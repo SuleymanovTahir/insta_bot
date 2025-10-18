@@ -1,0 +1,176 @@
+{% extends "admin/base.html" %}
+
+{% block title %}История сообщений - {{ salon_info.name }}{% endblock %}
+
+{% block nav_messages %}active{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>💬 История сообщений</h1>
+    <p>Все сообщения между ботом и клиентами</p>
+</div>
+
+<!-- Stats -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.total_client_messages }}</h3>
+                <p>От клиентов</p>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-user"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.total_bot_messages }}</h3>
+                <p>От бота</p>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-robot"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.total_client_messages + stats.total_bot_messages }}</h3>
+                <p>Всего сообщений</p>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-comments"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.total_clients }}</h3>
+                <p>Активных диалогов</p>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-users"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search and Filter -->
+<div class="search-filter-bar">
+    <input type="text" class="search-box" id="searchInput" placeholder="🔍 Поиск по тексту сообщения..." onkeyup="searchTable()">
+
+    <select class="filter-select" id="senderFilter" onchange="filterBySender()">
+        <option value="all">Все сообщения</option>
+        <option value="client">От клиентов</option>
+        <option value="bot">От бота</option>
+    </select>
+
+    <button class="btn btn-primary" onclick="window.location.href='/admin/chat'">
+        <i class="fas fa-comment-dots"></i> Открыть чат
+    </button>
+</div>
+
+<!-- Messages Table -->
+<div class="data-table-container">
+    <table class="data-table" id="messagesTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>От кого</th>
+                <th>Клиент</th>
+                <th>Сообщение</th>
+                <th>Время</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if messages %}
+            {% for message in messages %}
+            <tr data-sender="{{ message[3] }}">
+                <td><strong>#{{ message[0] }}</strong></td>
+                <td>
+                    {% if message[3] == 'client' %}
+                    <span class="badge badge-info">
+                        <i class="fas fa-user"></i> Клиент
+                    </span>
+                    {% else %}
+                    <span class="badge badge-success">
+                        <i class="fas fa-robot"></i> Бот
+                    </span>
+                    {% endif %}
+                </td>
+                <td>
+                    <small style="color: #6b7280;">{{ message[1][:20] }}...</small>
+                </td>
+                <td>
+                    <div style="max-width: 500px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        {{ message[2] }}
+                    </div>
+                </td>
+                <td>{{ message[4] if message[4] else '-' }}</td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="5">
+                    <div class="empty-state">
+                        <i class="fas fa-comments"></i>
+                        <h3>Нет сообщений</h3>
+                        <p>Сообщения появятся когда клиенты начнут общаться с ботом</p>
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function searchTable() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toUpperCase();
+    const table = document.getElementById('messagesTable');
+    const tr = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < tr.length; i++) {
+        const td = tr[i].getElementsByTagName('td');
+        let found = false;
+
+        for (let j = 0; j < td.length; j++) {
+            if (td[j]) {
+                const txtValue = td[j].textContent || td[j].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+
+        tr[i].style.display = found ? '' : 'none';
+    }
+}
+
+function filterBySender() {
+    const select = document.getElementById('senderFilter');
+    const sender = select.value;
+    const table = document.getElementById('messagesTable');
+    const tr = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < tr.length; i++) {
+        if (sender === 'all') {
+            tr[i].style.display = '';
+        } else {
+            const rowSender = tr[i].getAttribute('data-sender');
+            tr[i].style.display = rowSender === sender ? '' : 'none';
+        }
+    }
+}
+</script>
+{% endblock %}

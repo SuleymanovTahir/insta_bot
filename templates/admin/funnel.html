@@ -1,0 +1,357 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Воронка продаж - {{ salon_info.name }}{% endblock %}
+
+{% block nav_funnel %}active{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🎯 Воронка продаж</h1>
+    <p>Анализ конверсии на каждом этапе взаимодействия с клиентами</p>
+</div>
+
+<!-- Funnel Stats -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ funnel.conversion_rates.visitor_to_engaged }}%</h3>
+                <p>Посетитель → Вовлечённый</p>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ funnel.conversion_rates.engaged_to_booking }}%</h3>
+                <p>Вовлечённый → Начал запись</p>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ funnel.conversion_rates.booking_to_booked }}%</h3>
+                <p>Начал запись → Записался</p>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ funnel.conversion_rates.booked_to_completed }}%</h3>
+                <p>Записался → Посетил</p>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-check"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Funnel Visualization -->
+<div class="funnel-container">
+    <div class="funnel-container">
+    <h2 style="font-size: 1.8em; margin-bottom: 40px; color: #1f2937;">
+        <i class="fas fa-filter"></i> Визуализация воронки
+    </h2>
+
+    <div class="funnel-stage" draggable="true" ondragover="allowDrop(event)" ondrop="drop(event, 'visitors')">
+        <div class="funnel-bar">
+            <div class="funnel-info">
+                <h3><i class="fas fa-eye"></i> Посетители</h3>
+                <p>Начали диалог с ботом</p>
+            </div>
+            <div class="funnel-numbers">
+                <div class="funnel-count">{{ funnel.visitors }}</div>
+                <div class="funnel-rate">100%</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="funnel-stage" draggable="true" ondragover="allowDrop(event)" ondrop="drop(event, 'engaged')">
+        <div class="funnel-bar">
+            <div class="funnel-info">
+                <h3><i class="fas fa-comments"></i> Вовлечённые</h3>
+                <p>Продолжили диалог</p>
+            </div>
+            <div class="funnel-numbers">
+                <div class="funnel-count">{{ funnel.engaged }}</div>
+                <div class="funnel-rate">{{ funnel.conversion_rates.visitor_to_engaged }}%</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="funnel-stage" draggable="true" ondragover="allowDrop(event)" ondrop="drop(event, 'started_booking')">
+        <div class="funnel-bar">
+            <div class="funnel-info">
+                <h3><i class="fas fa-edit"></i> Начали запись</h3>
+                <p>Заполняют форму записи</p>
+            </div>
+            <div class="funnel-numbers">
+                <div class="funnel-count">{{ funnel.started_booking }}</div>
+                <div class="funnel-rate">{{ funnel.conversion_rates.engaged_to_booking }}%</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="funnel-stage" draggable="true" ondragover="allowDrop(event)" ondrop="drop(event, 'booked')">
+        <div class="funnel-bar">
+            <div class="funnel-info">
+                <h3><i class="fas fa-calendar-check"></i> Записались</h3>
+                <p>Завершили бронирование</p>
+            </div>
+            <div class="funnel-numbers">
+                <div class="funnel-count">{{ funnel.booked }}</div>
+                <div class="funnel-rate">{{ funnel.conversion_rates.booking_to_booked }}%</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="funnel-stage" draggable="true" ondragover="allowDrop(event)" ondrop="drop(event, 'completed')">
+        <div class="funnel-bar">
+            <div class="funnel-info">
+                <h3><i class="fas fa-check-circle"></i> Посетили</h3>
+                <p>Пришли на процедуру</p>
+            </div>
+            <div class="funnel-numbers">
+                <div class="funnel-count">{{ funnel.completed }}</div>
+                <div class="funnel-rate">{{ funnel.conversion_rates.booked_to_completed }}%</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Insights -->
+<div class="analytics-grid" style="margin-top: 40px;">
+    <div class="chart-container">
+        <h2><i class="fas fa-lightbulb"></i> Рекомендации по улучшению</h2>
+        <div style="padding: 20px 0;">
+            {% if funnel.conversion_rates.visitor_to_engaged < 70 %}
+            <div class="message-box message-client" style="margin-bottom: 15px;">
+                <div class="message-header">
+                    <span><i class="fas fa-exclamation-triangle"></i> Низкая вовлечённость</span>
+                    <span class="badge badge-warning">Требует внимания</span>
+                </div>
+                <div class="message-text">
+                    Конверсия посетителей в вовлечённых клиентов низкая ({{ funnel.conversion_rates.visitor_to_engaged }}%).
+                    Рекомендуем улучшить первое приветственное сообщение бота и сделать его более привлекательным.
+                </div>
+            </div>
+            {% endif %}
+
+            {% if funnel.conversion_rates.engaged_to_booking < 50 %}
+            <div class="message-box message-bot" style="margin-bottom: 15px;">
+                <div class="message-header">
+                    <span><i class="fas fa-exclamation-circle"></i> Проблема с началом записи</span>
+                    <span class="badge badge-warning">Требует внимания</span>
+                </div>
+                <div class="message-text">
+                    Многие клиенты не переходят к записи ({{ funnel.conversion_rates.engaged_to_booking }}%).
+                    Упростите процесс записи и добавьте больше мотивирующих триггеров в диалоге.
+                </div>
+            </div>
+            {% endif %}
+
+            {% if funnel.conversion_rates.booking_to_booked < 60 %}
+            <div class="message-box message-client" style="margin-bottom: 15px;">
+                <div class="message-header">
+                    <span><i class="fas fa-times-circle"></i> Высокий процент брошенных записей</span>
+                    <span class="badge badge-danger">Критично</span>
+                </div>
+                <div class="message-text">
+                    {{ 100 - funnel.conversion_rates.booking_to_booked | round }}% клиентов бросают запись на полпути.
+                    Проверьте длину формы записи и убедитесь, что процесс максимально простой.
+                </div>
+            </div>
+            {% endif %}
+
+            {% if funnel.conversion_rates.booked_to_completed < 80 %}
+            <div class="message-box message-bot" style="margin-bottom: 15px;">
+                <div class="message-header">
+                    <span><i class="fas fa-user-times"></i> Клиенты не приходят</span>
+                    <span class="badge badge-warning">Требует внимания</span>
+                </div>
+                <div class="message-text">
+                    {{ 100 - funnel.conversion_rates.booked_to_completed | round }}% записавшихся клиентов не приходят.
+                    Добавьте напоминания перед визитом и подтверждение записи за день до процедуры.
+                </div>
+            </div>
+            {% endif %}
+
+            {% if funnel.conversion_rates.visitor_to_engaged >= 70 and funnel.conversion_rates.engaged_to_booking >= 50 %}
+            <div class="message-box" style="background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-left: 5px solid #10b981;">
+                <div class="message-header">
+                    <span><i class="fas fa-check-circle"></i> Отличная работа!</span>
+                    <span class="badge badge-success">Всё хорошо</span>
+                </div>
+                <div class="message-text">
+                    Ваша воронка показывает отличные результаты. Продолжайте в том же духе и отслеживайте метрики регулярно.
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h2><i class="fas fa-chart-line"></i> Ключевые метрики</h2>
+        <div style="padding: 20px 0;">
+            <div class="client-card">
+                <div class="client-stats" style="border-top: none; padding-top: 0;">
+                    <div class="client-stat">
+                        <div class="client-stat-value">{{ ((funnel.completed / funnel.visitors * 100) if funnel.visitors > 0 else 0) | round(1) }}%</div>
+                        <div class="client-stat-label">Общая конверсия</div>
+                    </div>
+                    <div class="client-stat">
+                        <div class="client-stat-value">{{ funnel.visitors - funnel.completed }}</div>
+                        <div class="client-stat-label">Потеряно клиентов</div>
+                    </div>
+                    <div class="client-stat">
+                        <div class="client-stat-value">{{ ((funnel.completed / funnel.booked * 100) if funnel.booked > 0 else 0) | round(1) }}%</div>
+                        <div class="client-stat-label">Явка на визит</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="client-card">
+                <h3 style="margin-bottom: 15px; color: #1f2937;">Потенциал роста</h3>
+                <p style="color: #6b7280; margin-bottom: 20px;">
+                    Если улучшить каждый этап воронки на 10%, вы получите:
+                </p>
+                <div class="client-stats" style="border-top: none; padding-top: 0;">
+                    <div class="client-stat">
+                        <div class="client-stat-value" style="color: #10b981;">+{{ (funnel.visitors * 0.1) | round }}</div>
+                        <div class="client-stat-label">Больше вовлечённых</div>
+                    </div>
+                    <div class="client-stat">
+                        <div class="client-stat-value" style="color: #10b981;">+{{ (funnel.booked * 0.1) | round }}</div>
+                        <div class="client-stat-label">Больше записей</div>
+                    </div>
+                    <div class="client-stat">
+                        <div class="client-stat-value" style="color: #10b981;">+{{ (funnel.completed * 0.1) | round }}</div>
+                        <div class="client-stat-label">Больше визитов</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stage Details -->
+<div class="data-table-container" style="margin-top: 30px;">
+    <div style="padding: 20px; border-bottom: 1px solid #e5e7eb;">
+        <h2 style="font-size: 1.3em; color: #1f2937;">
+            <i class="fas fa-table"></i> Детализация по этапам
+        </h2>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Этап</th>
+                <th>Количество</th>
+                <th>Конверсия</th>
+                <th>Потери</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Посетители</strong></td>
+                <td>{{ funnel.visitors }}</td>
+                <td>100%</td>
+                <td>-</td>
+                <td><span class="badge badge-info">Начало</span></td>
+            </tr>
+            <tr>
+                <td><strong>Вовлечённые</strong></td>
+                <td>{{ funnel.engaged }}</td>
+                <td>{{ funnel.conversion_rates.visitor_to_engaged }}%</td>
+                <td>{{ funnel.visitors - funnel.engaged }}</td>
+                <td>
+                    {% if funnel.conversion_rates.visitor_to_engaged >= 70 %}
+                    <span class="badge badge-success">Отлично</span>
+                    {% elif funnel.conversion_rates.visitor_to_engaged >= 50 %}
+                    <span class="badge badge-warning">Норма</span>
+                    {% else %}
+                    <span class="badge badge-danger">Низко</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Начали запись</strong></td>
+                <td>{{ funnel.started_booking }}</td>
+                <td>{{ funnel.conversion_rates.engaged_to_booking }}%</td>
+                <td>{{ funnel.engaged - funnel.started_booking }}</td>
+                <td>
+                    {% if funnel.conversion_rates.engaged_to_booking >= 60 %}
+                    <span class="badge badge-success">Отлично</span>
+                    {% elif funnel.conversion_rates.engaged_to_booking >= 40 %}
+                    <span class="badge badge-warning">Норма</span>
+                    {% else %}
+                    <span class="badge badge-danger">Низко</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Записались</strong></td>
+                <td>{{ funnel.booked }}</td>
+                <td>{{ funnel.conversion_rates.booking_to_booked }}%</td>
+                <td>{{ funnel.started_booking - funnel.booked }}</td>
+                <td>
+                    {% if funnel.conversion_rates.booking_to_booked >= 70 %}
+                    <span class="badge badge-success">Отлично</span>
+                    {% elif funnel.conversion_rates.booking_to_booked >= 50 %}
+                    <span class="badge badge-warning">Норма</span>
+                    {% else %}
+                    <span class="badge badge-danger">Низко</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Посетили</strong></td>
+                <td>{{ funnel.completed }}</td>
+                <td>{{ funnel.conversion_rates.booked_to_completed }}%</td>
+                <td>{{ funnel.booked - funnel.completed }}</td>
+                <td>
+                    {% if funnel.conversion_rates.booked_to_completed >= 85 %}
+                    <span class="badge badge-success">Отлично</span>
+                    {% elif funnel.conversion_rates.booked_to_completed >= 70 %}
+                    <span class="badge badge-warning">Норма</span>
+                    {% else %}
+                    <span class="badge badge-danger">Низко</span>
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function allowDrop(event) {
+    event.preventDefault();
+}
+
+function drop(event, stage) {
+    event.preventDefault();
+    alert(`Элемент перемещён в этап: ${stage}`);
+}
+
+function manageFunnel() {
+    alert('Открыть настройки воронки продаж');
+}
+</script>
+{% endblock %}

@@ -1,0 +1,222 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Клиенты - {{ salon_info.name }}{% endblock %}
+
+{% block nav_clients %}active{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>👥 Управление клиентами</h1>
+    <p>Всего клиентов: {{ clients|length }}</p>
+</div>
+
+<!-- Stats -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.new_clients }}</h3>
+                <p>Новые клиенты</p>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-user-plus"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.leads }}</h3>
+                <p>Лиды</p>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-user-clock"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.customers }}</h3>
+                <p>Постоянные клиенты</p>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-user-check"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.total_clients }}</h3>
+                <p>Всего клиентов</p>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-users"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search and Filter -->
+<div class="search-filter-bar">
+    <input type="text" class="search-box" id="searchInput" placeholder="🔍 Поиск по имени, телефону, username..."
+        onkeyup="searchTable()">
+
+ <select class="filter-select" id="exportFormat" style="width: auto;">
+        <option value="">Экспорт...</option>
+        <option value="csv">CSV</option>
+        <option value="excel">Excel (XLSX)</option>
+        <option value="pdf">PDF</option>
+    </select>
+
+    <button class="btn btn-primary" onclick="exportClients()">
+        <i class="fas fa-file-export"></i> Экспорт
+    </button>
+</div>
+
+<!-- Clients Table -->
+<div class="data-table-container">
+    <table class="data-table" id="clientsTable">
+        <thead>
+            <tr>
+                <th>Клиент</th>
+                <th>Телефон</th>
+                <th>Instagram</th>
+                <th>Статус</th>
+                <th>Сообщений</th>
+                <th>LTV</th>
+                <th>Последний контакт</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if clients %}
+            {% for client in clients %}
+            <tr data-status="{{ client[8] }}">
+                <td>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="client-avatar"
+                            style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+                            {{ client[3][0] if client[3] else client[1][0] if client[1] else '?' }}
+                        </div>
+                        <div>
+                            <strong>{{ get_client_display_name(client) }}</strong>
+                            {% if client|length > 12 and client[12] %}
+                            <i class="fas fa-thumbtack" style="color: #f59e0b; margin-left: 5px;" title="Закреплен"></i>
+                            {% endif %}
+                        </div>
+                    </div>
+                </td>
+                <td>{{ client[2] or '-' }}</td>
+                <td>
+                    {% if client[1] %}
+                    <a href="https://instagram.com/{{ client[1] }}" target="_blank" style="color: #667eea;">
+                        @{{ client[1] }}
+                    </a>
+                    {% else %}
+                    <span style="color: #9ca3af;">{{ client[0][:15] }}...</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <span class="badge badge-{{ client[8] }}">
+                        {{ client_statuses[client[8]].label if client[8] in client_statuses else client[8] }}
+                    </span>
+                </td>
+                <td>{{ client[6] }}</td>
+                <td>{{ client[9] }} AED</td>
+                <td>{{ client[5][:16] if client[5] else '-' }}</td>
+                <td>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-sm btn-info" onclick="viewClient('{{ client[0] }}')" title="Просмотр">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-success" onclick="openChat('{{ client[0] }}')" title="Чат">
+                            <i class="fas fa-comment"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="8">
+                    <div class="empty-state">
+                        <i class="fas fa-users"></i>
+                        <h3>Нет клиентов</h3>
+                        <p>Клиенты появятся после первого контакта с ботом</p>
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    function searchTable() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toUpperCase();
+        const table = document.getElementById('clientsTable');
+        const tr = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < tr.length; i++) {
+            const td = tr[i].getElementsByTagName('td');
+            let found = false;
+
+            for (let j = 0; j < td.length; j++) {
+                if (td[j]) {
+                    const txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            tr[i].style.display = found ? '' : 'none';
+        }
+    }
+
+    function filterByStatus() {
+        const select = document.getElementById('statusFilter');
+        const status = select.value;
+        const table = document.getElementById('clientsTable');
+        const tr = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < tr.length; i++) {
+            if (status === 'all') {
+                tr[i].style.display = '';
+            } else {
+                const rowStatus = tr[i].getAttribute('data-status');
+                tr[i].style.display = rowStatus === status ? '' : 'none';
+            }
+        }
+    }
+
+    function viewClient(clientId) {
+        window.location.href = `/admin/clients/${clientId}`;
+    }
+
+    function openChat(clientId) {
+        window.location.href = `/admin/chat?client=${clientId}`;
+    }
+
+    function exportClients() {
+        const format = document.getElementById('exportFormat').value;
+
+        if (!format) {
+            showNotification('Выберите формат экспорта', 'warning');
+            return;
+        }
+
+        window.location.href = `/admin/api/export/clients?format=${format}`;
+        showNotification('Экспорт начат...', 'info');
+    }
+</script>
+{% endblock %}

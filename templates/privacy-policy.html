@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - {{ salon_info['name'] }}</title>
+    <link rel="stylesheet" href="/static/css/style.css"> <!-- Изменено с /static/css/style.css -->
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Privacy Policy</h1>
+            <p>{{ content }}</p>
+            <p class="footer">
+                {{ salon_info['name'] }} - {{ salon_info['address'] }}
+                <br>
+                <a href="/">Back to Booking</a> | <a href="/privacy-policy">Privacy Policy</a> | <a href="/terms">Terms of Service</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

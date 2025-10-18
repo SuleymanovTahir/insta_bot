@@ -1,0 +1,193 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Запись #{{ booking[0] }} - {{ salon_info.name }}{% endblock %}
+
+{% block nav_bookings %}active{% endblock %}
+
+{% block content %}
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <a href="/admin/bookings" style="color: #667eea; text-decoration: none; margin-bottom: 10px; display: inline-block;">
+            <i class="fas fa-arrow-left"></i> Назад к записям
+        </a>
+        <h1>
+            <i class="fas fa-calendar-alt"></i> Запись #{{ booking[0] }}
+            <span class="badge badge-{{ booking[6] }}" style="font-size: 0.6em; margin-left: 15px;">
+                {{ booking[6] }}
+            </span>
+        </h1>
+        <p style="color: #6b7280;">
+            {{ booking[2] }} - {{ booking[3] }}
+        </p>
+    </div>
+    <div>
+        <button class="btn btn-primary" onclick="window.location.href='/admin/chat?client={{ booking[1] }}'">
+            <i class="fas fa-comment"></i> Открыть чат
+        </button>
+    </div>
+</div>
+
+<!-- Информация о записи -->
+<div class="analytics-grid">
+    <div class="chart-container">
+        <h2><i class="fas fa-info-circle"></i> Детали записи</h2>
+        <div style="padding: 20px;">
+            <div class="info-item" style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                <span class="info-label" style="font-weight: 600; color: #6b7280;">Услуга</span>
+                <span class="info-value"><strong>{{ booking[2] }}</strong></span>
+            </div>
+            
+            <div class="info-item" style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                <span class="info-label" style="font-weight: 600; color: #6b7280;">Дата и время</span>
+                <span class="info-value">{{ booking[3] }}</span>
+            </div>
+            
+            <div class="info-item" style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                <span class="info-label" style="font-weight: 600; color: #6b7280;">Имя клиента</span>
+                <span class="info-value">{{ booking[5] }}</span>
+            </div>
+            
+            <div class="info-item" style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                <span class="info-label" style="font-weight: 600; color: #6b7280;">Телефон</span>
+                <span class="info-value">{{ booking[4] }}</span>
+            </div>
+            
+            <div class="info-item" style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                <span class="info-label" style="font-weight: 600; color: #6b7280;">Статус</span>
+                <select id="bookingStatus" class="form-select" onchange="updateStatus()">
+                    <option value="pending" {% if booking[6] == 'pending' %}selected{% endif %}>Ожидает</option>
+                    <option value="confirmed" {% if booking[6] == 'confirmed' %}selected{% endif %}>Подтвержден</option>
+                    <option value="completed" {% if booking[6] == 'completed' %}selected{% endif %}>Завершен</option>
+                    <option value="cancelled" {% if booking[6] == 'cancelled' %}selected{% endif %}>Отменен</option>
+                </select>
+            </div>
+            
+            <div class="info-item" style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                <span class="info-label" style="font-weight: 600; color: #6b7280;">Доход</span>
+                <span class="info-value">{{ booking[8] if booking[8] else 0 }} AED</span>
+            </div>
+            
+            <div class="info-item" style="padding: 15px;">
+                <span class="info-label" style="font-weight: 600; color: #6b7280;">Создана</span>
+                <span class="info-value">{{ booking[7][:16] if booking[7] else '-' }}</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Информация о клиенте -->
+    {% if client %}
+    <div class="chart-container">
+        <h2><i class="fas fa-user"></i> Информация о клиенте</h2>
+        <div style="padding: 20px;">
+            <div class="client-card">
+                <div class="client-header">
+                    <div class="client-avatar">
+                        {{ client[3][0] if client[3] else '?' }}
+                    </div>
+                    <div class="client-info">
+                        <div class="client-name">{{ get_client_display_name(client) }}</div>
+                        <div class="client-meta">
+                            {% if client[1] %}
+                            <a href="https://instagram.com/{{ client[1] }}" target="_blank" style="color: #667eea;">
+                                @{{ client[1] }}
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="client-stats">
+                    <div class="client-stat">
+                        <div class="client-stat-value">{{ client[6] }}</div>
+                        <div class="client-stat-label">Сообщений</div>
+                    </div>
+                    <div class="client-stat">
+                        <div class="client-stat-value">{{ client[9] }} AED</div>
+                        <div class="client-stat-label">LTV</div>
+                    </div>
+                    <div class="client-stat">
+                        <div class="client-stat-value">{{ client[5][:10] if client[5] else '-' }}</div>
+                        <div class="client-stat-label">Последний контакт</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <button class="btn btn-primary" style="flex: 1;" onclick="window.location.href='/admin/clients/{{ client[0] }}'">
+                        <i class="fas fa-eye"></i> Профиль
+                    </button>
+                    <button class="btn btn-success" style="flex: 1;" onclick="window.location.href='/admin/chat?client={{ client[0] }}'">
+                        <i class="fas fa-comment"></i> Чат
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Заметки -->
+<div class="chart-container" style="margin-top: 30px;">
+    <h2><i class="fas fa-sticky-note"></i> Заметки к записи</h2>
+    <div style="padding: 20px;">
+        <textarea id="bookingNotes" class="form-textarea" rows="6" placeholder="Добавьте заметки...">{{ booking[9] if booking[9] else '' }}</textarea>
+        <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="saveNotes()">
+            <i class="fas fa-save"></i> Сохранить заметки
+        </button>
+    </div>
+</div>
+
+<style>
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-label {
+    min-width: 150px;
+}
+</style>
+
+<script>
+const bookingId = {{ booking[0] }};
+
+async function updateStatus() {
+    const status = document.getElementById('bookingStatus').value;
+    
+    try {
+        const response = await fetch(`/admin/api/bookings/${bookingId}/status`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ status })
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+            showNotification('Статус обновлен', 'success');
+            setTimeout(() => location.reload(), 1000);
+        }
+    } catch (error) {
+        showNotification('Ошибка обновления', 'error');
+    }
+}
+
+async function saveNotes() {
+    const notes = document.getElementById('bookingNotes').value;
+    
+    try {
+        const response = await fetch(`/admin/api/bookings/${bookingId}/notes`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ notes })
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+            showNotification('Заметки сохранены', 'success');
+        }
+    } catch (error) {
+        showNotification('Ошибка сохранения', 'error');
+    }
+}
+</script>
+{% endblock %}

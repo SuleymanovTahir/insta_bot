@@ -1,0 +1,300 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ client[3] or 'Клиент' }} - {{ salon_info.name }}{% endblock %}
+
+{% block nav_clients %}active{% endblock %}
+
+{% block content %}
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <a href="/admin/clients" style="color: #667eea; text-decoration: none; margin-bottom: 10px; display: inline-block;">
+            <i class="fas fa-arrow-left"></i> Назад к списку
+        </a>
+        <h1>
+            <i class="fas fa-user-circle"></i> {{ client[3] or 'Клиент' }}
+            <span class="badge badge-{{ client[8] }}" style="font-size: 0.6em; margin-left: 15px;">
+                {{ client_statuses[client[8]].label if client[8] in client_statuses else client[8] }}
+            </span>
+        </h1>
+        <p style="color: #6b7280;">
+            <i class="fab fa-instagram"></i> @{{ client[1] or client[0][:15] }}
+        </p>
+    </div>
+    <div>
+        <button class="btn btn-primary" onclick="window.location.href='/admin/chat?client={{ client[0] }}'">
+            <i class="fas fa-comment"></i> Открыть чат
+        </button>
+    </div>
+</div>
+
+<!-- Информационные карточки -->
+<div class="stats-grid" style="margin-bottom: 30px;">
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ client[6] }}</h3>
+                <p>Всего сообщений</p>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-comments"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ bookings|length }}</h3>
+                <p>Записей</p>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ client[9] }} AED</h3>
+                <p>LTV (пожизненная ценность)</p>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ ((client[5]|string)[:10]) if client[5] else '-' }}</h3>
+                <p>Последний контакт</p>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Основная информация -->
+<div class="analytics-grid">
+    <!-- Контактная информация -->
+    <div class="chart-container">
+        <h2><i class="fas fa-address-card"></i> Контактная информация</h2>
+        <div style="padding: 20px;">
+            <div class="info-item" style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                <span class="info-label" style="font-weight: 600; color: #6b7280;">Имя</span>
+                <input type="text" id="clientName" class="info-value-edit" value="{{ client[3] or '' }}" placeholder="Не указано">
+            </div>
+            
+            <div class="info-item" style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                <span class="info-label" style="font-weight: 600; color: #6b7280;">Телефон</span>
+                <input type="text" id="clientPhone" class="info-value-edit" value="{{ client[2] or '' }}" placeholder="Не указано">
+            </div>
+            
+            <div class="info-item" style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                <span class="info-label" style="font-weight: 600; color: #6b7280;">Instagram</span>
+                {% if client[1] %}
+                <a href="https://instagram.com/{{ client[1] }}" target="_blank" style="color: #667eea;">
+                    @{{ client[1] }}
+                </a>
+                {% else %}
+                <span style="color: #9ca3af;">{{ client[0][:30] }}...</span>
+                {% endif %}
+            </div>
+            
+            <div class="info-item" style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                <span class="info-label" style="font-weight: 600; color: #6b7280;">Статус</span>
+                <select id="clientStatus" class="form-select" onchange="updateStatus()">
+                    {% for key, status in client_statuses.items() %}
+                    <option value="{{ key }}" {% if client[8] == key %}selected{% endif %}>
+                        {{ status.label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="info-item" style="padding: 15px;">
+                <span class="info-label" style="font-weight: 600; color: #6b7280;">Первый контакт</span>
+                <span class="info-value">{{ client[4][:16] if client[4] else '-' }}</span>
+            </div>
+            
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="saveClientInfo()">
+                <i class="fas fa-save"></i> Сохранить изменения
+            </button>
+        </div>
+    </div>
+    
+    <!-- Заметки -->
+    <div class="chart-container">
+        <h2><i class="fas fa-sticky-note"></i> Заметки</h2>
+        <div style="padding: 20px;">
+            <textarea id="clientNotes" class="form-textarea" rows="10" placeholder="Добавьте заметки о клиенте...">{{ client[11] if client|length > 11 else '' }}</textarea>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="saveNotes()">
+                <i class="fas fa-save"></i> Сохранить заметки
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- История записей -->
+{% if bookings %}
+<div class="data-table-container" style="margin-top: 30px;">
+    <div style="padding: 20px; border-bottom: 1px solid #e5e7eb;">
+        <h2 style="font-size: 1.3em; color: #1f2937;">
+            <i class="fas fa-calendar-alt"></i> История записей
+        </h2>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Услуга</th>
+                <th>Дата/Время</th>
+                <th>Статус</th>
+                <th>Доход</th>
+                <th>Создано</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td><strong>{{ booking[2] }}</strong></td>
+                <td>{{ booking[3] }}</td>
+                <td><span class="badge badge-{{ booking[6] }}">{{ booking[6] }}</span></td>
+                <td>{{ booking[8] if booking|length > 8 else 0 }} AED</td>
+                <td>{{ booking[7][:16] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<!-- История сообщений -->
+<div class="data-table-container" style="margin-top: 30px;">
+    <div style="padding: 20px; border-bottom: 1px solid #e5e7eb;">
+        <h2 style="font-size: 1.3em; color: #1f2937;">
+            <i class="fas fa-comments"></i> История сообщений (последние 50)
+        </h2>
+    </div>
+    <div style="padding: 20px; max-height: 600px; overflow-y: auto;">
+        {% for msg in history %}
+        <div class="message-box {% if msg[1] == 'client' %}message-client{% else %}message-bot{% endif %}" style="margin-bottom: 15px;">
+            <div class="message-header">
+                <span>
+                    {% if msg[1] == 'client' %}
+                    <i class="fas fa-user"></i> Клиент
+                    {% else %}
+                    <i class="fas fa-robot"></i> Бот
+                    {% endif %}
+                </span>
+                <span style="color: #9ca3af; font-size: 0.9em;">{{ msg[2][11:16] }}</span>
+            </div>
+            <div class="message-text">{{ msg[0] }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-label {
+    min-width: 120px;
+}
+
+.info-value-edit {
+    flex: 1;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.95em;
+    transition: border-color 0.3s;
+}
+
+.info-value-edit:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.message-client {
+    background: linear-gradient(135deg, #e0e7ff, #f3f4f6);
+    border-left: 4px solid #667eea;
+}
+
+.message-bot {
+    background: linear-gradient(135deg, #d1fae5, #f3f4f6);
+    border-left: 4px solid #10b981;
+}
+</style>
+
+<script>
+const clientId = '{{ client[0] }}';
+
+async function saveClientInfo() {
+    const name = document.getElementById('clientName').value;
+    const phone = document.getElementById('clientPhone').value;
+    
+    try {
+        const response = await fetch(`/admin/api/clients/${clientId}/update`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ name, phone })
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+            showNotification('Информация сохранена', 'success');
+        } else {
+            showNotification('Ошибка сохранения', 'error');
+        }
+    } catch (error) {
+        showNotification('Ошибка соединения', 'error');
+    }
+}
+
+async function updateStatus() {
+    const status = document.getElementById('clientStatus').value;
+    
+    try {
+        const response = await fetch(`/admin/api/clients/${clientId}/status`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ status })
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+            showNotification('Статус обновлен', 'success');
+        }
+    } catch (error) {
+        showNotification('Ошибка обновления', 'error');
+    }
+}
+
+async function saveNotes() {
+    const notes = document.getElementById('clientNotes').value;
+    
+    try {
+        const response = await fetch(`/admin/api/clients/${clientId}/notes`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ notes })
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+            showNotification('Заметки сохранены', 'success');
+        }
+    } catch (error) {
+        showNotification('Ошибка сохранения', 'error');
+    }
+}
+</script>
+{% endblock %}

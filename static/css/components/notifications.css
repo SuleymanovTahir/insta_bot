@@ -1,0 +1,221 @@
+/* === NOTIFICATIONS === */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 20px 25px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    z-index: var(--z-tooltip);
+    animation: slideIn var(--transition);
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+.notification.hiding {
+    animation: slideOut var(--transition);
+}
+
+/* === NOTIFICATION VARIANTS === */
+.notification-success {
+    background: var(--success);
+    color: var(--white);
+}
+
+.notification-error {
+    background: var(--danger);
+    color: var(--white);
+}
+
+.notification-info {
+    background: var(--info);
+    color: var(--white);
+}
+
+.notification-warning {
+    background: var(--warning);
+    color: var(--white);
+}
+
+/* === NOTIFICATION ICON === */
+.notification-icon {
+    font-size: 1.5em;
+    flex-shrink: 0;
+}
+
+/* === NOTIFICATION CONTENT === */
+.notification-content {
+    flex: 1;
+}
+
+.notification-title {
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+}
+
+.notification-message {
+    font-size: var(--font-size-sm);
+    opacity: 0.9;
+}
+
+/* === NOTIFICATION CLOSE === */
+.notification-close {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: var(--space-xs);
+    border-radius: var(--radius-full);
+    transition: background var(--transition);
+    flex-shrink: 0;
+}
+
+.notification-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* === NOTIFICATION STACK === */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: var(--z-tooltip);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    max-width: 400px;
+}
+
+/* === TOAST (alternative style) === */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 16px 20px;
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    z-index: var(--z-tooltip);
+    animation: slideUp var(--transition);
+    max-width: 350px;
+    border-left: 4px solid var(--primary);
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.toast-success {
+    border-left-color: var(--success);
+}
+
+.toast-error {
+    border-left-color: var(--danger);
+}
+
+.toast-warning {
+    border-left-color: var(--warning);
+}
+
+.toast-info {
+    border-left-color: var(--info);
+}
+
+/* === LOADING SPINNER === */
+.loading-spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--gray-light);
+    border-top-color: var(--primary);
+    border-radius: var(--radius-full);
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Small spinner */
+.loading-spinner-sm {
+    width: 20px;
+    height: 20px;
+    border-width: 2px;
+}
+
+/* Large spinner */
+.loading-spinner-lg {
+    width: 60px;
+    height: 60px;
+    border-width: 6px;
+}
+
+/* === LOADING OVERLAY === */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-modal-backdrop);
+}
+
+.loading-overlay .loading-spinner {
+    border-color: rgba(255, 255, 255, 0.3);
+    border-top-color: var(--white);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .notification,
+    .toast {
+        max-width: calc(100vw - 40px);
+        right: 10px;
+    }
+
+    .notification {
+        top: 10px;
+    }
+
+    .toast {
+        bottom: 10px;
+    }
+}

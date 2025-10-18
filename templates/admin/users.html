@@ -1,0 +1,85 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Управление пользователями - {{ salon_info.name }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>👥 Управление пользователями</h1>
+    <p>Список сотрудников с доступом к CRM</p>
+</div>
+
+<div class="search-filter-bar">
+    <button class="btn btn-primary" onclick="window.location.href='/register'">
+        <i class="fas fa-user-plus"></i> Добавить сотрудника
+    </button>
+</div>
+
+<div class="data-table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Логин</th>
+                <th>Полное имя</th>
+                <th>Email</th>
+                <th>Роль</th>
+                <th>Последний вход</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td><strong>#{{ user[0] }}</strong></td>
+                <td>{{ user[1] }}</td>
+                <td>{{ user[3] or '-' }}</td>
+                <td>{{ user[4] or '-' }}</td>
+                <td><span class="badge badge-info">{{ user[5] }}</span></td>
+                <td>{{ user[7][:16] if user[7] else 'Никогда' }}</td>
+                <td>
+                    {% if user[8] == 1 %}
+                    <span class="badge badge-success">Активен</span>
+                    {% else %}
+                    <span class="badge badge-danger">Заблокирован</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-danger" onclick="deleteUser({{ user[0] }}, '{{ user[1] }}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+async function deleteUser(userId, username) {
+    if (username === 'admin') {
+        showNotification('Нельзя удалить главного администратора', 'error');
+        return;
+    }
+    
+    if (!confirm(`Удалить пользователя ${username}?`)) return;
+    
+    try {
+        const response = await fetch(`/admin/api/users/${userId}/delete`, {
+            method: 'POST'
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification('Пользователь удален', 'success');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showNotification(result.message, 'error');
+        }
+    } catch (error) {
+        showNotification('Ошибка удаления', 'error');
+    }
+}
+</script>
+{% endblock %}

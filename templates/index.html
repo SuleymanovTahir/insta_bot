@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Booking - {{ salon_info['name'] }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>{{ salon_info['name'] }} Booking</h1>
+            <p>Book your appointment with us!</p>
+            <form action="/book" method="post" class="form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="service">Service</label>
+                    <select id="service" name="service" required>
+                        <option value="" disabled selected>Select a service</option>
+                        <option value="Haircut">Haircut</option>
+                        <option value="Manicure">Manicure</option>
+                        <option value="Pedicure">Pedicure</option>
+                        <option value="Facial">Facial</option>
+                        <option value="Massage">Massage</option>
+                    </select>
+                </div>
+                <button type="submit">Book Now</button>
+            </form>
+            <p class="footer">
+                Visit us at {{ salon_info['address'] }} or message us on Instagram!
+                <br>
+                <a href="/privacy-policy">Privacy Policy</a> | <a href="/terms">Terms of Service</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

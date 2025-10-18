@@ -1,0 +1,274 @@
+{% extends "admin/base.html" %}
+
+{% block title %}CRM Dashboard - {{ salon_info.name }}{% endblock %}
+
+{% block nav_dashboard %}active{% endblock %}
+
+{% block head_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>📊 Панель управления</h1>
+    <p>Добро пожаловать в CRM-систему салона красоты</p>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.total_clients }}</h3>
+                <p>Всего клиентов</p>
+                <span class="stat-trend trend-up">
+                    <i class="fas fa-arrow-up"></i> +12%
+                </span>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-users"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.total_bookings }}</h3>
+                <p>Всего записей</p>
+                <span class="stat-trend trend-up">
+                    <i class="fas fa-arrow-up"></i> +8%
+                </span>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.completed_bookings }}</h3>
+                <p>Завершенных</p>
+                <span class="stat-trend trend-up">
+                    <i class="fas fa-arrow-up"></i> +15%
+                </span>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.conversion_rate }}%</h3>
+                <p>Конверсия</p>
+                <span class="stat-trend trend-up">
+                    <i class="fas fa-arrow-up"></i> +3%
+                </span>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-percentage"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="analytics-grid">
+    <!-- Bookings Chart -->
+    <div class="chart-container">
+        <h2><i class="fas fa-chart-line"></i> Записи за 30 дней</h2>
+        <div class="chart-wrapper">
+            <canvas id="bookingsChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Services Chart -->
+    <div class="chart-container">
+        <h2><i class="fas fa-chart-pie"></i> Популярные услуги</h2>
+        <div class="chart-wrapper">
+            <canvas id="servicesChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="analytics-grid">
+    <!-- Recent Clients -->
+    <div class="data-table-container">
+        <div style="padding: 20px; border-bottom: 1px solid #e5e7eb;">
+            <h2 style="font-size: 1.3em; color: #1f2937;">
+                <i class="fas fa-user-plus"></i> Последние клиенты
+            </h2>
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Имя</th>
+                    <th>Телефон</th>
+                    <th>Статус</th>
+                    <th>Сообщений</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in recent_clients %}
+                <tr>
+                    <td><strong>{{ client[3] or 'Не указано' }}</strong></td>
+                    <td>{{ client[2] or '-' }}</td>
+                    <td><span class="badge badge-{{ client[8] }}">{{ client[8] }}</span></td>
+                    <td>{{ client[6] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Recent Bookings -->
+    <div class="data-table-container">
+        <div style="padding: 20px; border-bottom: 1px solid #e5e7eb;">
+            <h2 style="font-size: 1.3em; color: #1f2937;">
+                <i class="fas fa-calendar-alt"></i> Последние записи
+            </h2>
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Услуга</th>
+                    <th>Клиент</th>
+                    <th>Дата</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in recent_bookings %}
+                <tr>
+                    <td><strong>{{ booking[2] }}</strong></td>
+                    <td>{{ booking[5] }}</td>
+                    <td>{{ booking[3][:16] }}</td>
+                    <td><span class="badge badge-{{ booking[6] }}">{{ booking[6] }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Quick Stats -->
+<div class="stats-grid" style="margin-top: 30px;">
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.new_clients }}</h3>
+                <p>Новые клиенты</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.leads }}</h3>
+                <p>Лиды</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 60%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.customers }}</h3>
+                <p>Постоянные клиенты</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 85%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.pending_bookings }}</h3>
+                <p>Ожидают подтверждения</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 45%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Bookings Chart
+const bookingsCtx = document.getElementById('bookingsChart').getContext('2d');
+const bookingsChart = new Chart(bookingsCtx, {
+    type: 'line',
+    data: {
+        labels: {{ analytics.bookings_by_day | map(attribute=0) | list | tojson }},
+        datasets: [{
+            label: 'Записи',
+            data: {{ analytics.bookings_by_day | map(attribute=1) | list | tojson }},
+            borderColor: 'rgb(102, 126, 234)',
+            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+            tension: 0.4,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Services Chart
+const servicesCtx = document.getElementById('servicesChart').getContext('2d');
+const servicesChart = new Chart(servicesCtx, {
+    type: 'doughnut',
+    data: {
+        labels: {{ analytics.services_stats | map(attribute=0) | list | tojson }},
+        datasets: [{
+            data: {{ analytics.services_stats | map(attribute=1) | list | tojson }},
+            backgroundColor: [
+                'rgb(102, 126, 234)',
+                'rgb(118, 75, 162)',
+                'rgb(240, 147, 251)',
+                'rgb(16, 185, 129)',
+                'rgb(245, 158, 11)',
+                'rgb(59, 130, 246)'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

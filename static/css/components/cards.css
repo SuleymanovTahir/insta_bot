@@ -1,0 +1,118 @@
+/* === BASE CARD === */
+.card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    box-shadow: var(--shadow);
+    transition: all var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* === STAT CARD === */
+.stat-card {
+    background: var(--white);
+    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: var(--gradient-primary);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.stat-card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-card-info h3 {
+    font-size: 2.5em;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: var(--space-xs);
+}
+
+.stat-card-info p {
+    color: var(--gray);
+    font-size: 0.95em;
+    font-weight: 500;
+}
+
+.stat-card-icon {
+    font-size: 3em;
+    opacity: 0.2;
+    color: var(--primary);
+}
+
+.stat-trend {
+    font-size: 0.85em;
+    margin-top: var(--space-sm);
+    padding: 5px 12px;
+    border-radius: 20px;
+    display: inline-block;
+    font-weight: 600;
+}
+
+.trend-up {
+    background: var(--success-light);
+    color: var(--success-dark);
+}
+
+.trend-down {
+    background: var(--danger-light);
+    color: var(--danger-dark);
+}
+
+/* === CLIENT CARD === */
+.client-card {
+    background: var(--white);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    margin-bottom: var(--space-lg);
+    transition: all var(--transition);
+}
+
+.client-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.client-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.client-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-full);
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 1.5em;
+    font-weight: 700;
+}

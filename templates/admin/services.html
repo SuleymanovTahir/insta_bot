@@ -1,0 +1,312 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Услуги - {{ salon_info.name }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>💅 Управление услугами</h1>
+    <p>Прайс-лист салона</p>
+</div>
+
+<!-- Search and Filter -->
+<div class="search-filter-bar">
+    <input type="text" class="search-box" id="searchInput" placeholder="🔍 Поиск услуг..." onkeyup="searchTable()">
+    
+    <select class="filter-select" id="categoryFilter" onchange="filterByCategory()">
+        <option value="all">Все категории</option>
+        <option value="Permanent Makeup">Permanent Makeup</option>
+        <option value="Facial">Facial</option>
+        <option value="Massage">Massage</option>
+        <option value="Nails">Nails</option>
+        <option value="Hair">Hair</option>
+        <option value="Lashes">Lashes</option>
+        <option value="Brows">Brows</option>
+        <option value="Waxing">Waxing</option>
+    </select>
+
+    <button class="btn btn-primary" onclick="openAddModal()">
+        <i class="fas fa-plus"></i> Добавить услугу
+    </button>
+</div>
+
+<!-- Services Table -->
+<div class="data-table-container">
+    <table class="data-table" id="servicesTable">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Цена</th>
+                <th>Категория</th>
+                <th>Описание</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if services %}
+            {% for service in services %}
+            <tr data-category="{{ service[7] }}" data-active="{{ service[11] }}">
+                <td>
+                    <strong>{{ service[2] }}</strong><br>
+                    <small style="color: #6b7280;">{{ service[3] or service[2] }}</small>
+                </td>
+                <td><strong>{{ service[5] }} {{ service[6] }}</strong></td>
+                <td><span class="badge badge-info">{{ service[7] }}</span></td>
+                <td>
+                    <div style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">
+                        {{ service[9][:50] if service[9] else '-' }}
+                    </div>
+                </td>
+                <td>
+                    {% if service[11] == 1 %}
+                    <span class="badge badge-success">Активна</span>
+                    {% else %}
+                    <span class="badge badge-danger">Неактивна</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-sm btn-info" onclick="editService({{ service[0] }})" title="Редактировать">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteService({{ service[0] }})" title="Удалить">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="6">
+                    <div class="empty-state">
+                        <i class="fas fa-spa"></i>
+                        <h3>Нет услуг</h3>
+                        <p>Добавьте первую услугу</p>
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal для добавления/редактирования -->
+<div class="modal" id="serviceModal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <div class="modal-header">
+            <h2 id="modalTitle">Добавить услугу</h2>
+        </div>
+        
+        <form id="serviceForm" onsubmit="saveService(event)">
+            <input type="hidden" id="serviceId">
+            
+            <div class="form-group">
+                <label class="form-label">Ключ услуги (латиница)</label>
+                <input type="text" class="form-input" id="serviceKey" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Название (EN)</label>
+                <input type="text" class="form-input" id="serviceName" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Название (RU)</label>
+                <input type="text" class="form-input" id="serviceNameRu">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Цена</label>
+                <input type="number" class="form-input" id="servicePrice" step="0.01" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Валюта</label>
+                <select class="form-select" id="serviceCurrency">
+                    <option value="AED">AED</option>
+                    <option value="USD">USD</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Категория</label>
+                <select class="form-select" id="serviceCategory" required>
+                    <option value="Permanent Makeup">Permanent Makeup</option>
+                    <option value="Facial">Facial</option>
+                    <option value="Massage">Massage</option>
+                    <option value="Nails">Nails</option>
+                    <option value="Hair">Hair</option>
+                    <option value="Lashes">Lashes</option>
+                    <option value="Brows">Brows</option>
+                    <option value="Waxing">Waxing</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Описание (EN)</label>
+                <textarea class="form-textarea" id="serviceDescription" rows="3"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Описание (RU)</label>
+                <textarea class="form-textarea" id="serviceDescriptionRu" rows="3"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Преимущества (через |)</label>
+                <input type="text" class="form-input" id="serviceBenefits" placeholder="Быстро|Качественно|Недорого">
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button type="submit" class="btn btn-primary" style="flex: 1;">
+                    <i class="fas fa-save"></i> Сохранить
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">
+                    <i class="fas fa-times"></i> Отмена
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function searchTable() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toUpperCase();
+    const table = document.getElementById('servicesTable');
+    const tr = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < tr.length; i++) {
+        const td = tr[i].getElementsByTagName('td');
+        let found = false;
+
+        for (let j = 0; j < td.length; j++) {
+            if (td[j]) {
+                const txtValue = td[j].textContent || td[j].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+
+        tr[i].style.display = found ? '' : 'none';
+    }
+}
+
+function filterByCategory() {
+    const select = document.getElementById('categoryFilter');
+    const category = select.value;
+    const table = document.getElementById('servicesTable');
+    const tr = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < tr.length; i++) {
+        if (category === 'all') {
+            tr[i].style.display = '';
+        } else {
+            const rowCategory = tr[i].getAttribute('data-category');
+            tr[i].style.display = rowCategory === category ? '' : 'none';
+        }
+    }
+}
+
+function openAddModal() {
+    document.getElementById('modalTitle').textContent = 'Добавить услугу';
+    document.getElementById('serviceForm').reset();
+    document.getElementById('serviceId').value = '';
+    document.getElementById('serviceModal').classList.add('active');
+}
+
+function closeModal() {
+    document.getElementById('serviceModal').classList.remove('active');
+}
+
+async function editService(id) {
+    // Получаем данные услуги
+    const response = await fetch(`/admin/api/services/${id}`);
+    const service = await response.json();
+    
+    document.getElementById('modalTitle').textContent = 'Редактировать услугу';
+    document.getElementById('serviceId').value = id;
+    document.getElementById('serviceKey').value = service.service_key;
+    document.getElementById('serviceName').value = service.name;
+    document.getElementById('serviceNameRu').value = service.name_ru || '';
+    document.getElementById('servicePrice').value = service.price;
+    document.getElementById('serviceCurrency').value = service.currency;
+    document.getElementById('serviceCategory').value = service.category;
+    document.getElementById('serviceDescription').value = service.description || '';
+    document.getElementById('serviceDescriptionRu').value = service.description_ru || '';
+    document.getElementById('serviceBenefits').value = service.benefits || '';
+    
+    document.getElementById('serviceModal').classList.add('active');
+}
+
+async function saveService(event) {
+    event.preventDefault();
+    
+    const serviceId = document.getElementById('serviceId').value;
+    const isEdit = serviceId !== '';
+    
+    const data = {
+        service_key: document.getElementById('serviceKey').value,
+        name: document.getElementById('serviceName').value,
+        name_ru: document.getElementById('serviceNameRu').value,
+        price: document.getElementById('servicePrice').value,
+        currency: document.getElementById('serviceCurrency').value,
+        category: document.getElementById('serviceCategory').value,
+        description: document.getElementById('serviceDescription').value,
+        description_ru: document.getElementById('serviceDescriptionRu').value,
+        benefits: document.getElementById('serviceBenefits').value
+    };
+    
+    try {
+        const url = isEdit ? `/admin/api/services/${serviceId}/update` : '/admin/api/services/create';
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification(isEdit ? 'Услуга обновлена' : 'Услуга создана', 'success');
+            closeModal();
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showNotification(result.message, 'error');
+        }
+    } catch (error) {
+        showNotification('Ошибка сохранения', 'error');
+    }
+}
+
+async function deleteService(id) {
+    if (!confirm('Удалить эту услугу?')) return;
+    
+    try {
+        const response = await fetch(`/admin/api/services/${id}/delete`, {
+            method: 'POST'
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification('Услуга удалена', 'success');
+            setTimeout(() => location.reload(), 1000);
+        }
+    } catch (error) {
+        showNotification('Ошибка удаления', 'error');
+    }
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('serviceModal');
+    if (event.target === modal) {
+        closeModal();
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,205 @@
+zrok.exe
+zrok share public -p 8000
+
+
+91.201.215.32
+ubuntu
+kMJhy5pHKYiKRb2Pb2Dfm3U=
+
+
+Понял, ты на Ubuntu, но scp не установлен.
+
+Установи scp:
+bashsudo apt update && sudo apt install openssh-client
+
+Убедись, что OpenSSH установлен:
+powershellAdd-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
+
+
+mkdir -p /home/ubuntu/my_crm/inst_bot
+sudo chown -R /home/ubuntu/my_crm/inst_bot
+
+добавление папки в ftp без venv
+
+1. Создай временную папку без venv на локальной машине:
+robocopy "C:\Users\Admin\Desktop\My_crm\inst bot" "C:\Users\Admin\Desktop\my_crm\temp_inst_bot" /MIR /XD venv .git
+2. Залей временную папку на сервер:
+scp -r C:\Users\Admin\Desktop\My_crm\temp_inst_bot ubuntu@91.201.215.32:/home/ubuntu/inst_bot
+3. удаление временной папки на компьюторе после загрузки на сервер
+rmdir /S /Q "C:\Users\Admin\Desktop\My_crm\temp_inst_bot"
+
+если не создается через терминал компьютера, то удаляем последние три ключа 
+ssh-keygen -R 91.201.215.32
+
+удаление папки из ftp
+ssh ubuntu@91.201.215.32 "rm -rf /home/ubuntu/my_crm/inst\ bot"
+
+
+заходим в директорию проекта
+cd /home/ubuntu/inst_bot
+
+устанавлиеваем питон и создаем виртуальное окружение с установкой файлов библиотек из проекта
+sudo apt update && sudo apt install python3 python3-pip python3-venv git nginx certbot python3-certbot-nginx net-tools -y
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+
+удалить виртуальное окружение либо папку
+rm -rf venv  
+
+запуск 
+uvicorn main:app --reload
+
+Запусти Uvicorn в фоновом режиме если нужно какие-то команды параллельно выполнять:
+screen -S inst_bot
+/home/ubuntu/inst_bot/venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1
+
+Вернуться в сессию screen
+Чтобы вернуться в сессию:
+screen -r inst_bot
+Завершить процесс в screen
+Внутри сессии:
+
+Нажми Ctrl+C, чтобы остановить Uvicorn.
+Выйди из screen нужно просто нажать exit
+
+Проверить активные сессии
+Если забыл имя сессии или их несколько:
+screen -ls
+
+Останови Uvicorn (если нужно):
+Найди процесс:
+ps aux | grep uvicorn
+Убей процесс, указав его PID:
+kill -9 9928
+
+Активируй файрвол и открой порт 8000:
+sudo ufw status
+sudo ufw allow 22
+sudo ufw allow 80
+sudo ufw allow 443
+
+Проверь, слушает ли порт 8000:
+sudo netstat -tuln | grep 8000
+
+
+Настрой NGINX:
+sudo nano /etc/nginx/sites-available/mlediamant
+
+содержимое этого файла
+server {
+    listen 80;
+    server_name mlediamant.com www.mlediamant.com;
+
+    # Перенаправление HTTP → HTTPS
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name mlediamant.com www.mlediamant.com;
+
+    ssl_certificate /etc/letsencrypt/live/mlediamant.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/mlediamant.com/privkey.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+
+    location /static/ {
+        alias /home/ubuntu/inst_bot/static/;
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
+    }
+}
+
+
+Сохранить изменения:
+
+Нажми Ctrl + O (буква "O").
+Нажми Enter для подтверждения сохранения.
+
+
+Выйти из nano:
+
+Нажми Ctrl + X.
+
+Активируй:
+sudo ln -s /etc/nginx/sites-available/mlediamant /etc/nginx/sites-enabled
+sudo nginx -t && sudo systemctl restart nginx
+
+Настрой SSL:
+sudo apt install certbot python3-certbot-nginx -y
+sudo certbot --nginx -d mlediamant.com
+
+
+sudo nano /etc/systemd/system/inst_bot.service
+
+
+Содержимое файла (inst_bot.service):
+[Unit]
+Description=Inst Bot FastAPI with Gunicorn
+After=network.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/inst_bot
+Environment="PATH=/home/ubuntu/inst_bot/venv/bin"
+ExecStart=/home/ubuntu/inst_bot/venv/bin/gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000 --access-logfile /home/ubuntu/inst_bot/access.log --error-logfile /home/ubuntu/inst_bot/error.log
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+
+
+3. Активация и запуск сервиса
+sudo systemctl daemon-reload  # Перезагрузи systemd для чтения нового сервиса
+sudo systemctl enable inst_bot  # Автозапуск при загрузке сервера
+sudo systemctl start inst_bot   # Запуск сервиса
+sudo systemctl status inst_bot  # Проверка статуса (должен быть "active (running)")
+
+Пример вывода status (если всё OK):
+● inst_bot.service - Inst Bot FastAPI with Gunicorn + Uvicorn
+   Loaded: loaded (/etc/systemd/system/inst_bot.service; enabled; vendor preset: enabled)
+   Active: active (running) since ...
+   
+   
+ Проверка работы
+Порт 8000 слушается
+sudo netstat -tuln | grep 8000
+# Или лучше:
+sudo ss -tuln | grep 8000
+
+уствновка бесплатных сертификатов безопасности, скачичаваем сперва
+sudo apt update
+sudo apt install certbot python3-certbot-nginx -y
+
+устанавливаем
+sudo certbot --nginx -d mlediamant.com -d www.mlediamant.com 
+
+пишем почту
+mladiamontuae@gmail.com
+
+
+после установки проверить, что все работает
+sudo nginx -t
+sudo systemctl reload nginx
+curl -I https://mlediamant.com
+
+если при переходе на https://mlediamant.com/ выдает nginx,то нужно удалить 
+sudo rm /etc/nginx/sites-enabled/default
+и перезапустить
+sudo systemctl reload nginx
+
+

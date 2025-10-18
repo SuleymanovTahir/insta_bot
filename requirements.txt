@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+httpx
+google-generativeai
+python-multipart
+jinja2
+gunicorn
+reportlab
+openpyxl
+slowapi
