@@ -97,10 +97,16 @@ async def log_requests(request: Request, call_next):
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
+import os
+
 # CORS
+allowed_origins = ["https://mlediamant.com"]
+if os.getenv("ENVIRONMENT") != "production":
+    allowed_origins.extend(["http://localhost:8000", "http://127.0.0.1:8000"])
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://mlediamant.com"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -109,7 +115,14 @@ app.add_middleware(
 # Trusted hosts
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=["mlediamant.com", "*.mlediamant.com"]
+    allowed_hosts=[
+        "mlediamant.com", 
+        "*.mlediamant.com",
+        "localhost",
+        "127.0.0.1",
+        "localhost:8000",
+        "127.0.0.1:8000"
+    ]
 )
 
 # Security headers

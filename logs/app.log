@@ -959,3 +959,1500 @@
 2025-10-19 02:37:41 - crm - INFO - [startup] 📈 Воронка продаж: http://localhost:8000/admin/funnel
 2025-10-19 02:37:41 - crm - INFO - [startup] 📉 Аналитика: http://localhost:8000/admin/analytics
 2025-10-19 02:37:41 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:18:33 - crm - INFO - [startup] ✅ Созданы директории: static/uploads/images, static/uploads/files, static/uploads/voice, logs
+2025-10-19 03:18:34 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:18:34 - crm - INFO - [startup] 📋 Зарегистрированные роуты:
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET', 'HEAD'} /openapi.json
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs/oauth2-redirect
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET', 'HEAD'} /redoc
+2025-10-19 03:18:34 - crm - INFO - [startup]    MOUNT /ws
+2025-10-19 03:18:34 - crm - INFO - [startup]    MOUNT /static
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/clients
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/clients/{client_id}
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/bookings
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/bookings/{booking_id}
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/chat
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/messages
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/analytics
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/funnel
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/statuses
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/services
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/users
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/api/stats
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/api/unread-count
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/api/analytics
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/api/funnel
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/status
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/update
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/notes
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/pin
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/create
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/status
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/notes
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /admin/api/chat/send
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/api/chat/messages
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'DELETE'} /admin/api/chat/message/{client_id}/{message_id}
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /admin/api/chat/upload
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /admin/api/chat/voice
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/api/uploads/{file_type}/{filename}
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/api/chats-update
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/create
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/{status_key}/delete
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /admin/api/services/create
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/update
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/delete
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/api/services/{service_id}
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /admin/api/users/{user_id}/delete
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/api/export/clients
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/api/export/analytics
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /admin/api/export/bookings
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /login
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /login
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /logout
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /register
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /register
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /webhook
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /webhook
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /book
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /api
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /forgot-password
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /forgot-password
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /reset-password
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'POST'} /reset-password
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /stats
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /health
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /privacy-policy
+2025-10-19 03:18:34 - crm - INFO - [startup]    {'GET'} /terms
+2025-10-19 03:18:34 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:18:34 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:18:34 - crm - INFO - [startup] 🚀 Запуск CRM системы...
+2025-10-19 03:18:34 - crm - INFO - [startup] 💎 Салон: M.Le Diamant Beauty Lounge
+2025-10-19 03:18:34 - crm - INFO - [startup] 🤖 Бот-гений продаж: Diamant
+2025-10-19 03:18:34 - crm - INFO - [startup] 📍 Адрес: Shop 13, Amwaj 3 Plaza Level, Jumeirah Beach Residence, Dubai
+2025-10-19 03:18:34 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:18:34 - crm - INFO - [startup] ✅ CRM готова к работе!
+2025-10-19 03:18:34 - crm - INFO - [startup] 🔐 Логин: http://localhost:8000/login
+2025-10-19 03:18:34 - crm - INFO - [startup] 📊 Админ-панель: http://localhost:8000/admin
+2025-10-19 03:18:34 - crm - INFO - [startup] 📈 Воронка продаж: http://localhost:8000/admin/funnel
+2025-10-19 03:18:34 - crm - INFO - [startup] 📉 Аналитика: http://localhost:8000/admin/analytics
+2025-10-19 03:18:34 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:25:34 - crm - INFO - [startup] ✅ Созданы директории: static/uploads/images, static/uploads/files, static/uploads/voice, logs
+2025-10-19 03:25:34 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:25:34 - crm - INFO - [startup] 📋 Зарегистрированные роуты:
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'HEAD', 'GET'} /openapi.json
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'HEAD', 'GET'} /docs
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'HEAD', 'GET'} /docs/oauth2-redirect
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'HEAD', 'GET'} /redoc
+2025-10-19 03:25:34 - crm - INFO - [startup]    MOUNT /ws
+2025-10-19 03:25:34 - crm - INFO - [startup]    MOUNT /static
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/clients
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/clients/{client_id}
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/bookings
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/bookings/{booking_id}
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/chat
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/messages
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/analytics
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/funnel
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/statuses
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/services
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/users
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/api/stats
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/api/unread-count
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/api/analytics
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/api/funnel
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/status
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/update
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/notes
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/pin
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/create
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/status
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/notes
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /admin/api/chat/send
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/api/chat/messages
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'DELETE'} /admin/api/chat/message/{client_id}/{message_id}
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /admin/api/chat/upload
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /admin/api/chat/voice
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/api/uploads/{file_type}/{filename}
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/api/chats-update
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/create
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/{status_key}/delete
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /admin/api/services/create
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/update
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/delete
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/api/services/{service_id}
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /admin/api/users/{user_id}/delete
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/api/export/clients
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/api/export/analytics
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /admin/api/export/bookings
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /login
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /login
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /logout
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /register
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /register
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /webhook
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /webhook
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /book
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /api
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /forgot-password
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /forgot-password
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /reset-password
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'POST'} /reset-password
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /stats
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /health
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /privacy-policy
+2025-10-19 03:25:34 - crm - INFO - [startup]    {'GET'} /terms
+2025-10-19 03:25:34 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:25:34 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:25:34 - crm - INFO - [startup] 🚀 Запуск CRM системы...
+2025-10-19 03:25:34 - crm - INFO - [startup] 💎 Салон: M.Le Diamant Beauty Lounge
+2025-10-19 03:25:34 - crm - INFO - [startup] 🤖 Бот-гений продаж: Diamant
+2025-10-19 03:25:34 - crm - INFO - [startup] 📍 Адрес: Shop 13, Amwaj 3 Plaza Level, Jumeirah Beach Residence, Dubai
+2025-10-19 03:25:34 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:25:34 - crm - INFO - [startup] ✅ CRM готова к работе!
+2025-10-19 03:25:34 - crm - INFO - [startup] 🔐 Логин: http://localhost:8000/login
+2025-10-19 03:25:34 - crm - INFO - [startup] 📊 Админ-панель: http://localhost:8000/admin
+2025-10-19 03:25:34 - crm - INFO - [startup] 📈 Воронка продаж: http://localhost:8000/admin/funnel
+2025-10-19 03:25:34 - crm - INFO - [startup] 📉 Аналитика: http://localhost:8000/admin/analytics
+2025-10-19 03:25:34 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:42 - crm - INFO - [startup] ✅ Созданы директории: static/uploads/images, static/uploads/files, static/uploads/voice, logs
+2025-10-19 03:28:46 - crm - INFO - [startup] ✅ Созданы директории: static/uploads/images, static/uploads/files, static/uploads/voice, logs
+2025-10-19 03:28:46 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:46 - crm - INFO - [startup] 📋 Зарегистрированные роуты:
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET', 'HEAD'} /openapi.json
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs/oauth2-redirect
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET', 'HEAD'} /redoc
+2025-10-19 03:28:46 - crm - INFO - [startup]    MOUNT /ws
+2025-10-19 03:28:46 - crm - INFO - [startup]    MOUNT /static
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/clients
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/clients/{client_id}
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/bookings
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/bookings/{booking_id}
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/chat
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/messages
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/analytics
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/funnel
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/statuses
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/services
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/users
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/api/stats
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/api/unread-count
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/api/analytics
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/api/funnel
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/status
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/update
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/notes
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/pin
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/create
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/status
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/notes
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /admin/api/chat/send
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/api/chat/messages
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'DELETE'} /admin/api/chat/message/{client_id}/{message_id}
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /admin/api/chat/upload
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /admin/api/chat/voice
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/api/uploads/{file_type}/{filename}
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/api/chats-update
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/create
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/{status_key}/delete
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /admin/api/services/create
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/update
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/delete
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/api/services/{service_id}
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /admin/api/users/{user_id}/delete
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/api/export/clients
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/api/export/analytics
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /admin/api/export/bookings
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /login
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /login
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /logout
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /register
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /register
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /webhook
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /webhook
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /book
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /api
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /forgot-password
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /forgot-password
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /reset-password
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'POST'} /reset-password
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /stats
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /health
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /privacy-policy
+2025-10-19 03:28:46 - crm - INFO - [startup]    {'GET'} /terms
+2025-10-19 03:28:46 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:46 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:46 - crm - INFO - [startup] 🚀 Запуск CRM системы...
+2025-10-19 03:28:46 - crm - INFO - [startup] 💎 Салон: M.Le Diamant Beauty Lounge
+2025-10-19 03:28:46 - crm - INFO - [startup] 🤖 Бот-гений продаж: Diamant
+2025-10-19 03:28:46 - crm - INFO - [startup] 📍 Адрес: Shop 13, Amwaj 3 Plaza Level, Jumeirah Beach Residence, Dubai
+2025-10-19 03:28:46 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:46 - crm - INFO - [startup] ✅ CRM готова к работе!
+2025-10-19 03:28:46 - crm - INFO - [startup] 🔐 Логин: http://localhost:8000/login
+2025-10-19 03:28:46 - crm - INFO - [startup] 📊 Админ-панель: http://localhost:8000/admin
+2025-10-19 03:28:46 - crm - INFO - [startup] 📈 Воронка продаж: http://localhost:8000/admin/funnel
+2025-10-19 03:28:46 - crm - INFO - [startup] 📉 Аналитика: http://localhost:8000/admin/analytics
+2025-10-19 03:28:46 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:48 - crm - INFO - [startup] ✅ Созданы директории: static/uploads/images, static/uploads/files, static/uploads/voice, logs
+2025-10-19 03:28:48 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:48 - crm - INFO - [startup] 📋 Зарегистрированные роуты:
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET', 'HEAD'} /openapi.json
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs/oauth2-redirect
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET', 'HEAD'} /redoc
+2025-10-19 03:28:48 - crm - INFO - [startup]    MOUNT /ws
+2025-10-19 03:28:48 - crm - INFO - [startup]    MOUNT /static
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/clients
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/clients/{client_id}
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/bookings
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/bookings/{booking_id}
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/chat
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/messages
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/analytics
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/funnel
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/statuses
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/services
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/users
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/api/stats
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/api/unread-count
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/api/analytics
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/api/funnel
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/status
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/update
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/notes
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/pin
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/create
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/status
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/notes
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /admin/api/chat/send
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/api/chat/messages
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'DELETE'} /admin/api/chat/message/{client_id}/{message_id}
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /admin/api/chat/upload
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /admin/api/chat/voice
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/api/uploads/{file_type}/{filename}
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/api/chats-update
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/create
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/{status_key}/delete
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /admin/api/services/create
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/update
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/delete
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/api/services/{service_id}
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /admin/api/users/{user_id}/delete
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/api/export/clients
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/api/export/analytics
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /admin/api/export/bookings
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /login
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /login
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /logout
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /register
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /register
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /webhook
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /webhook
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /book
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /api
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /forgot-password
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /forgot-password
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /reset-password
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'POST'} /reset-password
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /stats
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /health
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /privacy-policy
+2025-10-19 03:28:48 - crm - INFO - [startup]    {'GET'} /terms
+2025-10-19 03:28:48 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:48 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:48 - crm - INFO - [startup] 🚀 Запуск CRM системы...
+2025-10-19 03:28:48 - crm - INFO - [startup] 💎 Салон: M.Le Diamant Beauty Lounge
+2025-10-19 03:28:48 - crm - INFO - [startup] 🤖 Бот-гений продаж: Diamant
+2025-10-19 03:28:48 - crm - INFO - [startup] 📍 Адрес: Shop 13, Amwaj 3 Plaza Level, Jumeirah Beach Residence, Dubai
+2025-10-19 03:28:48 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:48 - crm - INFO - [startup] ✅ CRM готова к работе!
+2025-10-19 03:28:48 - crm - INFO - [startup] 🔐 Логин: http://localhost:8000/login
+2025-10-19 03:28:48 - crm - INFO - [startup] 📊 Админ-панель: http://localhost:8000/admin
+2025-10-19 03:28:48 - crm - INFO - [startup] 📈 Воронка продаж: http://localhost:8000/admin/funnel
+2025-10-19 03:28:48 - crm - INFO - [startup] 📉 Аналитика: http://localhost:8000/admin/analytics
+2025-10-19 03:28:48 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:52 - crm - INFO - [startup] ✅ Созданы директории: static/uploads/images, static/uploads/files, static/uploads/voice, logs
+2025-10-19 03:28:54 - crm - INFO - [startup] ✅ Созданы директории: static/uploads/images, static/uploads/files, static/uploads/voice, logs
+2025-10-19 03:28:54 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:54 - crm - INFO - [startup] 📋 Зарегистрированные роуты:
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'HEAD', 'GET'} /openapi.json
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'HEAD', 'GET'} /docs
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'HEAD', 'GET'} /docs/oauth2-redirect
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'HEAD', 'GET'} /redoc
+2025-10-19 03:28:54 - crm - INFO - [startup]    MOUNT /ws
+2025-10-19 03:28:54 - crm - INFO - [startup]    MOUNT /static
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/clients
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/clients/{client_id}
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/bookings
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/bookings/{booking_id}
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/chat
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/messages
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/analytics
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/funnel
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/statuses
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/services
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/users
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/api/stats
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/api/unread-count
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/api/analytics
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/api/funnel
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/status
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/update
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/notes
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/pin
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/create
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/status
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/notes
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /admin/api/chat/send
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/api/chat/messages
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'DELETE'} /admin/api/chat/message/{client_id}/{message_id}
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /admin/api/chat/upload
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /admin/api/chat/voice
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/api/uploads/{file_type}/{filename}
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/api/chats-update
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/create
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/{status_key}/delete
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /admin/api/services/create
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/update
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/delete
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/api/services/{service_id}
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /admin/api/users/{user_id}/delete
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/api/export/clients
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/api/export/analytics
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /admin/api/export/bookings
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /login
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /login
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /logout
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /register
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /register
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /webhook
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /webhook
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /book
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /api
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /forgot-password
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /forgot-password
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /reset-password
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'POST'} /reset-password
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /stats
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /health
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /privacy-policy
+2025-10-19 03:28:54 - crm - INFO - [startup]    {'GET'} /terms
+2025-10-19 03:28:54 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:54 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:54 - crm - INFO - [startup] 🚀 Запуск CRM системы...
+2025-10-19 03:28:54 - crm - INFO - [startup] 💎 Салон: M.Le Diamant Beauty Lounge
+2025-10-19 03:28:54 - crm - INFO - [startup] 🤖 Бот-гений продаж: Diamant
+2025-10-19 03:28:54 - crm - INFO - [startup] 📍 Адрес: Shop 13, Amwaj 3 Plaza Level, Jumeirah Beach Residence, Dubai
+2025-10-19 03:28:54 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:54 - crm - INFO - [startup] ✅ CRM готова к работе!
+2025-10-19 03:28:54 - crm - INFO - [startup] 🔐 Логин: http://localhost:8000/login
+2025-10-19 03:28:54 - crm - INFO - [startup] 📊 Админ-панель: http://localhost:8000/admin
+2025-10-19 03:28:54 - crm - INFO - [startup] 📈 Воронка продаж: http://localhost:8000/admin/funnel
+2025-10-19 03:28:54 - crm - INFO - [startup] 📉 Аналитика: http://localhost:8000/admin/analytics
+2025-10-19 03:28:54 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:58 - crm - INFO - [startup] ✅ Созданы директории: static/uploads/images, static/uploads/files, static/uploads/voice, logs
+2025-10-19 03:28:58 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:58 - crm - INFO - [startup] 📋 Зарегистрированные роуты:
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET', 'HEAD'} /openapi.json
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs/oauth2-redirect
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET', 'HEAD'} /redoc
+2025-10-19 03:28:58 - crm - INFO - [startup]    MOUNT /ws
+2025-10-19 03:28:58 - crm - INFO - [startup]    MOUNT /static
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/clients
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/clients/{client_id}
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/bookings
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/bookings/{booking_id}
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/chat
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/messages
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/analytics
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/funnel
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/statuses
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/services
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/users
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/api/stats
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/api/unread-count
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/api/analytics
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/api/funnel
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/status
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/update
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/notes
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/pin
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/create
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/status
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/notes
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /admin/api/chat/send
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/api/chat/messages
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'DELETE'} /admin/api/chat/message/{client_id}/{message_id}
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /admin/api/chat/upload
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /admin/api/chat/voice
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/api/uploads/{file_type}/{filename}
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/api/chats-update
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/create
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/{status_key}/delete
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /admin/api/services/create
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/update
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/delete
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/api/services/{service_id}
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /admin/api/users/{user_id}/delete
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/api/export/clients
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/api/export/analytics
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /admin/api/export/bookings
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /login
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /login
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /logout
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /register
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /register
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /webhook
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /webhook
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /book
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /api
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /forgot-password
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /forgot-password
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /reset-password
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'POST'} /reset-password
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /stats
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /health
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /privacy-policy
+2025-10-19 03:28:58 - crm - INFO - [startup]    {'GET'} /terms
+2025-10-19 03:28:58 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:58 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:58 - crm - INFO - [startup] 🚀 Запуск CRM системы...
+2025-10-19 03:28:58 - crm - INFO - [startup] 💎 Салон: M.Le Diamant Beauty Lounge
+2025-10-19 03:28:58 - crm - INFO - [startup] 🤖 Бот-гений продаж: Diamant
+2025-10-19 03:28:58 - crm - INFO - [startup] 📍 Адрес: Shop 13, Amwaj 3 Plaza Level, Jumeirah Beach Residence, Dubai
+2025-10-19 03:28:58 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:28:58 - crm - INFO - [startup] ✅ CRM готова к работе!
+2025-10-19 03:28:58 - crm - INFO - [startup] 🔐 Логин: http://localhost:8000/login
+2025-10-19 03:28:58 - crm - INFO - [startup] 📊 Админ-панель: http://localhost:8000/admin
+2025-10-19 03:28:58 - crm - INFO - [startup] 📈 Воронка продаж: http://localhost:8000/admin/funnel
+2025-10-19 03:28:58 - crm - INFO - [startup] 📉 Аналитика: http://localhost:8000/admin/analytics
+2025-10-19 03:28:58 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:30:15 - crm - INFO - [startup] ✅ Созданы директории: static/uploads/images, static/uploads/files, static/uploads/voice, logs
+2025-10-19 03:30:15 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:30:15 - crm - INFO - [startup] 📋 Зарегистрированные роуты:
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'HEAD', 'GET'} /openapi.json
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'HEAD', 'GET'} /docs
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'HEAD', 'GET'} /docs/oauth2-redirect
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'HEAD', 'GET'} /redoc
+2025-10-19 03:30:15 - crm - INFO - [startup]    MOUNT /ws
+2025-10-19 03:30:15 - crm - INFO - [startup]    MOUNT /static
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/clients
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/clients/{client_id}
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/bookings
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/bookings/{booking_id}
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/chat
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/messages
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/analytics
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/funnel
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/statuses
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/services
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/users
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/api/stats
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/api/unread-count
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/api/analytics
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/api/funnel
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/status
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/update
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/notes
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/pin
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/create
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/status
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/notes
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /admin/api/chat/send
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/api/chat/messages
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'DELETE'} /admin/api/chat/message/{client_id}/{message_id}
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /admin/api/chat/upload
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /admin/api/chat/voice
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/api/uploads/{file_type}/{filename}
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/api/chats-update
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/create
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/{status_key}/delete
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /admin/api/services/create
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/update
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/delete
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/api/services/{service_id}
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /admin/api/users/{user_id}/delete
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/api/export/clients
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/api/export/analytics
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /admin/api/export/bookings
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /login
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /login
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /logout
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /register
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /register
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /webhook
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /webhook
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /book
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /api
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /forgot-password
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /forgot-password
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /reset-password
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'POST'} /reset-password
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /stats
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /health
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /privacy-policy
+2025-10-19 03:30:15 - crm - INFO - [startup]    {'GET'} /terms
+2025-10-19 03:30:15 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:30:15 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:30:15 - crm - INFO - [startup] 🚀 Запуск CRM системы...
+2025-10-19 03:30:15 - crm - INFO - [startup] 💎 Салон: M.Le Diamant Beauty Lounge
+2025-10-19 03:30:15 - crm - INFO - [startup] 🤖 Бот-гений продаж: Diamant
+2025-10-19 03:30:15 - crm - INFO - [startup] 📍 Адрес: Shop 13, Amwaj 3 Plaza Level, Jumeirah Beach Residence, Dubai
+2025-10-19 03:30:15 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:30:15 - crm - INFO - [startup] ✅ CRM готова к работе!
+2025-10-19 03:30:15 - crm - INFO - [startup] 🔐 Логин: http://localhost:8000/login
+2025-10-19 03:30:15 - crm - INFO - [startup] 📊 Админ-панель: http://localhost:8000/admin
+2025-10-19 03:30:15 - crm - INFO - [startup] 📈 Воронка продаж: http://localhost:8000/admin/funnel
+2025-10-19 03:30:15 - crm - INFO - [startup] 📉 Аналитика: http://localhost:8000/admin/analytics
+2025-10-19 03:30:15 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:30:23 - crm - INFO - [startup] ✅ Созданы директории: static/uploads/images, static/uploads/files, static/uploads/voice, logs
+2025-10-19 03:30:23 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:30:23 - crm - INFO - [startup] 📋 Зарегистрированные роуты:
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET', 'HEAD'} /openapi.json
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs/oauth2-redirect
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET', 'HEAD'} /redoc
+2025-10-19 03:30:23 - crm - INFO - [startup]    MOUNT /ws
+2025-10-19 03:30:23 - crm - INFO - [startup]    MOUNT /static
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/clients
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/clients/{client_id}
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/bookings
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/bookings/{booking_id}
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/chat
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/messages
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/analytics
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/funnel
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/statuses
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/services
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/users
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/api/stats
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/api/unread-count
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/api/analytics
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/api/funnel
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/status
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/update
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/notes
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/pin
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/create
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/status
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/notes
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /admin/api/chat/send
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/api/chat/messages
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'DELETE'} /admin/api/chat/message/{client_id}/{message_id}
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /admin/api/chat/upload
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /admin/api/chat/voice
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/api/uploads/{file_type}/{filename}
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/api/chats-update
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/create
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/{status_key}/delete
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /admin/api/services/create
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/update
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/delete
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/api/services/{service_id}
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /admin/api/users/{user_id}/delete
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/api/export/clients
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/api/export/analytics
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /admin/api/export/bookings
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /login
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /login
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /logout
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /register
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /register
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /webhook
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /webhook
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /book
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /api
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /forgot-password
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /forgot-password
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /reset-password
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'POST'} /reset-password
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /stats
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /health
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /privacy-policy
+2025-10-19 03:30:23 - crm - INFO - [startup]    {'GET'} /terms
+2025-10-19 03:30:23 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:30:23 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:30:23 - crm - INFO - [startup] 🚀 Запуск CRM системы...
+2025-10-19 03:30:23 - crm - INFO - [startup] 💎 Салон: M.Le Diamant Beauty Lounge
+2025-10-19 03:30:23 - crm - INFO - [startup] 🤖 Бот-гений продаж: Diamant
+2025-10-19 03:30:23 - crm - INFO - [startup] 📍 Адрес: Shop 13, Amwaj 3 Plaza Level, Jumeirah Beach Residence, Dubai
+2025-10-19 03:30:23 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:30:23 - crm - INFO - [startup] ✅ CRM готова к работе!
+2025-10-19 03:30:23 - crm - INFO - [startup] 🔐 Логин: http://localhost:8000/login
+2025-10-19 03:30:23 - crm - INFO - [startup] 📊 Админ-панель: http://localhost:8000/admin
+2025-10-19 03:30:23 - crm - INFO - [startup] 📈 Воронка продаж: http://localhost:8000/admin/funnel
+2025-10-19 03:30:23 - crm - INFO - [startup] 📉 Аналитика: http://localhost:8000/admin/analytics
+2025-10-19 03:30:23 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:31:11 - crm - INFO - [startup] ✅ Созданы директории: static/uploads/images, static/uploads/files, static/uploads/voice, logs
+2025-10-19 03:31:11 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:31:11 - crm - INFO - [startup] 📋 Зарегистрированные роуты:
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'HEAD', 'GET'} /openapi.json
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'HEAD', 'GET'} /docs
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'HEAD', 'GET'} /docs/oauth2-redirect
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'HEAD', 'GET'} /redoc
+2025-10-19 03:31:11 - crm - INFO - [startup]    MOUNT /ws
+2025-10-19 03:31:11 - crm - INFO - [startup]    MOUNT /static
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/clients
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/clients/{client_id}
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/bookings
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/bookings/{booking_id}
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/chat
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/messages
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/analytics
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/funnel
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/statuses
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/services
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/users
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/api/stats
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/api/unread-count
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/api/analytics
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/api/funnel
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/status
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/update
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/notes
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/pin
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/create
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/status
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/notes
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /admin/api/chat/send
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/api/chat/messages
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'DELETE'} /admin/api/chat/message/{client_id}/{message_id}
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /admin/api/chat/upload
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /admin/api/chat/voice
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/api/uploads/{file_type}/{filename}
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/api/chats-update
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/create
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/{status_key}/delete
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /admin/api/services/create
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/update
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/delete
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/api/services/{service_id}
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /admin/api/users/{user_id}/delete
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/api/export/clients
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/api/export/analytics
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /admin/api/export/bookings
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /login
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /login
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /logout
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /register
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /register
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /webhook
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /webhook
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /book
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /api
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /forgot-password
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /forgot-password
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /reset-password
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'POST'} /reset-password
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /stats
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /health
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /privacy-policy
+2025-10-19 03:31:11 - crm - INFO - [startup]    {'GET'} /terms
+2025-10-19 03:31:11 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:31:11 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:31:11 - crm - INFO - [startup] 🚀 Запуск CRM системы...
+2025-10-19 03:31:11 - crm - INFO - [startup] 💎 Салон: M.Le Diamant Beauty Lounge
+2025-10-19 03:31:11 - crm - INFO - [startup] 🤖 Бот-гений продаж: Diamant
+2025-10-19 03:31:11 - crm - INFO - [startup] 📍 Адрес: Shop 13, Amwaj 3 Plaza Level, Jumeirah Beach Residence, Dubai
+2025-10-19 03:31:11 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:31:11 - crm - INFO - [startup] ✅ CRM готова к работе!
+2025-10-19 03:31:11 - crm - INFO - [startup] 🔐 Логин: http://localhost:8000/login
+2025-10-19 03:31:11 - crm - INFO - [startup] 📊 Админ-панель: http://localhost:8000/admin
+2025-10-19 03:31:11 - crm - INFO - [startup] 📈 Воронка продаж: http://localhost:8000/admin/funnel
+2025-10-19 03:31:11 - crm - INFO - [startup] 📉 Аналитика: http://localhost:8000/admin/analytics
+2025-10-19 03:31:11 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:32:08 - crm - INFO - [startup] ✅ Созданы директории: static/uploads/images, static/uploads/files, static/uploads/voice, logs
+2025-10-19 03:32:08 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:32:08 - crm - INFO - [startup] 📋 Зарегистрированные роуты:
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET', 'HEAD'} /openapi.json
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs/oauth2-redirect
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET', 'HEAD'} /redoc
+2025-10-19 03:32:08 - crm - INFO - [startup]    MOUNT /ws
+2025-10-19 03:32:08 - crm - INFO - [startup]    MOUNT /static
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/clients
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/clients/{client_id}
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/bookings
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/bookings/{booking_id}
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/chat
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/messages
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/analytics
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/funnel
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/statuses
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/services
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/users
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/api/stats
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/api/unread-count
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/api/analytics
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/api/funnel
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/status
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/update
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/notes
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/pin
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/create
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/status
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/notes
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /admin/api/chat/send
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/api/chat/messages
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'DELETE'} /admin/api/chat/message/{client_id}/{message_id}
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /admin/api/chat/upload
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /admin/api/chat/voice
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/api/uploads/{file_type}/{filename}
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/api/chats-update
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/create
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/{status_key}/delete
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /admin/api/services/create
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/update
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/delete
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/api/services/{service_id}
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /admin/api/users/{user_id}/delete
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/api/export/clients
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/api/export/analytics
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /admin/api/export/bookings
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /login
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /login
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /logout
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /register
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /register
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /webhook
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /webhook
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /book
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /api
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /forgot-password
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /forgot-password
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /reset-password
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'POST'} /reset-password
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /stats
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /health
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /privacy-policy
+2025-10-19 03:32:08 - crm - INFO - [startup]    {'GET'} /terms
+2025-10-19 03:32:08 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:32:08 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:32:08 - crm - INFO - [startup] 🚀 Запуск CRM системы...
+2025-10-19 03:32:08 - crm - INFO - [startup] 💎 Салон: M.Le Diamant Beauty Lounge
+2025-10-19 03:32:08 - crm - INFO - [startup] 🤖 Бот-гений продаж: Diamant
+2025-10-19 03:32:08 - crm - INFO - [startup] 📍 Адрес: Shop 13, Amwaj 3 Plaza Level, Jumeirah Beach Residence, Dubai
+2025-10-19 03:32:08 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:32:08 - crm - INFO - [startup] ✅ CRM готова к работе!
+2025-10-19 03:32:08 - crm - INFO - [startup] 🔐 Логин: http://localhost:8000/login
+2025-10-19 03:32:08 - crm - INFO - [startup] 📊 Админ-панель: http://localhost:8000/admin
+2025-10-19 03:32:08 - crm - INFO - [startup] 📈 Воронка продаж: http://localhost:8000/admin/funnel
+2025-10-19 03:32:08 - crm - INFO - [startup] 📉 Аналитика: http://localhost:8000/admin/analytics
+2025-10-19 03:32:08 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:32:13 - crm - INFO - [startup] ✅ Созданы директории: static/uploads/images, static/uploads/files, static/uploads/voice, logs
+2025-10-19 03:32:13 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:32:13 - crm - INFO - [startup] 📋 Зарегистрированные роуты:
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET', 'HEAD'} /openapi.json
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs/oauth2-redirect
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET', 'HEAD'} /redoc
+2025-10-19 03:32:13 - crm - INFO - [startup]    MOUNT /ws
+2025-10-19 03:32:13 - crm - INFO - [startup]    MOUNT /static
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/clients
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/clients/{client_id}
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/bookings
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/bookings/{booking_id}
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/chat
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/messages
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/analytics
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/funnel
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/statuses
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/services
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/users
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/api/stats
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/api/unread-count
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/api/analytics
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/api/funnel
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/status
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/update
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/notes
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/pin
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/create
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/status
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/notes
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /admin/api/chat/send
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/api/chat/messages
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'DELETE'} /admin/api/chat/message/{client_id}/{message_id}
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /admin/api/chat/upload
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /admin/api/chat/voice
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/api/uploads/{file_type}/{filename}
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/api/chats-update
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/create
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/{status_key}/delete
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /admin/api/services/create
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/update
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/delete
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/api/services/{service_id}
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /admin/api/users/{user_id}/delete
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/api/export/clients
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/api/export/analytics
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /admin/api/export/bookings
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /login
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /login
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /logout
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /register
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /register
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /webhook
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /webhook
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /book
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /api
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /forgot-password
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /forgot-password
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /reset-password
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'POST'} /reset-password
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /stats
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /health
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /privacy-policy
+2025-10-19 03:32:13 - crm - INFO - [startup]    {'GET'} /terms
+2025-10-19 03:32:13 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:32:13 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:32:13 - crm - INFO - [startup] 🚀 Запуск CRM системы...
+2025-10-19 03:32:13 - crm - INFO - [startup] 💎 Салон: M.Le Diamant Beauty Lounge
+2025-10-19 03:32:13 - crm - INFO - [startup] 🤖 Бот-гений продаж: Diamant
+2025-10-19 03:32:13 - crm - INFO - [startup] 📍 Адрес: Shop 13, Amwaj 3 Plaza Level, Jumeirah Beach Residence, Dubai
+2025-10-19 03:32:13 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:32:13 - crm - INFO - [startup] ✅ CRM готова к работе!
+2025-10-19 03:32:13 - crm - INFO - [startup] 🔐 Логин: http://localhost:8000/login
+2025-10-19 03:32:13 - crm - INFO - [startup] 📊 Админ-панель: http://localhost:8000/admin
+2025-10-19 03:32:13 - crm - INFO - [startup] 📈 Воронка продаж: http://localhost:8000/admin/funnel
+2025-10-19 03:32:13 - crm - INFO - [startup] 📉 Аналитика: http://localhost:8000/admin/analytics
+2025-10-19 03:32:13 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:32:19 - crm - INFO - [middleware] 🔥 GET /
+2025-10-19 03:32:19 - crm - INFO - [middleware] 📤 GET / → 200 (0.00s)
+2025-10-19 03:32:19 - crm - INFO - [middleware] 🔥 GET /favicon.ico
+2025-10-19 03:32:19 - crm - INFO - [middleware] 📤 GET /favicon.ico → 404 (0.00s)
+2025-10-19 03:32:26 - crm - INFO - [middleware] 🔥 GET /admin
+2025-10-19 03:32:26 - crm - INFO - [middleware] 📤 GET /admin → 302 (0.00s)
+2025-10-19 03:32:26 - crm - INFO - [middleware] 🔥 GET /login
+2025-10-19 03:32:26 - crm - INFO - [auth] Открыта страница логина
+2025-10-19 03:32:26 - crm - INFO - [middleware] 📤 GET /login → 200 (0.00s)
+2025-10-19 03:32:27 - crm - INFO - [middleware] 🔥 POST /login
+2025-10-19 03:32:27 - crm - INFO - [auth] Попытка входа: admin
+2025-10-19 03:32:27 - crm - INFO - [auth] Создана сессия для пользователя admin
+2025-10-19 03:32:27 - crm - INFO - [middleware] 📤 POST /login → 302 (0.00s)
+2025-10-19 03:32:27 - crm - INFO - [middleware] 🔥 GET /admin
+2025-10-19 03:32:27 - crm - INFO - [middleware] 📤 GET /admin → 200 (0.01s)
+2025-10-19 03:32:30 - crm - INFO - [middleware] 🔥 GET /admin/chat
+2025-10-19 03:32:30 - crm - INFO - [middleware] 📤 GET /admin/chat → 200 (0.02s)
+2025-10-19 03:32:31 - crm - INFO - [middleware] 🔥 GET /admin/chat
+2025-10-19 03:32:31 - crm - INFO - [middleware] 📤 GET /admin/chat → 200 (0.00s)
+2025-10-19 03:32:34 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:32:34 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:32:36 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:32:36 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:32:38 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:32:38 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:32:41 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:32:41 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:32:42 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:32:42 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:32:44 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:32:44 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:32:47 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:32:47 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:32:47 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:32:47 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:32:50 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:32:50 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:32:52 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:32:52 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:32:53 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:32:53 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:32:56 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:32:56 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:32:57 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:32:57 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:32:58 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:32:58 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:02 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:02 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:02 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:33:02 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:33:05 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:05 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:07 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:33:07 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:33:07 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:07 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:11 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:11 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:12 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:33:12 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:33:14 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:14 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:17 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:17 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:33:17 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:17 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:33:20 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:20 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:22 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:33:22 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:33:23 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:23 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:25 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:25 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:26 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:33:26 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:33:28 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:28 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:31 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:31 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:33:31 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:31 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:33:34 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:34 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:36 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:33:36 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:33:37 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:37 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:40 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:40 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:41 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:33:41 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:33:43 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:43 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:46 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:46 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:33:46 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:46 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:33:49 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:49 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:51 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:33:51 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:33:52 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:52 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:55 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:55 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:33:57 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:33:57 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:33:59 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:33:59 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:34:02 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:34:02 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:34:02 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:34:02 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:34:05 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:34:05 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:34:07 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:34:07 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:34:08 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:34:08 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:34:11 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:34:11 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:34:12 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:34:12 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:34:14 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:34:14 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:34:17 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:34:17 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:34:17 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:34:17 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:34:20 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:34:20 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:34:22 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:34:22 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:34:23 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:34:23 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:34:26 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:34:26 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:34:27 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:34:27 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:34:29 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:34:29 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:34:32 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:34:32 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:34:32 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:34:32 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:34:35 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:34:35 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:34:37 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:34:37 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:34:38 - crm - INFO - [startup] ✅ Созданы директории: static/uploads/images, static/uploads/files, static/uploads/voice, logs
+2025-10-19 03:34:38 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:34:38 - crm - INFO - [startup] 📋 Зарегистрированные роуты:
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET', 'HEAD'} /openapi.json
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs/oauth2-redirect
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET', 'HEAD'} /redoc
+2025-10-19 03:34:38 - crm - INFO - [startup]    MOUNT /ws
+2025-10-19 03:34:38 - crm - INFO - [startup]    MOUNT /static
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/clients
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/clients/{client_id}
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/bookings
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/bookings/{booking_id}
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/chat
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/messages
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/analytics
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/funnel
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/statuses
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/services
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/users
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/api/stats
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/api/unread-count
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/api/analytics
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/api/funnel
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/status
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/update
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/notes
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/pin
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/create
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/status
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/notes
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /admin/api/chat/send
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/api/chat/messages
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'DELETE'} /admin/api/chat/message/{client_id}/{message_id}
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /admin/api/chat/upload
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /admin/api/chat/voice
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/api/uploads/{file_type}/{filename}
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/api/chats-update
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/create
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/{status_key}/delete
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /admin/api/services/create
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/update
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/delete
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/api/services/{service_id}
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /admin/api/users/{user_id}/delete
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/api/export/clients
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/api/export/analytics
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /admin/api/export/bookings
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /login
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /login
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /logout
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /register
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /register
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /webhook
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /webhook
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /book
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /api
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /forgot-password
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /forgot-password
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /reset-password
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'POST'} /reset-password
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /stats
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /health
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /privacy-policy
+2025-10-19 03:34:38 - crm - INFO - [startup]    {'GET'} /terms
+2025-10-19 03:34:38 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:34:38 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:34:38 - crm - INFO - [startup] 🚀 Запуск CRM системы...
+2025-10-19 03:34:38 - crm - INFO - [startup] 💎 Салон: M.Le Diamant Beauty Lounge
+2025-10-19 03:34:38 - crm - INFO - [startup] 🤖 Бот-гений продаж: Diamant
+2025-10-19 03:34:38 - crm - INFO - [startup] 📍 Адрес: Shop 13, Amwaj 3 Plaza Level, Jumeirah Beach Residence, Dubai
+2025-10-19 03:34:38 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:34:38 - crm - INFO - [startup] ✅ CRM готова к работе!
+2025-10-19 03:34:38 - crm - INFO - [startup] 🔐 Логин: http://localhost:8000/login
+2025-10-19 03:34:38 - crm - INFO - [startup] 📊 Админ-панель: http://localhost:8000/admin
+2025-10-19 03:34:38 - crm - INFO - [startup] 📈 Воронка продаж: http://localhost:8000/admin/funnel
+2025-10-19 03:34:38 - crm - INFO - [startup] 📉 Аналитика: http://localhost:8000/admin/analytics
+2025-10-19 03:34:38 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:34:50 - crm - INFO - [startup] ✅ Созданы директории: static/uploads/images, static/uploads/files, static/uploads/voice, logs
+2025-10-19 03:34:50 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:34:50 - crm - INFO - [startup] 📋 Зарегистрированные роуты:
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'HEAD', 'GET'} /openapi.json
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'HEAD', 'GET'} /docs
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'HEAD', 'GET'} /docs/oauth2-redirect
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'HEAD', 'GET'} /redoc
+2025-10-19 03:34:50 - crm - INFO - [startup]    MOUNT /ws
+2025-10-19 03:34:50 - crm - INFO - [startup]    MOUNT /static
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/clients
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/clients/{client_id}
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/bookings
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/bookings/{booking_id}
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/chat
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/messages
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/analytics
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/funnel
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/statuses
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/services
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/users
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/api/stats
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/api/unread-count
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/api/analytics
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/api/funnel
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/status
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/update
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/notes
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/pin
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/create
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/status
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/notes
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /admin/api/chat/send
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/api/chat/messages
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'DELETE'} /admin/api/chat/message/{client_id}/{message_id}
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /admin/api/chat/upload
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /admin/api/chat/voice
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/api/uploads/{file_type}/{filename}
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/api/chats-update
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/create
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/{status_key}/delete
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /admin/api/services/create
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/update
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/delete
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/api/services/{service_id}
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /admin/api/users/{user_id}/delete
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/api/export/clients
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/api/export/analytics
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /admin/api/export/bookings
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /login
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /login
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /logout
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /register
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /register
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /webhook
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /webhook
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /book
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /api
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /forgot-password
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /forgot-password
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /reset-password
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'POST'} /reset-password
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /stats
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /health
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /privacy-policy
+2025-10-19 03:34:50 - crm - INFO - [startup]    {'GET'} /terms
+2025-10-19 03:34:50 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:34:50 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:34:50 - crm - INFO - [startup] 🚀 Запуск CRM системы...
+2025-10-19 03:34:50 - crm - INFO - [startup] 💎 Салон: M.Le Diamant Beauty Lounge
+2025-10-19 03:34:50 - crm - INFO - [startup] 🤖 Бот-гений продаж: Diamant
+2025-10-19 03:34:50 - crm - INFO - [startup] 📍 Адрес: Shop 13, Amwaj 3 Plaza Level, Jumeirah Beach Residence, Dubai
+2025-10-19 03:34:50 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:34:50 - crm - INFO - [startup] ✅ CRM готова к работе!
+2025-10-19 03:34:50 - crm - INFO - [startup] 🔐 Логин: http://localhost:8000/login
+2025-10-19 03:34:50 - crm - INFO - [startup] 📊 Админ-панель: http://localhost:8000/admin
+2025-10-19 03:34:50 - crm - INFO - [startup] 📈 Воронка продаж: http://localhost:8000/admin/funnel
+2025-10-19 03:34:50 - crm - INFO - [startup] 📉 Аналитика: http://localhost:8000/admin/analytics
+2025-10-19 03:34:50 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:34:50 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:34:50 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:34:52 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:34:52 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:34:53 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:34:53 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:34:59 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:34:59 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:34:59 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:34:59 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:35:00 - crm - INFO - [middleware] 🔥 GET /admin/chat
+2025-10-19 03:35:00 - crm - INFO - [middleware] 📤 GET /admin/chat → 200 (0.02s)
+2025-10-19 03:35:00 - crm - INFO - [middleware] 🔥 GET /admin/chat
+2025-10-19 03:35:00 - crm - INFO - [middleware] 📤 GET /admin/chat → 200 (0.00s)
+2025-10-19 03:35:03 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:03 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:05 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:35:05 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:35:06 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:06 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:09 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:09 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:10 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:35:10 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:35:12 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:12 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:15 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:15 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:35:15 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:15 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:35:18 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:18 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:20 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:35:20 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:35:21 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:21 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:25 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:25 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:26 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:35:26 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:35:28 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:28 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:31 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:31 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:35:31 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:31 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:35:34 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:34 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:35 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:35:35 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:35:36 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:36 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:39 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:39 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:40 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:35:40 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:35:42 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:42 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:45 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:45 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:35:45 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:45 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:35:49 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:49 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:51 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:35:51 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:35:52 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:52 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:55 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:55 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:35:56 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:35:56 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:35:57 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:35:57 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:00 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:00 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:36:00 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:00 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:36:03 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:03 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:05 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:36:05 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:36:06 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:06 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:09 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:09 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:11 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:36:11 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:36:13 - crm - INFO - [startup] ✅ Созданы директории: static/uploads/images, static/uploads/files, static/uploads/voice, logs
+2025-10-19 03:36:13 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:36:13 - crm - INFO - [startup] 📋 Зарегистрированные роуты:
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET', 'HEAD'} /openapi.json
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs/oauth2-redirect
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET', 'HEAD'} /redoc
+2025-10-19 03:36:13 - crm - INFO - [startup]    MOUNT /ws
+2025-10-19 03:36:13 - crm - INFO - [startup]    MOUNT /static
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/clients
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/clients/{client_id}
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/bookings
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/bookings/{booking_id}
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/chat
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/messages
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/analytics
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/funnel
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/statuses
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/services
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/users
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/api/stats
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/api/unread-count
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/api/analytics
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/api/funnel
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/status
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/update
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/notes
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/pin
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/create
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/status
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/notes
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /admin/api/chat/send
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/api/chat/messages
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'DELETE'} /admin/api/chat/message/{client_id}/{message_id}
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /admin/api/chat/upload
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /admin/api/chat/voice
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/api/uploads/{file_type}/{filename}
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/api/chats-update
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/create
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/{status_key}/delete
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /admin/api/services/create
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/update
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/delete
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/api/services/{service_id}
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /admin/api/users/{user_id}/delete
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/api/export/clients
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/api/export/analytics
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /admin/api/export/bookings
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /login
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /login
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /logout
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /register
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /register
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /webhook
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /webhook
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /book
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /api
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /forgot-password
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /forgot-password
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /reset-password
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'POST'} /reset-password
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /stats
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /health
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /privacy-policy
+2025-10-19 03:36:13 - crm - INFO - [startup]    {'GET'} /terms
+2025-10-19 03:36:13 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:36:13 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:36:13 - crm - INFO - [startup] 🚀 Запуск CRM системы...
+2025-10-19 03:36:13 - crm - INFO - [startup] 💎 Салон: M.Le Diamant Beauty Lounge
+2025-10-19 03:36:13 - crm - INFO - [startup] 🤖 Бот-гений продаж: Diamant
+2025-10-19 03:36:13 - crm - INFO - [startup] 📍 Адрес: Shop 13, Amwaj 3 Plaza Level, Jumeirah Beach Residence, Dubai
+2025-10-19 03:36:13 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:36:13 - crm - INFO - [startup] ✅ CRM готова к работе!
+2025-10-19 03:36:13 - crm - INFO - [startup] 🔐 Логин: http://localhost:8000/login
+2025-10-19 03:36:13 - crm - INFO - [startup] 📊 Админ-панель: http://localhost:8000/admin
+2025-10-19 03:36:13 - crm - INFO - [startup] 📈 Воронка продаж: http://localhost:8000/admin/funnel
+2025-10-19 03:36:13 - crm - INFO - [startup] 📉 Аналитика: http://localhost:8000/admin/analytics
+2025-10-19 03:36:13 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:36:13 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:13 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:16 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:16 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:36:16 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:16 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:36:18 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:18 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:20 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:36:20 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:36:21 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:21 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:24 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:24 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:25 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:36:25 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:36:27 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:27 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:30 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:30 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:36:30 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:30 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:36:33 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:33 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:36 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:36:36 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:36:37 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:37 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:40 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:40 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:41 - crm - INFO - [startup] ✅ Созданы директории: static/uploads/images, static/uploads/files, static/uploads/voice, logs
+2025-10-19 03:36:41 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:36:41 - crm - INFO - [startup] 📋 Зарегистрированные роуты:
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET', 'HEAD'} /openapi.json
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET', 'HEAD'} /docs/oauth2-redirect
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET', 'HEAD'} /redoc
+2025-10-19 03:36:41 - crm - INFO - [startup]    MOUNT /ws
+2025-10-19 03:36:41 - crm - INFO - [startup]    MOUNT /static
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/clients
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/clients/{client_id}
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/bookings
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/bookings/{booking_id}
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/chat
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/messages
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/analytics
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/funnel
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/statuses
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/services
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/users
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/api/stats
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/api/unread-count
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/api/analytics
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/api/funnel
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/status
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/update
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/notes
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /admin/api/clients/{client_id}/pin
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/create
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/status
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /admin/api/bookings/{booking_id}/notes
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /admin/api/chat/send
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/api/chat/messages
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'DELETE'} /admin/api/chat/message/{client_id}/{message_id}
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /admin/api/chat/upload
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /admin/api/chat/voice
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/api/uploads/{file_type}/{filename}
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/api/chats-update
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/create
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /admin/api/statuses/{status_key}/delete
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /admin/api/services/create
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/update
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /admin/api/services/{service_id}/delete
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/api/services/{service_id}
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /admin/api/users/{user_id}/delete
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/api/export/clients
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/api/export/analytics
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /admin/api/export/bookings
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /login
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /login
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /logout
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /register
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /register
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /webhook
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /webhook
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /book
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /api
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /forgot-password
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /forgot-password
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /reset-password
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'POST'} /reset-password
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /stats
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /health
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /privacy-policy
+2025-10-19 03:36:41 - crm - INFO - [startup]    {'GET'} /terms
+2025-10-19 03:36:41 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:36:41 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:36:41 - crm - INFO - [startup] 🚀 Запуск CRM системы...
+2025-10-19 03:36:41 - crm - INFO - [startup] 💎 Салон: M.Le Diamant Beauty Lounge
+2025-10-19 03:36:41 - crm - INFO - [startup] 🤖 Бот-гений продаж: Diamant
+2025-10-19 03:36:41 - crm - INFO - [startup] 📍 Адрес: Shop 13, Amwaj 3 Plaza Level, Jumeirah Beach Residence, Dubai
+2025-10-19 03:36:41 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:36:41 - crm - INFO - [startup] ✅ CRM готова к работе!
+2025-10-19 03:36:41 - crm - INFO - [startup] 🔐 Логин: http://localhost:8000/login
+2025-10-19 03:36:41 - crm - INFO - [startup] 📊 Админ-панель: http://localhost:8000/admin
+2025-10-19 03:36:41 - crm - INFO - [startup] 📈 Воронка продаж: http://localhost:8000/admin/funnel
+2025-10-19 03:36:41 - crm - INFO - [startup] 📉 Аналитика: http://localhost:8000/admin/analytics
+2025-10-19 03:36:41 - crm - INFO - [startup] ======================================================================
+2025-10-19 03:36:41 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:36:41 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:36:43 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:43 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:45 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:45 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:36:45 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:45 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:36:49 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:49 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:51 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:36:51 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:36:52 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:52 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:55 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:55 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:36:56 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:36:56 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:36:58 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:36:58 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:37:01 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:37:01 - crm - INFO - [middleware] 🔥 GET /admin/api/chats-update
+2025-10-19 03:37:01 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
+2025-10-19 03:37:01 - crm - INFO - [middleware] 📤 GET /admin/api/chats-update → 200 (0.00s)
+2025-10-19 03:37:04 - crm - INFO - [middleware] 🔥 GET /admin/api/chat/messages
+2025-10-19 03:37:04 - crm - INFO - [middleware] 📤 GET /admin/api/chat/messages → 200 (0.00s)
