@@ -726,30 +726,45 @@ async def terms_of_service(request: Request):
         log_error(f"Ошибка в terms_of_service: {e}", "api", exc_info=True)
         raise
 
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-# ===== ЗАПУСК =====
-@app.on_event("startup")
-async def startup_event():
-    """При запуске приложения"""
+scheduler = AsyncIOScheduler()
+
+def cleanup_expired_sessions():
+    """Очистить истёкшие сессии"""
+    from database import DATABASE_NAME
+    from datetime import datetime
+    
+    conn = sqlite3.connect(DATABASE_NAME)
+    c = conn.cursor()
+    
+    now = datetime.now().isoformat()
+    
     try:
-        log_info("=" * 70, "startup")
-        log_info("🚀 Запуск CRM системы...", "startup")
-        log_info(f"💎 Салон: {SALON_INFO['name']}", "startup")
-        log_info(f"🤖 Бот-гений продаж: {SALON_INFO['bot_name']}", "startup")
-        log_info(f"📍 Адрес: {SALON_INFO['address']}", "startup")
-        log_info("=" * 70, "startup")
-
-        init_database()
-
-        log_info("✅ CRM готова к работе!", "startup")
-        log_info("🔐 Логин: http://localhost:8000/login", "startup")
-        log_info("📊 Админ-панель: http://localhost:8000/admin", "startup")
-        log_info("📈 Воронка продаж: http://localhost:8000/admin/funnel", "startup")
-        log_info("📉 Аналитика: http://localhost:8000/admin/analytics", "startup")
-        log_info("=" * 70, "startup")
+        c.execute("DELETE FROM sessions WHERE expires_at < ?", (now,))
+        deleted = c.rowcount
+        conn.commit()
+        conn.close()
+        
+        if deleted > 0:
+            print(f"🧹 Очищено {deleted} истёкших сессий")
     except Exception as e:
-        log_critical(f"❌ КРИТИЧЕСКАЯ ОШИБКА ПРИ ЗАПУСКЕ: {e}", "startup")
-        raise
+        conn.close()
+        print(f"Ошибка очистки сессий: {e}")
+
+
+# Запускать каждый час
+scheduler.add_job(cleanup_expired_sessions, 'interval', hours=1)
+
+@app.on_event("startup")
+async def startup_scheduler():
+    scheduler.start()
+    print("✅ Планировщик задач запущен")
+
+@app.on_event("shutdown")
+async def shutdown_scheduler():
+    scheduler.shutdown()
+
 
 
 if __name__ == "__main__":

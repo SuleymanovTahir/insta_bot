@@ -1072,4 +1072,151 @@ def update_custom_status(status_key: str, status_label: str = None,
         print(f"Ошибка обновления статуса: {e}")
         conn.close()
         return False
+
+
+# ===== ДОБАВИТЬ ЭТИ ФУНКЦИИ В database.py =====
+
+def init_bot_settings_table():
+    """Создать таблицу для настроек бота"""
+    conn = sqlite3.connect(DATABASE_NAME)
+    c = conn.cursor()
     
+    c.execute('''CREATE TABLE IF NOT EXISTS bot_settings
+                 (id INTEGER PRIMARY KEY,
+                  settings TEXT NOT NULL,
+                  updated_at TEXT,
+                  updated_by INTEGER,
+                  FOREIGN KEY (updated_by) REFERENCES users(id))''')
+    
+    conn.commit()
+    conn.close()
+    print("✅ Таблица bot_settings создана")
+
+
+# Добавить вызов в init_database():
+# init_bot_settings_table()
+
+
+def get_bot_settings():
+    """Получить настройки бота из базы данных"""
+    conn = sqlite3.connect(DATABASE_NAME)
+    c = conn.cursor()
+    
+    try:
+        c.execute("SELECT settings FROM bot_settings WHERE id = 1")
+        result = c.fetchone()
+        conn.close()
+        
+        if result:
+            import json
+            return json.loads(result[0])
+        return None
+    except Exception as e:
+        conn.close()
+        print(f"Ошибка получения настроек бота: {e}")
+        return None
+
+
+def save_bot_settings(settings, user_id=None):
+    """
+    Сохранить настройки бота
+    
+    Args:
+        settings: dict с настройками
+        user_id: ID пользователя, который сохраняет
+    """
+    conn = sqlite3.connect(DATABASE_NAME)
+    c = conn.cursor()
+    
+    try:
+        import json
+        from datetime import datetime
+        
+        settings_json = json.dumps(settings, ensure_ascii=False)
+        now = datetime.now().isoformat()
+        
+        # Удаляем старые настройки
+        c.execute("DELETE FROM bot_settings")
+        
+        # Вставляем новые
+        c.execute("""INSERT INTO bot_settings (id, settings, updated_at, updated_by)
+                     VALUES (1, ?, ?, ?)""",
+                  (settings_json, now, user_id))
+        
+        conn.commit()
+        conn.close()
+        return True
+    except Exception as e:
+        conn.close()
+        print(f"Ошибка сохранения настроек бота: {e}")
+        return False
+
+
+def delete_bot_settings():
+    """Удалить настройки бота"""
+    conn = sqlite3.connect(DATABASE_NAME)
+    c = conn.cursor()
+    
+    try:
+        c.execute("DELETE FROM bot_settings")
+        conn.commit()
+        conn.close()
+        return True
+    except Exception as e:
+        conn.close()
+        print(f"Ошибка удаления настроек: {e}")
+        return False
+    
+
+def add_database_indexes():
+    """Добавить индексы для ускорения запросов"""
+    conn = sqlite3.connect(DATABASE_NAME)
+    c = conn.cursor()
+    
+    try:
+        # Индексы для chat_history
+        c.execute("""CREATE INDEX IF NOT EXISTS idx_chat_instagram_id 
+                     ON chat_history(instagram_id)""")
+        c.execute("""CREATE INDEX IF NOT EXISTS idx_chat_timestamp 
+                     ON chat_history(timestamp DESC)""")
+        c.execute("""CREATE INDEX IF NOT EXISTS idx_chat_sender 
+                     ON chat_history(sender)""")
+        c.execute("""CREATE INDEX IF NOT EXISTS idx_chat_unread 
+                     ON chat_history(instagram_id, is_read, sender)""")
+        
+        # Индексы для clients
+        c.execute("""CREATE INDEX IF NOT EXISTS idx_clients_last_contact 
+                     ON clients(last_contact DESC)""")
+        c.execute("""CREATE INDEX IF NOT EXISTS idx_clients_status 
+                     ON clients(status)""")
+        c.execute("""CREATE INDEX IF NOT EXISTS idx_clients_pinned 
+                     ON clients(is_pinned DESC, last_contact DESC)""")
+        
+        # Индексы для bookings
+        c.execute("""CREATE INDEX IF NOT EXISTS idx_bookings_instagram_id 
+                     ON bookings(instagram_id)""")
+        c.execute("""CREATE INDEX IF NOT EXISTS idx_bookings_status 
+                     ON bookings(status)""")
+        c.execute("""CREATE INDEX IF NOT EXISTS idx_bookings_created 
+                     ON bookings(created_at DESC)""")
+        c.execute("""CREATE INDEX IF NOT EXISTS idx_bookings_datetime 
+                     ON bookings(datetime)""")
+        
+        # Индексы для services
+        c.execute("""CREATE INDEX IF NOT EXISTS idx_services_category 
+                     ON services(category)""")
+        c.execute("""CREATE INDEX IF NOT EXISTS idx_services_active 
+                     ON services(is_active)""")
+        
+        # Индексы для sessions
+        c.execute("""CREATE INDEX IF NOT EXISTS idx_sessions_token 
+                     ON sessions(session_token)""")
+        c.execute("""CREATE INDEX IF NOT EXISTS idx_sessions_expires 
+                     ON sessions(expires_at)""")
+        
+        conn.commit()
+        conn.close()
+        print("✅ Индексы созданы для оптимизации")
+    except Exception as e:
+        conn.close()
+        print(f"⚠️ Ошибка создания индексов: {e}")

@@ -692,13 +692,18 @@ async def save_booking_notes(
         return JSONResponse({"success": False, "message": str(e)}, status_code=400)
 
 
-# ===== API ЧАТ =====
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+
+limiter = Limiter(key_func=get_remote_address)
+
 @router.post("/admin/api/chat/send")
-async def send_chat_message(
+@limiter.limit("30/minute")  # Максимум 30 сообщений в минуту
+async def send_chat_message_v2(
     request: Request,
     session_token: Optional[str] = Cookie(None)
 ):
-    """Отправить сообщение клиенту через чат"""
+    """Отправить сообщение с rate limiting"""
     user = await require_auth(session_token)
     if not user:
         return JSONResponse({"error": "Unauthorized"}, status_code=401)
@@ -708,7 +713,17 @@ async def send_chat_message(
     message = data.get('message')
 
     if not instagram_id or not message:
-        return JSONResponse({"success": False, "message": "Неверные данные"}, status_code=400)
+        return JSONResponse({
+            "success": False,
+            "message": "Неверные данные"
+        }, status_code=400)
+    
+    # Проверка длины сообщения
+    if len(message) > 1000:
+        return JSONResponse({
+            "success": False,
+            "message": "Сообщение слишком длинное (макс 1000 символов)"
+        }, status_code=400)
 
     result = await send_message(instagram_id, message)
 
@@ -716,10 +731,15 @@ async def send_chat_message(
         save_message(instagram_id, message, "bot")
         log_activity(user["id"], "send_message", "client",
                      instagram_id, f"Отправлено: {message[:50]}")
-        return JSONResponse({"success": True, "message": "Сообщение отправлено"})
+        return JSONResponse({
+            "success": True,
+            "message": "Сообщение отправлено"
+        })
     else:
-        return JSONResponse({"success": False, "message": "Ошибка отправки"}, status_code=500)
-
+        return JSONResponse({
+            "success": False,
+            "message": f"Ошибка Instagram API: {result.get('error')}"
+        }, status_code=500)
 
 @router.get("/admin/api/chat/messages")
 async def get_chat_messages(
@@ -747,12 +767,12 @@ async def get_chat_messages(
 
 
 @router.delete("/admin/api/chat/message/{client_id}/{message_id}")
-async def delete_message(
+async def delete_message_v2(
     client_id: str,
     message_id: int,
     session_token: Optional[str] = Cookie(None)
 ):
-    """Удалить сообщение"""
+    """Удалить сообщение (ТОЛЬКО из CRM, не из Instagram)"""
     user = await require_auth(session_token)
     if not user:
         return JSONResponse({"error": "Unauthorized"}, status_code=401)
@@ -761,30 +781,44 @@ async def delete_message(
     c = conn.cursor()
 
     try:
+        # Проверяем, что сообщение существует
+        c.execute("SELECT sender FROM chat_history WHERE instagram_id = ? AND id = ?",
+                  (client_id, message_id))
+        message = c.fetchone()
+        
+        if not message:
+            conn.close()
+            return JSONResponse({
+                "success": False,
+                "message": "Сообщение не найдено"
+            }, status_code=404)
+        
+        # Удаляем из БД
         c.execute("DELETE FROM chat_history WHERE instagram_id = ? AND id = ?",
                   (client_id, message_id))
         conn.commit()
         conn.close()
 
         log_activity(user["id"], "delete_message", "message", str(message_id), 
-                     "Сообщение удалено из CRM")
+                     "Сообщение удалено из CRM (останется в Instagram)")
         
         return JSONResponse({
             "success": True, 
-            "message": "Сообщение удалено из CRM (останется в Instagram)"
+            "message": "⚠️ Сообщение удалено из CRM. ВАЖНО: Оно останется в Instagram! Для полного удаления удалите вручную в Instagram."
         })
     except Exception as e:
         conn.close()
+        log_error(f"Ошибка удаления сообщения: {e}", "chat", exc_info=True)
         return JSONResponse({"success": False, "message": str(e)}, status_code=400)
 
 
 # ===== ЗАГРУЗКА ФАЙЛОВ =====
 @router.post("/admin/api/chat/upload")
-async def upload_file(
+async def upload_file_v2(
     request: Request,
     session_token: Optional[str] = Cookie(None)
 ):
-    """Загрузить файл или картинку в чат"""
+    """Загрузить файл с валидацией"""
     user = await require_auth(session_token)
     if not user:
         return JSONResponse({"error": "Unauthorized"}, status_code=401)
@@ -796,18 +830,58 @@ async def upload_file(
         is_image = form.get('is_image') == 'true'
 
         if not file or not instagram_id:
-            return JSONResponse({"success": False, "message": "Недостаточно данных"}, status_code=400)
+            return JSONResponse({
+                "success": False,
+                "message": "Недостаточно данных"
+            }, status_code=400)
 
+        # ВАЛИДАЦИЯ РАЗМЕРА (макс 10MB)
         contents = await file.read()
+        file_size_mb = len(contents) / (1024 * 1024)
+        
+        if file_size_mb > 10:
+            return JSONResponse({
+                "success": False,
+                "message": f"Файл слишком большой ({file_size_mb:.1f}MB). Максимум 10MB."
+            }, status_code=400)
+
         filename = file.filename
         file_extension = filename.split('.')[-1].lower()
+
+        # ВАЛИДАЦИЯ ТИПА ФАЙЛА
+        allowed_image_extensions = {'jpg', 'jpeg', 'png', 'gif', 'webp'}
+        allowed_file_extensions = {'pdf', 'doc', 'docx', 'txt', 'zip', 'rar', 'xlsx', 'xls'}
+        
+        if is_image:
+            if file_extension not in allowed_image_extensions:
+                return JSONResponse({
+                    "success": False,
+                    "message": f"Недопустимый формат изображения. Разрешено: {', '.join(allowed_image_extensions)}"
+                }, status_code=400)
+        else:
+            if file_extension not in allowed_file_extensions:
+                return JSONResponse({
+                    "success": False,
+                    "message": f"Недопустимый формат файла. Разрешено: {', '.join(allowed_file_extensions)}"
+                }, status_code=400)
+
+        # ПРОВЕРКА НА ВИРУСЫ (базовая - по magic bytes)
+        if not is_safe_file(contents, file_extension):
+            return JSONResponse({
+                "success": False,
+                "message": "Файл не прошёл проверку безопасности"
+            }, status_code=400)
 
         import os
         upload_dir = "static/uploads/images" if is_image else "static/uploads/files"
         os.makedirs(upload_dir, exist_ok=True)
 
+        # БЕЗОПАСНОЕ ИМЯ ФАЙЛА
+        import re
+        safe_filename = re.sub(r'[^a-zA-Z0-9._-]', '_', filename)
+        
         timestamp = datetime.now().timestamp()
-        unique_filename = f"{int(timestamp)}_{filename}"
+        unique_filename = f"{int(timestamp)}_{safe_filename}"
         file_path = os.path.join(upload_dir, unique_filename)
 
         with open(file_path, "wb") as f:
@@ -835,6 +909,47 @@ async def upload_file(
     except Exception as e:
         log_error(f"Ошибка загрузки файла: {e}", "upload", exc_info=True)
         return JSONResponse({"success": False, "message": str(e)}, status_code=500)
+
+
+def is_safe_file(contents: bytes, extension: str) -> bool:
+    """
+    Базовая проверка файла по magic bytes
+    
+    Args:
+        contents: содержимое файла
+        extension: расширение файла
+    
+    Returns:
+        True если файл безопасен
+    """
+    # Magic bytes для различных типов файлов
+    magic_bytes = {
+        'jpg': [b'\xff\xd8\xff'],
+        'jpeg': [b'\xff\xd8\xff'],
+        'png': [b'\x89\x50\x4e\x47'],
+        'gif': [b'\x47\x49\x46\x38'],
+        'webp': [b'\x52\x49\x46\x46'],
+        'pdf': [b'\x25\x50\x44\x46'],
+        'zip': [b'\x50\x4b\x03\x04', b'\x50\x4b\x05\x06'],
+        'rar': [b'\x52\x61\x72\x21'],
+        'doc': [b'\xd0\xcf\x11\xe0'],
+        'docx': [b'\x50\x4b\x03\x04'],
+        'xlsx': [b'\x50\x4b\x03\x04'],
+        'xls': [b'\xd0\xcf\x11\xe0'],
+    }
+    
+    if extension not in magic_bytes:
+        # Неизвестный тип - разрешаем (можно ужесточить)
+        return True
+    
+    expected_bytes = magic_bytes[extension]
+    
+    for expected in expected_bytes:
+        if contents.startswith(expected):
+            return True
+    
+    # Magic bytes не совпадают - подозрительный файл
+    return False
 
 
 @router.post("/admin/api/chat/voice")
@@ -1457,3 +1572,56 @@ async def export_bookings(
         )
 
     return JSONResponse({"error": "Format not supported"}, status_code=400)
+
+
+@router.get("/admin/api/chat/messages")
+async def get_chat_messages_paginated(
+    client: str = Query(...),
+    limit: int = Query(50, le=100),
+    offset: int = Query(0),
+    session_token: Optional[str] = Cookie(None)
+):
+    """Получить сообщения с пагинацией"""
+    user = await require_auth(session_token)
+    if not user:
+        return JSONResponse({"error": "Unauthorized"}, status_code=401)
+
+    from database import DATABASE_NAME
+    
+    conn = sqlite3.connect(DATABASE_NAME)
+    c = conn.cursor()
+    
+    # Получаем общее количество
+    c.execute("""SELECT COUNT(*) FROM chat_history 
+                 WHERE instagram_id = ?""", (client,))
+    total = c.fetchone()[0]
+    
+    # Получаем сообщения с пагинацией
+    c.execute("""SELECT message, sender, timestamp, message_type, id
+                 FROM chat_history 
+                 WHERE instagram_id = ? 
+                 ORDER BY timestamp DESC 
+                 LIMIT ? OFFSET ?""",
+              (client, limit, offset))
+    
+    messages_raw = c.fetchall()
+    conn.close()
+    
+    messages = [
+        {
+            "id": msg[4],
+            "message": msg[0],
+            "sender": msg[1],
+            "timestamp": msg[2],
+            "type": msg[3]
+        }
+        for msg in reversed(messages_raw)
+    ]
+
+    mark_messages_as_read(client, user["id"])
+
+    return JSONResponse({
+        "messages": messages,
+        "total": total,
+        "has_more": (offset + limit) < total
+    })

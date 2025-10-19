@@ -9,3 +9,5 @@ reportlab
 openpyxl
 slowapi
 pydantic
+python-dotenv
+apscheduler

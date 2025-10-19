@@ -1,0 +1,585 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Настройки бота - {{ salon_info.name }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🤖 Настройки бота</h1>
+    <p>Управление поведением AI-ассистента</p>
+</div>
+
+<!-- Выбор режима загрузки -->
+<div class="chart-container" style="margin-bottom: 30px;">
+    <h2><i class="fas fa-upload"></i> Загрузка инструкций</h2>
+    <div style="padding: 20px;">
+        <div style="display: flex; gap: 20px; margin-bottom: 30px;">
+            <button class="btn btn-primary" onclick="loadFromFile()" style="flex: 1;">
+                <i class="fas fa-file-import"></i> Загрузить из файла
+            </button>
+            <button class="btn btn-secondary" onclick="showManualForm()" style="flex: 1;">
+                <i class="fas fa-edit"></i> Заполнить вручную
+            </button>
+        </div>
+        
+        <div class="message-box" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe); border-left: 5px solid #3b82f6;">
+            <div class="message-header">
+                <span><i class="fas fa-info-circle"></i> Информация</span>
+            </div>
+            <div class="message-text">
+                <strong>Загрузка из файла:</strong> Инициализирует настройки из bot_instructions.txt (рекомендуется для первого запуска)<br>
+                <strong>Заполнение вручную:</strong> Позволяет настроить каждый параметр индивидуально
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Форма ручных настроек (скрыта по умолчанию) -->
+<div id="manualSettingsForm" style="display: none;">
+    <form id="botSettingsForm" onsubmit="saveSettings(event)">
+        
+        <!-- Основные настройки -->
+        <div class="chart-container" style="margin-bottom: 30px;">
+            <h2><i class="fas fa-cog"></i> Основные настройки</h2>
+            <div style="padding: 20px;">
+                <div class="form-group">
+                    <label class="form-label">Роль бота</label>
+                    <textarea class="form-textarea" id="botRole" rows="3" placeholder="Например: Ты — виртуальный администратор элитного салона красоты..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Миссия</label>
+                    <textarea class="form-textarea" id="botMission" rows="2" placeholder="Например: Консультировать клиентов и направлять на онлайн-запись..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Личность бота (через |)</label>
+                    <input type="text" class="form-input" id="botPersonality" placeholder="Обаятельная|Уверенная|Харизматичная|Эксперт">
+                </div>
+            </div>
+        </div>
+
+        <!-- Стиль общения -->
+        <div class="chart-container" style="margin-bottom: 30px;">
+            <h2><i class="fas fa-comments"></i> Стиль общения</h2>
+            <div style="padding: 20px;">
+                <div class="form-group">
+                    <label class="form-label">Тон общения</label>
+                    <select class="form-select" id="botTone">
+                        <option value="friendly">Дружелюбный</option>
+                        <option value="professional">Профессиональный</option>
+                        <option value="enthusiastic">Восторженный</option>
+                        <option value="expert">Экспертный</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Максимальная длина ответа (предложений)</label>
+                    <input type="number" class="form-input" id="maxResponseLength" value="4" min="2" max="10">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Использование эмодзи</label>
+                    <select class="form-select" id="emojiUsage">
+                        <option value="moderate">Умеренное (2-3 за сообщение)</option>
+                        <option value="minimal">Минимальное (1 за сообщение)</option>
+                        <option value="none">Без эмодзи</option>
+                        <option value="maximum">Максимальное (4-5 за сообщение)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Поддерживаемые языки</label>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                ${settings.justifyPrices ? '<span class="badge badge-success"><i class="fas fa-check"></i> Оправдание цен</span>' : ''}
+                ${settings.mentionQuality ? '<span class="badge badge-success"><i class="fas fa-check"></i> Упоминание качества</span>' : ''}
+                ${settings.emphasizeDuration ? '<span class="badge badge-success"><i class="fas fa-check"></i> Долговременность</span>' : ''}
+                ${settings.createUrgency ? '<span class="badge badge-success"><i class="fas fa-check"></i> FOMO</span>' : ''}
+                ${settings.useCompliments ? '<span class="badge badge-success"><i class="fas fa-check"></i> Комплименты</span>' : ''}
+                ${settings.personalApproach ? '<span class="badge badge-success"><i class="fas fa-check"></i> Персонализация</span>' : ''}
+                ${settings.upsellTechniques ? '<span class="badge badge-success"><i class="fas fa-check"></i> Upsell</span>' : ''}
+            </div>
+        </div>
+        
+        ${settings.role ? `
+        <div style="margin-top: 25px; padding-top: 25px; border-top: 2px solid #e5e7eb;">
+            <h3 style="margin-bottom: 10px; color: #1f2937;">Роль бота:</h3>
+            <p style="color: #6b7280; line-height: 1.6;">${settings.role}</p>
+        </div>
+        ` : ''}
+        
+        ${settings.mission ? `
+        <div style="margin-top: 20px;">
+            <h3 style="margin-bottom: 10px; color: #1f2937;">Миссия:</h3>
+            <p style="color: #6b7280; line-height: 1.6;">${settings.mission}</p>
+        </div>
+        ` : ''}
+    `;
+}
+
+async function resetToDefaults() {
+    if (!confirm('Сбросить все настройки к значениям по умолчанию?')) return;
+    
+    try {
+        const response = await fetch('/admin/api/bot-settings/reset', {
+            method: 'POST'
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showNotification('Настройки сброшены', 'success');
+            setTimeout(() => location.reload(), 1000);
+        }
+    } catch (error) {
+        showNotification('Ошибка сброса', 'error');
+    }
+}
+
+async function previewBot() {
+    const testMessage = prompt('Введите тестовое сообщение для бота:', 'Привет! Сколько стоит маникюр?');
+    
+    if (!testMessage) return;
+    
+    try {
+        const response = await fetch('/admin/api/bot-settings/preview', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ message: testMessage })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert(`Ответ бота:\n\n${data.response}`);
+        }
+    } catch (error) {
+        showNotification('Ошибка предпросмотра', 'error');
+    }
+}
+
+// Загрузка текущих настроек при открытии страницы
+document.addEventListener('DOMContentLoaded', async function() {
+    try {
+        const response = await fetch('/admin/api/bot-settings/current');
+        const data = await response.json();
+        
+        if (data.success && data.settings) {
+            displayCurrentSettings(data.settings);
+        }
+    } catch (error) {
+        console.error('Ошибка загрузки настроек:', error);
+    }
+});
+</script>
+{% endblock %} gap: 20px; margin-top: 10px;">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" class="form-checkbox" name="languages" value="ru" checked>
+                            <span>Русский</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" class="form-checkbox" name="languages" value="en" checked>
+                            <span>English</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" class="form-checkbox" name="languages" value="ar">
+                            <span>العربية</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Правила о ценах -->
+        <div class="chart-container" style="margin-bottom: 30px;">
+            <h2><i class="fas fa-dollar-sign"></i> Правила о ценах</h2>
+            <div style="padding: 20px;">
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" class="form-checkbox" id="justifyPrices" checked>
+                        <span>Оправдывать цену ценностью (не просто называть цифру)</span>
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" class="form-checkbox" id="mentionQuality" checked>
+                        <span>Упоминать качество материалов и мастеров</span>
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" class="form-checkbox" id="emphasizeDuration" checked>
+                        <span>Подчёркивать долговременность результата</span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Стратегия при возражении "дорого"</label>
+                    <select class="form-select" id="expensiveStrategy">
+                        <option value="premium">Подчеркнуть премиум-сегмент</option>
+                        <option value="value">Объяснить соотношение цена/качество</option>
+                        <option value="comparison">Сравнить с конкурентами</option>
+                        <option value="discount">Предложить альтернативу</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Правила о записи -->
+        <div class="chart-container" style="margin-bottom: 30px;">
+            <h2><i class="fas fa-calendar-check"></i> Правила о записи</h2>
+            <div style="padding: 20px;">
+                <div class="message-box" style="background: linear-gradient(135deg, #fef3c7, #fde68a); border-left: 5px solid #f59e0b; margin-bottom: 20px;">
+                    <div class="message-header">
+                        <span><i class="fas fa-exclamation-triangle"></i> Важно</span>
+                    </div>
+                    <div class="message-text">
+                        Бот НЕ может записывать клиентов напрямую. Он должен направлять на онлайн-запись.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Ссылка на онлайн-запись</label>
+                    <input type="url" class="form-input" id="bookingUrl" value="{{ salon_info.booking_url }}" placeholder="https://...">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Текст при запросе записи</label>
+                    <textarea class="form-textarea" id="bookingMessage" rows="4" placeholder="Я AI-ассистент и не могу записать вас напрямую, но это легко сделать онлайн! 🎯..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" class="form-checkbox" id="createUrgency" checked>
+                        <span>Создавать ощущение срочности (FOMO)</span>
+                    </label>
+                    <small class="form-help">Например: "На эту неделю уже мало свободных окон..."</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Дополнительные техники -->
+        <div class="chart-container" style="margin-bottom: 30px;">
+            <h2><i class="fas fa-lightbulb"></i> Продвинутые техники</h2>
+            <div style="padding: 20px;">
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" class="form-checkbox" id="useCompliments" checked>
+                        <span>Использовать комплименты</span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" class="form-checkbox" id="personalApproach" checked>
+                        <span>Персональный подход</span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" class="form-checkbox" id="upsellTechniques">
+                        <span>Upsell техники (предлагать дополнительные услуги)</span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Запрещённые темы (через |)</label>
+                    <input type="text" class="form-input" id="forbiddenTopics" placeholder="Медицинские советы|Политика|Религия">
+                </div>
+            </div>
+        </div>
+
+        <!-- Примеры ответов -->
+        <div class="chart-container" style="margin-bottom: 30px;">
+            <h2><i class="fas fa-comment-dots"></i> Примеры ответов</h2>
+            <div style="padding: 20px;">
+                <div class="form-group">
+                    <label class="form-label">Приветствие</label>
+                    <textarea class="form-textarea" id="greetingExample" rows="2" placeholder="Привет! 😊 Добро пожаловать в M.Le Diamant!"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Ответ на вопрос о цене</label>
+                    <textarea class="form-textarea" id="priceExample" rows="3" placeholder="Gelish маникюр - 130 AED 💅 Это японский гель-лак..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Ответ на возражение</label>
+                    <textarea class="form-textarea" id="objectionExample" rows="3" placeholder="Мы в премиум-сегменте 💎 Зато..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Кнопки сохранения -->
+        <div style="display: flex; gap: 15px; margin-top: 30px;">
+            <button type="submit" class="btn btn-primary" style="flex: 1;">
+                <i class="fas fa-save"></i> Сохранить настройки
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="resetToDefaults()">
+                <i class="fas fa-undo"></i> Сбросить по умолчанию
+            </button>
+            <button type="button" class="btn btn-info" onclick="previewBot()">
+                <i class="fas fa-eye"></i> Предпросмотр
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Текущие настройки -->
+<div class="chart-container" style="margin-top: 30px;">
+    <h2><i class="fas fa-list-check"></i> Текущие настройки бота</h2>
+    <div id="currentSettings" style="padding: 20px;">
+        <p style="color: #6b7280;">Загрузите настройки из файла или заполните форму...</p>
+    </div>
+</div>
+
+<style>
+.form-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.form-help {
+    display: block;
+    color: #6b7280;
+    font-size: 0.85em;
+    margin-top: 5px;
+    margin-left: 28px;
+}
+
+.message-box {
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+.message-header {
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.05em;
+}
+
+.message-text {
+    line-height: 1.6;
+}
+</style>
+
+<script>
+async function loadFromFile() {
+    try {
+        const response = await fetch('/admin/api/bot-settings/load-from-file', {
+            method: 'POST'
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            displayCurrentSettings(data.settings);
+            showNotification('Настройки загружены из файла', 'success');
+        } else {
+            showNotification(data.message || 'Ошибка загрузки', 'error');
+        }
+    } catch (error) {
+        showNotification('Ошибка соединения', 'error');
+    }
+}
+
+function showManualForm() {
+    document.getElementById('manualSettingsForm').style.display = 'block';
+    document.getElementById('manualSettingsForm').scrollIntoView({ behavior: 'smooth' });
+}
+
+async function saveSettings(event) {
+    event.preventDefault();
+    
+    const settings = {
+        role: document.getElementById('botRole').value,
+        mission: document.getElementById('botMission').value,
+        personality: document.getElementById('botPersonality').value.split('|'),
+        tone: document.getElementById('botTone').value,
+        maxResponseLength: parseInt(document.getElementById('maxResponseLength').value),
+        emojiUsage: document.getElementById('emojiUsage').value,
+        languages: Array.from(document.querySelectorAll('input[name="languages"]:checked')).map(el => el.value),
+        justifyPrices: document.getElementById('justifyPrices').checked,
+        mentionQuality: document.getElementById('mentionQuality').checked,
+        emphasizeDuration: document.getElementById('emphasizeDuration').checked,
+        expensiveStrategy: document.getElementById('expensiveStrategy').value,
+        bookingUrl: document.getElementById('bookingUrl').value,
+        bookingMessage: document.getElementById('bookingMessage').value,
+        createUrgency: document.getElementById('createUrgency').checked,
+        useCompliments: document.getElementById('useCompliments').checked,
+        personalApproach: document.getElementById('personalApproach').checked,
+        upsellTechniques: document.getElementById('upsellTechniques').checked,
+        forbiddenTopics: document.getElementById('forbiddenTopics').value.split('|'),
+        examples: {
+            greeting: document.getElementById('greetingExample').value,
+            price: document.getElementById('priceExample').value,
+            objection: document.getElementById('objectionExample').value
+        }
+    };
+    
+    try {
+        const response = await fetch('/admin/api/bot-settings/save', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(settings)
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            displayCurrentSettings(settings);
+            showNotification('Настройки сохранены', 'success');
+        } else {
+            showNotification('Ошибка сохранения', 'error');
+        }
+    } catch (error) {
+        showNotification('Ошибка соединения', 'error');
+    }
+}
+
+function displayCurrentSettings(settings) {
+    const container = document.getElementById('currentSettings');
+    
+    container.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+            <div class="stat-card">
+                <div class="stat-card-content">
+                    <div class="stat-card-info">
+                        <h3>${settings.tone || 'Не установлен'}</h3>
+                        <p>Тон общения</p>
+                    </div>
+                    <div class="stat-card-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-card-content">
+                    <div class="stat-card-info">
+                        <h3>${settings.maxResponseLength || 4}</h3>
+                        <p>Макс. предложений</p>
+                    </div>
+                    <div class="stat-card-icon">
+                        <i class="fas fa-align-left"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-card-content">
+                    <div class="stat-card-info">
+                        <h3>${settings.languages ? settings.languages.length : 0}</h3>
+                        <p>Языков поддержки</p>
+                    </div>
+                    <div class="stat-card-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-card-content">
+                    <div class="stat-card-info">
+                        <h3>${settings.emojiUsage || 'Умеренное'}</h3>
+                        <p>Эмодзи</p>
+                    </div>
+                    <div class="stat-card-icon">
+                        <i class="fas fa-smile"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 25px; padding-top: 25px; border-top: 2px solid #e5e7eb;">
+            <h3 style="margin-bottom: 15px; color: #1f2937;">Активные функции:</h3>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                ${settings.justifyPrices ? '<span class="badge badge-success"><i class="fas fa-check"></i> Оправдание цен</span>' : ''}
+                ${settings.mentionQuality ? '<span class="badge badge-success"><i class="fas fa-check"></i> Упоминание качества</span>' : ''}
+                ${settings.emphasizeDuration ? '<span class="badge badge-success"><i class="fas fa-check"></i> Долговременность</span>' : ''}
+                ${settings.createUrgency ? '<span class="badge badge-success"><i class="fas fa-check"></i> FOMO</span>' : ''}
+                ${settings.useCompliments ? '<span class="badge badge-success"><i class="fas fa-check"></i> Комплименты</span>' : ''}
+                ${settings.personalApproach ? '<span class="badge badge-success"><i class="fas fa-check"></i> Персонализация</span>' : ''}
+                ${settings.upsellTechniques ? '<span class="badge badge-success"><i class="fas fa-check"></i> Upsell</span>' : ''}
+            </div>
+        </div>
+        
+        ${settings.role ? `
+        <div style="margin-top: 25px; padding-top: 25px; border-top: 2px solid #e5e7eb;">
+            <h3 style="margin-bottom: 10px; color: #1f2937;">Роль бота:</h3>
+            <p style="color: #6b7280; line-height: 1.6;">${settings.role}</p>
+        </div>
+        ` : ''}
+        
+        ${settings.mission ? `
+        <div style="margin-top: 20px;">
+            <h3 style="margin-bottom: 10px; color: #1f2937;">Миссия:</h3>
+            <p style="color: #6b7280; line-height: 1.6;">${settings.mission}</p>
+        </div>
+        ` : ''}
+    `;
+}
+
+async function resetToDefaults() {
+    if (!confirm('Сбросить все настройки к значениям по умолчанию?')) return;
+    
+    try {
+        const response = await fetch('/admin/api/bot-settings/reset', {
+            method: 'POST'
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showNotification('Настройки сброшены', 'success');
+            setTimeout(() => location.reload(), 1000);
+        }
+    } catch (error) {
+        showNotification('Ошибка сброса', 'error');
+    }
+}
+
+async function previewBot() {
+    const testMessage = prompt('Введите тестовое сообщение для бота:', 'Привет! Сколько стоит маникюр?');
+    
+    if (!testMessage) return;
+    
+    try {
+        const response = await fetch('/admin/api/bot-settings/preview', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ message: testMessage })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert(`Ответ бота:\n\n${data.response}`);
+        }
+    } catch (error) {
+        showNotification('Ошибка предпросмотра', 'error');
+    }
+}
+
+// Загрузка текущих настроек при открытии страницы
+document.addEventListener('DOMContentLoaded', async function() {
+    try {
+        const response = await fetch('/admin/api/bot-settings/current');
+        const data = await response.json();
+        
+        if (data.success && data.settings) {
+            displayCurrentSettings(data.settings);
+        }
+    } catch (error) {
+        console.error('Ошибка загрузки настроек:', error);
+    }
+});
+</script>
+{% endblock %}
