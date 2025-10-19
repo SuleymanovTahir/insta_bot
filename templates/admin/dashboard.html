@@ -9,188 +9,186 @@
 {% endblock %}
 
 {% block content %}
-<div class="p-8">
-    <!-- Header -->
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">📊 Панель управления</h1>
-        <p class="text-gray-600">Добро пожаловать в CRM-систему салона красоты</p>
-    </div>
+<!-- Header -->
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">📊 Панель управления</h1>
+    <p class="text-gray-600">Добро пожаловать в CRM-систему салона красоты</p>
+</div>
 
-    <!-- Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <!-- Total Clients -->
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <p class="text-sm text-gray-500 mb-1">Всего клиентов</p>
-                    <h3 class="text-3xl font-bold text-gray-900">{{ stats.total_clients }}</h3>
-                </div>
-                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <i class="fas fa-users text-blue-600 text-xl"></i>
-                </div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Total Clients -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <p class="text-sm text-gray-500 mb-1">Всего клиентов</p>
+                <h3 class="text-3xl font-bold text-gray-900">{{ stats.total_clients }}</h3>
             </div>
-            <div class="flex items-center text-sm">
-                <span class="text-green-600 flex items-center font-medium">
-                    <i class="fas fa-arrow-up mr-1"></i> +12%
-                </span>
-                <span class="text-gray-500 ml-2">за месяц</span>
+            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-users text-blue-600 text-xl"></i>
             </div>
         </div>
-
-        <!-- Total Bookings -->
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <p class="text-sm text-gray-500 mb-1">Всего записей</p>
-                    <h3 class="text-3xl font-bold text-gray-900">{{ stats.total_bookings }}</h3>
-                </div>
-                <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center">
-                    <i class="fas fa-calendar-check text-pink-600 text-xl"></i>
-                </div>
-            </div>
-            <div class="flex items-center text-sm">
-                <span class="text-green-600 flex items-center font-medium">
-                    <i class="fas fa-arrow-up mr-1"></i> +8%
-                </span>
-                <span class="text-gray-500 ml-2">за месяц</span>
-            </div>
-        </div>
-
-        <!-- Completed Bookings -->
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <p class="text-sm text-gray-500 mb-1">Завершенных</p>
-                    <h3 class="text-3xl font-bold text-gray-900">{{ stats.completed_bookings }}</h3>
-                </div>
-                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                    <i class="fas fa-check-circle text-green-600 text-xl"></i>
-                </div>
-            </div>
-            <div class="flex items-center text-sm">
-                <span class="text-green-600 flex items-center font-medium">
-                    <i class="fas fa-arrow-up mr-1"></i> +15%
-                </span>
-                <span class="text-gray-500 ml-2">за месяц</span>
-            </div>
-        </div>
-
-        <!-- Conversion Rate -->
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <p class="text-sm text-gray-500 mb-1">Конверсия</p>
-                    <h3 class="text-3xl font-bold text-gray-900">{{ stats.conversion_rate }}%</h3>
-                </div>
-                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                    <i class="fas fa-percentage text-purple-600 text-xl"></i>
-                </div>
-            </div>
-            <div class="flex items-center text-sm">
-                <span class="text-green-600 flex items-center font-medium">
-                    <i class="fas fa-arrow-up mr-1"></i> +3%
-                </span>
-                <span class="text-gray-500 ml-2">за месяц</span>
-            </div>
+        <div class="flex items-center text-sm">
+            <span class="text-green-600 flex items-center font-medium">
+                <i class="fas fa-arrow-up mr-1"></i> +12%
+            </span>
+            <span class="text-gray-500 ml-2">за месяц</span>
         </div>
     </div>
 
-    <!-- Charts Row -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <!-- Bookings Chart -->
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                <i class="fas fa-chart-line text-pink-600"></i>
-                Записи за 30 дней
+    <!-- Total Bookings -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <p class="text-sm text-gray-500 mb-1">Всего записей</p>
+                <h3 class="text-3xl font-bold text-gray-900">{{ stats.total_bookings }}</h3>
+            </div>
+            <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-calendar-check text-pink-600 text-xl"></i>
+            </div>
+        </div>
+        <div class="flex items-center text-sm">
+            <span class="text-green-600 flex items-center font-medium">
+                <i class="fas fa-arrow-up mr-1"></i> +8%
+            </span>
+            <span class="text-gray-500 ml-2">за месяц</span>
+        </div>
+    </div>
+
+    <!-- Completed Bookings -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <p class="text-sm text-gray-500 mb-1">Завершенных</p>
+                <h3 class="text-3xl font-bold text-gray-900">{{ stats.completed_bookings }}</h3>
+            </div>
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+            </div>
+        </div>
+        <div class="flex items-center text-sm">
+            <span class="text-green-600 flex items-center font-medium">
+                <i class="fas fa-arrow-up mr-1"></i> +15%
+            </span>
+            <span class="text-gray-500 ml-2">за месяц</span>
+        </div>
+    </div>
+
+    <!-- Conversion Rate -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <p class="text-sm text-gray-500 mb-1">Конверсия</p>
+                <h3 class="text-3xl font-bold text-gray-900">{{ stats.conversion_rate }}%</h3>
+            </div>
+            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-percentage text-purple-600 text-xl"></i>
+            </div>
+        </div>
+        <div class="flex items-center text-sm">
+            <span class="text-green-600 flex items-center font-medium">
+                <i class="fas fa-arrow-up mr-1"></i> +3%
+            </span>
+            <span class="text-gray-500 ml-2">за месяц</span>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Bookings Chart -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <i class="fas fa-chart-line text-pink-600"></i>
+            Записи за 30 дней
+        </h2>
+        <div style="height: 300px;">
+            <canvas id="bookingsChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Services Chart -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <i class="fas fa-chart-pie text-purple-600"></i>
+            Популярные услуги
+        </h2>
+        <div style="height: 300px;">
+            <canvas id="servicesChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Recent Clients -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-6 border-b border-gray-200">
+            <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <i class="fas fa-user-plus text-blue-600"></i>
+                Последние клиенты
             </h2>
-            <div style="height: 300px;">
-                <canvas id="bookingsChart"></canvas>
-            </div>
         </div>
-
-        <!-- Services Chart -->
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                <i class="fas fa-chart-pie text-purple-600"></i>
-                Популярные услуги
-            </h2>
-            <div style="height: 300px;">
-                <canvas id="servicesChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <!-- Recent Activity -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Recent Clients -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="p-6 border-b border-gray-200">
-                <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
-                    <i class="fas fa-user-plus text-blue-600"></i>
-                    Последние клиенты
-                </h2>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Имя</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Телефон</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Статус</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200">
-                        {% for client in recent_clients %}
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                                        {{ client[3][0] if client[3] else '?' }}
-                                    </div>
-                                    <span class="text-sm font-medium text-gray-900">{{ client[3] or 'Не указано' }}</span>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Имя</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Телефон</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Статус</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for client in recent_clients %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                                    {{ client[3][0] if client[3] else '?' }}
                                 </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ client[2] or '-' }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    {{ client[8] }}
-                                </span>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                                <span class="text-sm font-medium text-gray-900">{{ client[3] or 'Не указано' }}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ client[2] or '-' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                {{ client[8] }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
+    </div>
 
-        <!-- Recent Bookings -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="p-6 border-b border-gray-200">
-                <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
-                    <i class="fas fa-calendar-alt text-pink-600"></i>
-                    Последние записи
-                </h2>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Услуга</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Клиент</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Дата</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200">
-                        {% for booking in recent_bookings %}
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ booking[2] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ booking[5] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ booking[3][:16] }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+    <!-- Recent Bookings -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-6 border-b border-gray-200">
+            <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <i class="fas fa-calendar-alt text-pink-600"></i>
+                Последние записи
+            </h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Услуга</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Клиент</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Дата</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for booking in recent_bookings %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ booking[2] }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-600">{{ booking[5] }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-600">{{ booking[3][:16] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

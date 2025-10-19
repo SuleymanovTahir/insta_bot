@@ -4775,3 +4775,79 @@
 2025-10-19 11:50:44 - crm - INFO - [middleware] 📤 GET /admin/users → 200 (0.00s)
 2025-10-19 11:50:45 - crm - INFO - [middleware] 🔥 GET /admin/settings
 2025-10-19 11:50:45 - crm - INFO - [middleware] 📤 GET /admin/settings → 200 (0.00s)
+2025-10-19 11:52:00 - crm - INFO - [middleware] 🔥 GET /admin/calendar
+2025-10-19 11:52:00 - crm - INFO - [middleware] 📤 GET /admin/calendar → 200 (0.00s)
+2025-10-19 11:52:02 - crm - INFO - [middleware] 🔥 GET /admin/funnel
+2025-10-19 11:52:02 - crm - INFO - [middleware] 📤 GET /admin/funnel → 200 (0.00s)
+2025-10-19 11:52:04 - crm - INFO - [middleware] 🔥 GET /admin/analytics
+2025-10-19 11:52:04 - crm - INFO - [middleware] 📤 GET /admin/analytics → 200 (0.00s)
+2025-10-19 11:52:04 - crm - INFO - [middleware] 🔥 GET /admin/messages
+2025-10-19 11:52:04 - crm - INFO - [middleware] 📤 GET /admin/messages → 200 (0.00s)
+2025-10-19 11:52:05 - crm - INFO - [middleware] 🔥 GET /admin/chat
+2025-10-19 11:52:05 - crm - INFO - [middleware] 📤 GET /admin/chat → 200 (0.00s)
+2025-10-19 11:52:06 - crm - INFO - [middleware] 🔥 GET /admin/services
+2025-10-19 11:52:06 - crm - INFO - [middleware] 📤 GET /admin/services → 200 (0.00s)
+2025-10-19 11:52:07 - crm - INFO - [middleware] 🔥 GET /admin/bookings
+2025-10-19 11:52:07 - crm - INFO - [middleware] 📤 GET /admin/bookings → 200 (0.00s)
+2025-10-19 11:58:31 - crm - INFO - [middleware] 🔥 GET /admin/clients
+2025-10-19 11:58:31 - crm - INFO - [middleware] 📤 GET /admin/clients → 200 (0.00s)
+2025-10-19 11:58:32 - crm - INFO - [middleware] 🔥 GET /admin
+2025-10-19 11:58:32 - crm - INFO - [middleware] 📤 GET /admin → 200 (0.00s)
+2025-10-19 11:58:33 - crm - INFO - [middleware] 🔥 GET /admin/bookings
+2025-10-19 11:58:33 - crm - INFO - [middleware] 📤 GET /admin/bookings → 200 (0.00s)
+2025-10-19 11:58:34 - crm - INFO - [middleware] 🔥 GET /admin
+2025-10-19 11:58:34 - crm - INFO - [middleware] 📤 GET /admin → 200 (0.00s)
+2025-10-19 11:59:17 - crm - INFO - [middleware] 🔥 GET /admin/clients
+2025-10-19 11:59:17 - crm - INFO - [middleware] 📤 GET /admin/clients → 200 (0.00s)
+2025-10-19 11:59:18 - crm - INFO - [middleware] 🔥 GET /admin/bookings
+2025-10-19 11:59:18 - crm - INFO - [middleware] 📤 GET /admin/bookings → 200 (0.00s)
+2025-10-19 11:59:19 - crm - INFO - [middleware] 🔥 GET /admin/services
+2025-10-19 11:59:19 - crm - INFO - [middleware] 📤 GET /admin/services → 200 (0.00s)
+2025-10-19 11:59:21 - crm - INFO - [middleware] 🔥 GET /admin/messages
+2025-10-19 11:59:21 - crm - INFO - [middleware] 📤 GET /admin/messages → 200 (0.00s)
+2025-10-19 11:59:22 - crm - INFO - [middleware] 🔥 GET /admin/analytics
+2025-10-19 11:59:22 - crm - INFO - [middleware] 📤 GET /admin/analytics → 200 (0.00s)
+2025-10-19 11:59:23 - crm - INFO - [middleware] 🔥 GET /admin/funnel
+2025-10-19 11:59:23 - crm - INFO - [middleware] 📤 GET /admin/funnel → 200 (0.00s)
+2025-10-19 11:59:24 - crm - INFO - [middleware] 🔥 GET /admin/calendar
+2025-10-19 11:59:24 - crm - INFO - [middleware] 📤 GET /admin/calendar → 200 (0.00s)
+2025-10-19 11:59:25 - crm - INFO - [middleware] 🔥 GET /admin/settings
+2025-10-19 11:59:25 - crm - INFO - [middleware] 📤 GET /admin/settings → 200 (0.00s)
+2025-10-19 11:59:26 - crm - INFO - [middleware] 🔥 GET /admin/users
+2025-10-19 11:59:26 - crm - INFO - [middleware] 📤 GET /admin/users → 200 (0.00s)
+2025-10-19 12:00:00 - crm - INFO - [middleware] 🔥 GET /admin/analytics
+2025-10-19 12:00:00 - crm - INFO - [middleware] 📤 GET /admin/analytics → 200 (0.00s)
+2025-10-19 12:00:03 - crm - INFO - [middleware] 🔥 GET /admin
+2025-10-19 12:00:03 - crm - INFO - [middleware] 📤 GET /admin → 200 (0.00s)
+2025-10-19 12:00:20 - crm - INFO - [middleware] 🔥 GET /admin/analytics
+2025-10-19 12:00:20 - crm - INFO - [middleware] 📤 GET /admin/analytics → 200 (0.00s)
+2025-10-19 12:00:27 - crm - INFO - [middleware] 🔥 GET /admin
+2025-10-19 12:00:27 - crm - INFO - [middleware] 📤 GET /admin → 200 (0.00s)
+2025-10-19 12:09:41 - crm - INFO - [middleware] 🔥 GET /admin
+2025-10-19 12:09:41 - crm - INFO - [middleware] 📤 GET /admin → 200 (0.02s)
+2025-10-19 12:09:44 - crm - INFO - [middleware] 🔥 GET /admin/analytics
+2025-10-19 12:09:44 - crm - INFO - [middleware] 📤 GET /admin/analytics → 200 (0.01s)
+2025-10-19 12:09:46 - crm - INFO - [middleware] 🔥 GET /admin/analytics
+2025-10-19 12:09:46 - crm - INFO - [middleware] 📤 GET /admin/analytics → 200 (0.00s)
+2025-10-19 12:10:14 - crm - INFO - [middleware] 🔥 GET /admin/analytics
+2025-10-19 12:10:14 - crm - INFO - [middleware] 📤 GET /admin/analytics → 200 (0.00s)
+2025-10-19 12:10:16 - crm - INFO - [middleware] 🔥 GET /admin
+2025-10-19 12:10:17 - crm - INFO - [middleware] 📤 GET /admin → 200 (0.00s)
+2025-10-19 12:10:18 - crm - INFO - [middleware] 🔥 GET /admin/analytics
+2025-10-19 12:10:18 - crm - INFO - [middleware] 📤 GET /admin/analytics → 200 (0.00s)
+2025-10-19 12:10:20 - crm - INFO - [middleware] 🔥 GET /admin
+2025-10-19 12:10:20 - crm - INFO - [middleware] 📤 GET /admin → 200 (0.01s)
+2025-10-19 12:10:22 - crm - INFO - [middleware] 🔥 GET /admin/analytics
+2025-10-19 12:10:22 - crm - INFO - [middleware] 📤 GET /admin/analytics → 200 (0.00s)
+2025-10-19 12:11:36 - crm - INFO - [middleware] 🔥 GET /admin/analytics
+2025-10-19 12:11:36 - crm - INFO - [middleware] 📤 GET /admin/analytics → 200 (0.00s)
+2025-10-19 12:11:38 - crm - INFO - [middleware] 🔥 GET /admin/settings
+2025-10-19 12:11:38 - crm - INFO - [middleware] 📤 GET /admin/settings → 200 (0.01s)
+2025-10-19 12:11:45 - crm - INFO - [middleware] 🔥 GET /admin/settings
+2025-10-19 12:11:45 - crm - INFO - [middleware] 📤 GET /admin/settings → 200 (0.00s)
+2025-10-19 12:11:56 - crm - INFO - [middleware] 🔥 GET /admin/settings
+2025-10-19 12:11:56 - crm - INFO - [middleware] 📤 GET /admin/settings → 200 (0.01s)
+2025-10-19 12:14:08 - crm - INFO - [middleware] 🔥 GET /admin/settings
+2025-10-19 12:14:08 - crm - INFO - [middleware] 📤 GET /admin/settings → 200 (0.00s)
+2025-10-19 12:14:10 - crm - INFO - [middleware] 🔥 GET /admin/bookings
+2025-10-19 12:14:10 - crm - INFO - [middleware] 📤 GET /admin/bookings → 200 (0.01s)

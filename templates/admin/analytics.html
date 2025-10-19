@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block content %}
+<!-- Header -->
 <div class="mb-8">
     <h1 class="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-3">
         <span class="text-4xl">📊</span>
@@ -17,38 +18,44 @@
     <p class="text-gray-600">Детальный анализ работы салона</p>
 </div>
 
-<!-- Period Selector -->
-<div class="search-filter-bar">
-    <select class="filter-select" id="periodSelect" onchange="changePeriod()">
-        <option value="7">Неделя</option>
-        <option value="14">2 недели</option>
-        <option value="30" selected>Месяц</option>
-        <option value="90">3 месяца</option>
-        <option value="custom">Свой период</option>
-    </select>
+<!-- Filters -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
+    <div class="flex flex-col md:flex-row gap-4">
+        <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" 
+                id="periodSelect" onchange="changePeriod()">
+            <option value="7">Неделя</option>
+            <option value="14">2 недели</option>
+            <option value="30" selected>Месяц</option>
+            <option value="90">3 месяца</option>
+            <option value="custom">Свой период</option>
+        </select>
 
-    <input type="date" class="form-input" id="dateFrom" style="display:none; width: auto;"
-        onchange="updateCustomPeriod()">
-    <input type="date" class="form-input" id="dateTo" style="display:none; width: auto;"
-        onchange="updateCustomPeriod()">
+        <input type="date" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" 
+               id="dateFrom" style="display:none;" onchange="updateCustomPeriod()">
+        <input type="date" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" 
+               id="dateTo" style="display:none;" onchange="updateCustomPeriod()">
 
-    <button class="btn btn-primary" onclick="refreshData()">
-        <i class="fas fa-sync"></i> Обновить
-    </button>
+        <button class="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all md:ml-auto" 
+                onclick="refreshData()">
+            <i class="fas fa-sync mr-2"></i> Обновить
+        </button>
 
-<select class="filter-select" id="exportFormat" style="width: auto;">
-        <option value="">Экспорт...</option>
-        <option value="csv">CSV</option>
-        <option value="excel">Excel (XLSX)</option>
-        <option value="pdf">PDF</option>
-    </select>
+        <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" 
+                id="exportFormat">
+            <option value="">Формат...</option>
+            <option value="csv">CSV</option>
+            <option value="excel">Excel (XLSX)</option>
+            <option value="pdf">PDF</option>
+        </select>
 
-    <button class="btn btn-secondary" onclick="exportReport()">
-        <i class="fas fa-download"></i> Скачать
-    </button>
+        <button class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" 
+                onclick="exportReport()">
+            <i class="fas fa-download mr-2"></i> Скачать
+        </button>
+    </div>
 </div>
 
-<!-- Key Metrics -->
+<!-- Stats Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <!-- Conversion Rate Card -->
     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
@@ -68,13 +75,13 @@
     <!-- Average Response Time Card -->
     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
         <div class="flex items-start justify-between mb-4">
-            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
                 <i class="fas fa-clock text-white text-xl"></i>
             </div>
         </div>
         <h3 class="text-3xl font-bold text-gray-900 mb-1">{{ analytics.avg_response_time }} мин</h3>
         <p class="text-gray-600 text-sm mb-2">Среднее время ответа</p>
-        <div class="flex items-center gap-1 text-red-600 text-sm">
+        <div class="flex items-center gap-1 text-green-600 text-sm">
             <i class="fas fa-arrow-down"></i>
             <span>-0.5 мин</span>
         </div>
@@ -83,7 +90,7 @@
     <!-- Total Revenue Card -->
     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
         <div class="flex items-start justify-between mb-4">
-            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
                 <i class="fas fa-dollar-sign text-white text-xl"></i>
             </div>
         </div>
@@ -98,11 +105,13 @@
     <!-- Average Check Card -->
     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
         <div class="flex items-start justify-between mb-4">
-            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+            <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-pink-600 rounded-lg flex items-center justify-center">
                 <i class="fas fa-receipt text-white text-xl"></i>
             </div>
         </div>
-        <h3 class="text-3xl font-bold text-gray-900 mb-1">{{ (stats.total_revenue / stats.completed_bookings) | round(0) if stats.completed_bookings > 0 else 0 }} AED</h3>
+        <h3 class="text-3xl font-bold text-gray-900 mb-1">
+            {{ (stats.total_revenue / stats.completed_bookings) | round(0) if stats.completed_bookings > 0 else 0 }} AED
+        </h3>
         <p class="text-gray-600 text-sm mb-2">Средний чек</p>
         <div class="flex items-center gap-1 text-green-600 text-sm">
             <i class="fas fa-arrow-up"></i>
@@ -110,183 +119,110 @@
         </div>
     </div>
 </div>
+
 <!-- Charts Grid -->
-<div class="analytics-grid">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
     <!-- Bookings Trend -->
-    <div class="chart-container">
-        <h2><i class="fas fa-chart-area"></i> Динамика записей</h2>
-        <div class="chart-wrapper">
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <i class="fas fa-chart-area text-pink-600"></i>
+            Динамика записей
+        </h2>
+        <div style="height: 300px;">
             <canvas id="bookingsTrendChart"></canvas>
         </div>
     </div>
 
     <!-- Services Distribution -->
-    <div class="chart-container">
-        <h2><i class="fas fa-chart-pie"></i> Распределение услуг</h2>
-        <div class="chart-wrapper">
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <i class="fas fa-chart-pie text-purple-600"></i>
+            Распределение услуг
+        </h2>
+        <div style="height: 300px;">
             <canvas id="servicesChart"></canvas>
         </div>
     </div>
-</div>
 
-<!-- More Charts -->
-<div class="analytics-grid">
     <!-- Status Distribution -->
-    <div class="chart-container">
-        <h2><i class="fas fa-chart-bar"></i> Статусы записей</h2>
-        <div class="chart-wrapper">
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <i class="fas fa-chart-bar text-blue-600"></i>
+            Статусы записей
+        </h2>
+        <div style="height: 300px;">
             <canvas id="statusChart"></canvas>
         </div>
     </div>
 
     <!-- Revenue Trend -->
-    <div class="chart-container">
-        <h2><i class="fas fa-dollar-sign"></i> Динамика дохода</h2>
-        <div class="chart-wrapper">
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <i class="fas fa-dollar-sign text-green-600"></i>
+            Динамика дохода
+        </h2>
+        <div style="height: 300px;">
             <canvas id="revenueChart"></canvas>
         </div>
     </div>
 </div>
 
 <!-- Services Table -->
-<div class="data-table-container" style="margin-top: 30px;">
-    <div style="padding: 20px; border-bottom: 1px solid #e5e7eb;">
-        <h2 style="font-size: 1.3em; color: #1f2937;">
-            <i class="fas fa-list"></i> Детализация по услугам
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="p-6 border-b border-gray-200">
+        <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+            <i class="fas fa-list text-pink-600"></i>
+            Детализация по услугам
         </h2>
     </div>
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Услуга</th>
-                <th>Количество</th>
-                <th>Доход</th>
-                <th>Средний чек</th>
-                <th>Доля рынка</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if analytics.services_stats %}
-            {% set total_count = analytics.services_stats | sum(attribute=1) %}
-            {% for service in analytics.services_stats %}
-            <tr>
-                <td><strong>{{ service[0] }}</strong></td>
-                <td>{{ service[1] }}</td>
-                <td>{{ service[2] or 0 }} AED</td>
-                <td>{{ ((service[2] or 0) / service[1]) | round(0) if service[1] > 0 else 0 }} AED</td>
-                <td>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <div class="progress-bar" style="flex: 1;">
-                            <div class="progress-fill"
-                                style="width: {{ (service[1] / total_count * 100) if total_count > 0 else 0 }}%"></div>
-                        </div>
-                        <span>{{ ((service[1] / total_count * 100) if total_count > 0 else 0) | round(1) }}%</span>
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-            {% else %}
-            <tr>
-                <td colspan="5">
-                    <div class="empty-state">
-                        <i class="fas fa-chart-bar"></i>
-                        <h3>Нет данных</h3>
-                        <p>Данные появятся после первых записей</p>
-                    </div>
-                </td>
-            </tr>
-            {% endif %}
-        </tbody>
-    </table>
-</div>
-
-<!-- Insights -->
-<div class="analytics-grid" style="margin-top: 30px;">
-    <div class="chart-container">
-        <h2><i class="fas fa-lightbulb"></i> Ключевые инсайты</h2>
-        <div style="padding: 20px 0;">
-            <div class="message-box"
-                style="background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-left: 5px solid #10b981; margin-bottom: 15px;">
-                <div class="message-header">
-                    <span><i class="fas fa-trophy"></i> Лучшая услуга</span>
-                    <span class="badge badge-success">Топ</span>
-                </div>
-                <div class="message-text">
-                    {% if analytics.services_stats and analytics.services_stats[0] %}
-                    <strong>{{ analytics.services_stats[0][0] }}</strong> — самая популярная услуга с {{
-                    analytics.services_stats[0][1] }} записями
-                    {% else %}
-                    Пока нет данных по услугам
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="message-box"
-                style="background: linear-gradient(135deg, #dbeafe, #bfdbfe); border-left: 5px solid #3b82f6; margin-bottom: 15px;">
-                <div class="message-header">
-                    <span><i class="fas fa-clock"></i> Время работы</span>
-                    <span class="badge badge-info">Инсайт</span>
-                </div>
-                <div class="message-text">
-                    Средний цикл от первого контакта до записи: <strong>{{ analytics.avg_response_time * 3 | round(0) }}
-                        минут</strong>
-                </div>
-            </div>
-
-            <div class="message-box"
-                style="background: linear-gradient(135deg, #fef3c7, #fde68a); border-left: 5px solid #f59e0b; margin-bottom: 15px;">
-                <div class="message-header">
-                    <span><i class="fas fa-chart-line"></i> Тренд</span>
-                    <span class="badge badge-warning">Важно</span>
-                </div>
-                <div class="message-text">
-                    {% if stats.total_bookings > 0 %}
-                    Конверсия составляет {{ stats.conversion_rate }}%. Это {% if stats.conversion_rate > 30 %}отличный{%
-                    elif stats.conversion_rate > 15 %}хороший{% else %}средний{% endif %} показатель для салонов
-                    красоты.
-                    {% else %}
-                    Начните собирать данные для анализа трендов
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="chart-container">
-        <h2><i class="fas fa-users"></i> Сегментация клиентов</h2>
-        <div style="padding: 20px 0;">
-            <div class="client-card">
-                <div class="client-stats" style="border-top: none; padding-top: 0;">
-                    <div class="client-stat">
-                        <div class="client-stat-value">{{ stats.new_clients }}</div>
-                        <div class="client-stat-label">Новые</div>
-                        <div class="progress-bar" style="margin-top: 10px;">
-                            <div class="progress-fill"
-                                style="width: {{ (stats.new_clients / stats.total_clients * 100) if stats.total_clients > 0 else 0 }}%; background: #3b82f6;">
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Услуга</th>
+                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Количество</th>
+                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Доход</th>
+                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Средний чек</th>
+                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Доля рынка</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% if analytics.services_stats %}
+                {% set total_count = analytics.services_stats | sum(attribute=1) %}
+                {% for service in analytics.services_stats %}
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ service[0] }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-900">{{ service[1] }}</td>
+                    <td class="px-6 py-4 text-sm text-green-600 font-medium">{{ service[2] or 0 }} AED</td>
+                    <td class="px-6 py-4 text-sm text-gray-900">
+                        {{ ((service[2] or 0) / service[1]) | round(0) if service[1] > 0 else 0 }} AED
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="flex-1 bg-gray-200 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-pink-500 to-purple-600 h-2 rounded-full" 
+                                     style="width: {{ (service[1] / total_count * 100) if total_count > 0 else 0 }}%"></div>
                             </div>
+                            <span class="text-sm text-gray-600 font-medium">
+                                {{ ((service[1] / total_count * 100) if total_count > 0 else 0) | round(1) }}%
+                            </span>
                         </div>
-                    </div>
-                    <div class="client-stat">
-                        <div class="client-stat-value">{{ stats.leads }}</div>
-                        <div class="client-stat-label">Лиды</div>
-                        <div class="progress-bar" style="margin-top: 10px;">
-                            <div class="progress-fill"
-                                style="width: {{ (stats.leads / stats.total_clients * 100) if stats.total_clients > 0 else 0 }}%; background: #f59e0b;">
-                            </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="5" class="px-6 py-12 text-center">
+                        <div class="flex flex-col items-center">
+                            <i class="fas fa-chart-bar text-gray-300 text-5xl mb-4"></i>
+                            <h3 class="text-lg font-medium text-gray-900 mb-2">Нет данных</h3>
+                            <p class="text-gray-500">Данные появятся после первых записей</p>
                         </div>
-                    </div>
-                    <div class="client-stat">
-                        <div class="client-stat-value">{{ stats.customers }}</div>
-                        <div class="client-stat-label">Клиенты</div>
-                        <div class="progress-bar" style="margin-top: 10px;">
-                            <div class="progress-fill"
-                                style="width: {{ (stats.customers / stats.total_clients * 100) if stats.total_clients > 0 else 0 }}%; background: #10b981;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
     </div>
 </div>
 {% endblock %}
