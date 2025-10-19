@@ -9,9 +9,12 @@
 {% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <h1>📊 Аналитика и отчеты</h1>
-    <p>Детальный анализ работы салона</p>
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-3">
+        <span class="text-4xl">📊</span>
+        Аналитика и отчеты
+    </h1>
+    <p class="text-gray-600">Детальный анализ работы салона</p>
 </div>
 
 <!-- Period Selector -->
@@ -46,69 +49,67 @@
 </div>
 
 <!-- Key Metrics -->
-<div class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-card-content">
-            <div class="stat-card-info">
-                <h3>{{ stats.conversion_rate }}%</h3>
-                <p>Конверсия</p>
-                <span class="stat-trend trend-up">
-                    <i class="fas fa-arrow-up"></i> +2.3%
-                </span>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Conversion Rate Card -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+        <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                <i class="fas fa-chart-line text-white text-xl"></i>
             </div>
-            <div class="stat-card-icon">
-                <i class="fas fa-chart-line"></i>
-            </div>
+        </div>
+        <h3 class="text-3xl font-bold text-gray-900 mb-1">{{ stats.conversion_rate }}%</h3>
+        <p class="text-gray-600 text-sm mb-2">Конверсия</p>
+        <div class="flex items-center gap-1 text-green-600 text-sm">
+            <i class="fas fa-arrow-up"></i>
+            <span>+2.3%</span>
         </div>
     </div>
 
-    <div class="stat-card">
-        <div class="stat-card-content">
-            <div class="stat-card-info">
-                <h3>{{ analytics.avg_response_time }} мин</h3>
-                <p>Среднее время ответа</p>
-                <span class="stat-trend trend-down">
-                    <i class="fas fa-arrow-down"></i> -0.5 мин
-                </span>
+    <!-- Average Response Time Card -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+        <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                <i class="fas fa-clock text-white text-xl"></i>
             </div>
-            <div class="stat-card-icon">
-                <i class="fas fa-clock"></i>
-            </div>
+        </div>
+        <h3 class="text-3xl font-bold text-gray-900 mb-1">{{ analytics.avg_response_time }} мин</h3>
+        <p class="text-gray-600 text-sm mb-2">Среднее время ответа</p>
+        <div class="flex items-center gap-1 text-red-600 text-sm">
+            <i class="fas fa-arrow-down"></i>
+            <span>-0.5 мин</span>
         </div>
     </div>
 
-    <div class="stat-card">
-        <div class="stat-card-content">
-            <div class="stat-card-info">
-                <h3>{{ stats.total_revenue }} AED</h3>
-                <p>Доход за период</p>
-                <span class="stat-trend trend-up">
-                    <i class="fas fa-arrow-up"></i> +15%
-                </span>
+    <!-- Total Revenue Card -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+        <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                <i class="fas fa-dollar-sign text-white text-xl"></i>
             </div>
-            <div class="stat-card-icon">
-                <i class="fas fa-dollar-sign"></i>
-            </div>
+        </div>
+        <h3 class="text-3xl font-bold text-gray-900 mb-1">{{ stats.total_revenue }} AED</h3>
+        <p class="text-gray-600 text-sm mb-2">Доход за период</p>
+        <div class="flex items-center gap-1 text-green-600 text-sm">
+            <i class="fas fa-arrow-up"></i>
+            <span>+15%</span>
         </div>
     </div>
 
-    <div class="stat-card">
-        <div class="stat-card-content">
-            <div class="stat-card-info">
-                <h3>{{ (stats.total_revenue / stats.completed_bookings) | round(0) if stats.completed_bookings > 0 else
-                    0 }} AED</h3>
-                <p>Средний чек</p>
-                <span class="stat-trend trend-up">
-                    <i class="fas fa-arrow-up"></i> +8%
-                </span>
+    <!-- Average Check Card -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+        <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                <i class="fas fa-receipt text-white text-xl"></i>
             </div>
-            <div class="stat-card-icon">
-                <i class="fas fa-receipt"></i>
-            </div>
+        </div>
+        <h3 class="text-3xl font-bold text-gray-900 mb-1">{{ (stats.total_revenue / stats.completed_bookings) | round(0) if stats.completed_bookings > 0 else 0 }} AED</h3>
+        <p class="text-gray-600 text-sm mb-2">Средний чек</p>
+        <div class="flex items-center gap-1 text-green-600 text-sm">
+            <i class="fas fa-arrow-up"></i>
+            <span>+8%</span>
         </div>
     </div>
 </div>
-
 <!-- Charts Grid -->
 <div class="analytics-grid">
     <!-- Bookings Trend -->

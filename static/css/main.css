@@ -3325,3 +3325,9 @@ html {
     height: 0;
   }
 }
+
+.active {
+    background: linear-gradient(135deg, #fdf2f8, #fae8ff);
+    color: #ec4899;
+    font-weight: 600;
+}
