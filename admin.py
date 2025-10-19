@@ -1627,3 +1627,40 @@ async def get_chat_messages_paginated(
         "total": total,
         "has_more": (offset + limit) < total
     })
+
+# В конец файла admin.py добавь:
+
+@router.get("/admin/calendar", response_class=HTMLResponse)
+async def admin_calendar(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Календарь записей"""
+    user = await require_auth(session_token)
+    if not user:
+        return RedirectResponse(url="/login", status_code=302)
+
+    unread_count = get_total_unread()
+
+    return templates.TemplateResponse("admin/calendar.html", {
+        "request": request,
+        "salon_info": SALON_INFO,
+        "current_user": user,
+        "unread_count": unread_count,
+        "css_version": CSS_VERSION
+    })
+
+
+@router.get("/admin/settings", response_class=HTMLResponse)
+async def admin_settings(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Настройки системы"""
+    user = await require_auth(session_token)
+    if not user or user["role"] != "admin":
+        return RedirectResponse(url="/admin", status_code=302)
+
+    unread_count = get_total_unread()
+
+    return templates.TemplateResponse("admin/settings.html", {
+        "request": request,
+        "salon_info": SALON_INFO,
+        "current_user": user,
+        "unread_count": unread_count,
+        "css_version": CSS_VERSION
+    })

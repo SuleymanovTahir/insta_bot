@@ -6,23 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ salon_info.name }}{% endblock %}</title>
 
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS v4 -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#ec4899',
-                        secondary: '#8b5cf6',
-                    }
-                }
-            }
-        }
-    </script>
-
+    
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/main.css?v={{ css_version }}">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -31,133 +19,111 @@
     {% block head_scripts %}{% endblock %}
 </head>
 
-<body>
-    <div class="crm-wrapper">
+<body class="bg-gray-50 overflow-hidden">
+    <div class="flex h-screen">
         <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h1>💎 {{ salon_info.name }}</h1>
-                <p>CRM System</p>
+        <aside class="w-64 bg-white border-r border-gray-200 flex flex-col flex-shrink-0">
+            <!-- Header -->
+            <div class="p-6 border-b border-gray-200 flex-shrink-0">
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
+                    💎 {{ salon_info.name }}
+                </h1>
+                <p class="text-sm text-gray-500 mt-1">CRM System</p>
             </div>
-            <aside class="w-64 bg-white border-r border-gray-200 flex flex-col">
-                <!-- Header -->
-                <div class="p-6 border-b border-gray-200">
-                    <h1 class="text-2xl font-bold text-pink-600">💎 {{ salon_info.name }}</h1>
-                    <p class="text-sm text-gray-500 mt-1">CRM System</p>
-                </div>
 
-                <!-- Navigation -->
-                <nav class="flex-1 overflow-y-auto p-4">
-                    <ul class="space-y-1">
-                        <li>
-                            <a href="/admin"
-                                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {% block nav_dashboard %}{% endblock %}">
-                                <i class="fas fa-chart-line w-5 h-5"></i>
-                                <span>Дашборд</span>
-                            </a>
-                        </li>
+            <!-- Navigation - scrollable -->
+            <nav class="flex-1 overflow-y-auto p-4">
+                <ul class="space-y-1">
+                    <li>
+                        <a href="/admin" class="nav-link {% block nav_dashboard %}{% endblock %}">
+                            <i class="fas fa-chart-line w-5"></i>
+                            <span>Дашборд</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/admin/clients" class="nav-link {% block nav_clients %}{% endblock %}">
+                            <i class="fas fa-users w-5"></i>
+                            <span>Клиенты</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/admin/bookings" class="nav-link {% block nav_bookings %}{% endblock %}">
+                            <i class="fas fa-calendar-check w-5"></i>
+                            <span>Записи</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/admin/services" class="nav-link {% block nav_services %}{% endblock %}">
+                            <i class="fas fa-spa w-5"></i>
+                            <span>Услуги</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/admin/chat" class="nav-link {% block nav_chat %}{% endblock %} relative">
+                            <i class="fas fa-comment-dots w-5"></i>
+                            <span>Чат</span>
+                            {% if unread_count > 0 %}
+                            <span class="absolute right-2 top-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                {{ unread_count }}
+                            </span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/admin/messages" class="nav-link {% block nav_messages %}{% endblock %}">
+                            <i class="fas fa-comments w-5"></i>
+                            <span>История</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/admin/analytics" class="nav-link {% block nav_analytics %}{% endblock %}">
+                            <i class="fas fa-chart-bar w-5"></i>
+                            <span>Аналитика</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/admin/funnel" class="nav-link {% block nav_funnel %}{% endblock %}">
+                            <i class="fas fa-filter w-5"></i>
+                            <span>Воронка продаж</span>
+                        </a>
+                    </li>
 
-                        <li>
-                            <a href="/admin/clients"
-                                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {% block nav_clients %}{% endblock %}">
-                                <i class="fas fa-users w-5 h-5"></i>
-                                <span>Клиенты</span>
-                            </a>
-                        </li>
+                    <li>
+                        <a href="/admin/calendar" class="nav-link {% block nav_calendar %}{% endblock %}">
+                            <i class="fas fa-calendar w-5"></i>
+                            <span>Календарь</span>
+                        </a>
+                    </li>
 
-                        <li>
-                            <a href="/admin/bookings"
-                                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {% block nav_bookings %}{% endblock %}">
-                                <i class="fas fa-calendar-check w-5 h-5"></i>
-                                <span>Записи</span>
-                            </a>
-                        </li>
+                    <li>
+                        <a href="/admin/settings" class="nav-link {% block nav_settings %}{% endblock %}">
+                            <i class="fas fa-cog w-5"></i>
+                            <span>Настройки</span>
+                        </a>
+                    </li>
+                    
+                    {% if current_user and current_user.role == 'admin' %}
+                    <li>
+                        <a href="/admin/users" class="nav-link {% block nav_users %}{% endblock %}">
+                            <i class="fas fa-user-cog w-5"></i>
+                            <span>Пользователи</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
 
-                        <li>
-                            <a href="/admin/services"
-                                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {% block nav_services %}{% endblock %}">
-                                <i class="fas fa-spa w-5 h-5"></i>
-                                <span>Услуги</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="/admin/chat"
-                                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {% block nav_chat %}{% endblock %} relative">
-                                <i class="fas fa-comment-dots w-5 h-5"></i>
-                                <span>Чат</span>
-                                {% if unread_count > 0 %}
-                                <span
-                                    class="absolute right-2 top-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                    {{ unread_count }}
-                                </span>
-                                {% endif %}
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="/admin/messages"
-                                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {% block nav_messages %}{% endblock %}">
-                                <i class="fas fa-comments w-5 h-5"></i>
-                                <span>История</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="/admin/analytics"
-                                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {% block nav_analytics %}{% endblock %}">
-                                <i class="fas fa-chart-bar w-5 h-5"></i>
-                                <span>Аналитика</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="/admin/funnel"
-                                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {% block nav_funnel %}{% endblock %}">
-                                <i class="fas fa-filter w-5 h-5"></i>
-                                <span>Воронка продаж</span>
-                            </a>
-                        </li>
-
-                        {% if current_user and current_user.role == 'admin' %}
-                        <li>
-                            <a href="/admin/users"
-                                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {% block nav_users %}{% endblock %}">
-                                <i class="fas fa-user-cog w-5 h-5"></i>
-                                <span>Пользователи</span>
-                            </a>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-
-                <!-- User Profile Footer -->
-                <div class="p-4 border-t border-gray-200">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div
-                            class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
-                            {{ current_user.full_name[0] if current_user and current_user.full_name else 'A' }}
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm font-medium text-gray-900 truncate">
-                                {{ current_user.full_name if current_user else 'Администратор' }}
-                            </p>
-                            <p class="text-xs text-gray-500">
-                                {{ current_user.role if current_user else 'admin' }}
-                            </p>
-                        </div>
-                    </div>
-                    <a href="/logout"
-                        class="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Выход</span>
-                    </a>
-                </div>
-            </aside>
-            <div class="p-4 border-t border-gray-200">
+            <!-- User Profile Footer - fixed at bottom -->
+            <div class="p-4 border-t border-gray-200 flex-shrink-0">
                 <div class="flex items-center gap-3 mb-3">
-                    <div
-                        class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                    <div class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
                         {{ current_user.full_name[0] if current_user and current_user.full_name else 'A' }}
                     </div>
                     <div class="flex-1 min-w-0">
@@ -169,37 +135,47 @@
                         </p>
                     </div>
                 </div>
-                <a href="/logout"
-                    class="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors">
+                <a href="/logout" class="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Выход</span>
                 </a>
             </div>
         </aside>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <button class="menu-toggle" onclick="toggleSidebar()">
-                <i class="fas fa-bars"></i>
-            </button>
-
-            {% block content %}
-            <!-- Здесь будет контент страницы -->
-            {% endblock %}
+        <!-- Main Content - scrollable -->
+        <main class="flex-1 overflow-y-auto bg-gray-50">
+            {% block content %}{% endblock %}
         </main>
     </div>
 
-    <script>
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-        }
+    <!-- Notification Container -->
+    <div id="notification-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
 
-        function showNotification(message, type) {
-            const notif = document.createElement('div');
-            notif.className = `notification notification-${type}`;
-            notif.textContent = message;
-            document.body.appendChild(notif);
-            setTimeout(() => notif.remove(), 3000);
+    <script>
+        // Notification System
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notification-container');
+            const notification = document.createElement('div');
+            
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                warning: 'bg-yellow-500',
+                info: 'bg-blue-500'
+            };
+            
+            notification.className = `${colors[type]} text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 animate-slide-in`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            container.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('animate-slide-out');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
         }
     </script>
 
