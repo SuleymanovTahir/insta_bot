@@ -14,7 +14,10 @@ os.environ['GLOG_minloglevel'] = '2'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 # ===== ВЕРСИЯ ДЛЯ КЭШИРОВАНИЯ =====
-CSS_VERSION = datetime.now().strftime('%Y%m%d%H%M%S')
+import time
+
+# Версия CSS для кэш-буста
+CSS_VERSION = str(int(time.time()))
 
 # ===== ТОКЕНЫ И КЛЮЧИ =====
 VERIFY_TOKEN = os.getenv("VERIFY_TOKEN", "taha")
@@ -537,3 +540,32 @@ SMTP_PASSWORD = "hkfw qruh hxur ghta"
 FROM_EMAIL = "ii3391609@gmail.com"
 
 DATABASE_NAME = 'salon_bot.db'
+
+# ===== СТАТУСЫ КЛИЕНТОВ С ЦВЕТАМИ =====
+CLIENT_STATUSES = {
+    "new": {
+        "label": "Новый",
+        "color": "green",
+        "icon": "fa-user-plus"
+    },
+    "lead": {
+        "label": "Лид",
+        "color": "blue",
+        "icon": "fa-user-clock"
+    },
+    "customer": {
+        "label": "Клиент",
+        "color": "purple",
+        "icon": "fa-user-check"
+    },
+    "vip": {
+        "label": "VIP",
+        "color": "pink",
+        "icon": "fa-crown"
+    },
+    "lost": {
+        "label": "Потерян",
+        "color": "red",
+        "icon": "fa-user-times"
+    }
+}

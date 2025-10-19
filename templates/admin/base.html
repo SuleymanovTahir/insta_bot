@@ -4,271 +4,252 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ salon_info.name }}{% endblock %}</title>
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/static/css/main.css?v={{ css_version }}">
-
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="/static/css/index.css?v={{ css_version }}">
+    
+    <!-- Кастомные стили -->
+    <link rel="stylesheet" href="/static/css/globals.css?v={{ css_version }}">
+    <link rel="stylesheet" href="/static/css/admin.css?v={{ css_version }}">
+    
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    {% block extra_css %}{% endblock %}
-    {% block head_scripts %}{% endblock %}
     
-    <style>
-        /* Дополнительные стили для навигации */
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: 8px;
-            color: #6b7280;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-        
-        .nav-link:hover {
-            background: #f3f4f6;
-            color: #111827;
-        }
-        
-        .nav-link.active {
-            background: linear-gradient(135deg, #ec4899, #8b5cf6);
-            color: white;
-        }
-        
-        .nav-link i {
-            width: 20px;
-            text-align: center;
-        }
-        
-        /* Скроллбар для сайдбара */
-        .sidebar-scroll::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .sidebar-scroll::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        
-        .sidebar-scroll::-webkit-scrollbar-thumb {
-            background: #d1d5db;
-            border-radius: 3px;
-        }
-        
-        .sidebar-scroll::-webkit-scrollbar-thumb:hover {
-            background: #9ca3af;
-        }
-
-        /* Анимация для уведомлений */
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideOut {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-        }
-
-        .animate-slide-in {
-            animation: slideIn 0.3s ease-out;
-        }
-
-        .animate-slide-out {
-            animation: slideOut 0.3s ease-in;
-        }
-    </style>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    {% block head_scripts %}{% endblock %}
 </head>
-
 <body class="bg-gray-50">
-    <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white border-r border-gray-200 flex flex-col flex-shrink-0">
-            <!-- Header -->
-            <div class="p-6 border-b border-gray-200 flex-shrink-0">
-                <h1 class="text-2xl font-bold">
-                    <span class="bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
-                        💎 {{ salon_info.name }}
-                    </span>
-                </h1>
-                <p class="text-sm text-gray-500 mt-1">CRM System</p>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i class="fas fa-gem"></i>
             </div>
+            <div>
+                <div class="sidebar-title">{{ salon_info.name }}</div>
+                <div style="font-size: 0.75rem; color: #6b7280;">CRM System</div>
+            </div>
+        </div>
 
-            <!-- Navigation - scrollable -->
-            <nav class="flex-1 overflow-y-auto p-4 sidebar-scroll">
-                <ul class="space-y-1">
-                    <li>
-                        <a href="/admin" class="nav-link {% block nav_dashboard %}{% endblock %}">
-                            <i class="fas fa-chart-line"></i>
-                            <span>Дашборд</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/admin/clients" class="nav-link {% block nav_clients %}{% endblock %}">
-                            <i class="fas fa-users"></i>
-                            <span>Клиенты</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/admin/bookings" class="nav-link {% block nav_bookings %}{% endblock %}">
-                            <i class="fas fa-calendar-check"></i>
-                            <span>Записи</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/admin/services" class="nav-link {% block nav_services %}{% endblock %}">
-                            <i class="fas fa-spa"></i>
-                            <span>Услуги</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/admin/chat" class="nav-link {% block nav_chat %}{% endblock %} relative">
-                            <i class="fas fa-comment-dots"></i>
-                            <span>Чат</span>
-                            {% if unread_count > 0 %}
-                            <span class="absolute right-3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                {{ unread_count }}
-                            </span>
-                            {% endif %}
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/admin/messages" class="nav-link {% block nav_messages %}{% endblock %}">
-                            <i class="fas fa-comments"></i>
-                            <span>История</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/admin/analytics" class="nav-link {% block nav_analytics %}{% endblock %}">
-                            <i class="fas fa-chart-bar"></i>
-                            <span>Аналитика</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="/admin/funnel" class="nav-link {% block nav_funnel %}{% endblock %}">
-                            <i class="fas fa-filter"></i>
-                            <span>Воронка продаж</span>
-                        </a>
-                    </li>
+        <nav class="sidebar-nav">
+            <a href="/admin" class="sidebar-nav-item {% block nav_dashboard %}{% endblock %}">
+                <i class="fas fa-home"></i>
+                <span>Главная</span>
+            </a>
+            
+            <a href="/admin/clients" class="sidebar-nav-item {% block nav_clients %}{% endblock %}">
+                <i class="fas fa-users"></i>
+                <span>Клиенты</span>
+            </a>
+            
+            <a href="/admin/bookings" class="sidebar-nav-item {% block nav_bookings %}{% endblock %}">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Записи</span>
+            </a>
+            
+            <a href="/admin/chat" class="sidebar-nav-item {% block nav_chat %}{% endblock %}">
+                <i class="fas fa-comments"></i>
+                <span>Чат</span>
+                {% if unread_count > 0 %}
+                <span class="sidebar-badge">{{ unread_count }}</span>
+                {% endif %}
+            </a>
+            
+            <a href="/admin/messages" class="sidebar-nav-item {% block nav_messages %}{% endblock %}">
+                <i class="fas fa-envelope"></i>
+                <span>Сообщения</span>
+            </a>
+            
+            <a href="/admin/analytics" class="sidebar-nav-item {% block nav_analytics %}{% endblock %}">
+                <i class="fas fa-chart-line"></i>
+                <span>Аналитика</span>
+            </a>
+            
+            <a href="/admin/funnel" class="sidebar-nav-item {% block nav_funnel %}{% endblock %}">
+                <i class="fas fa-filter"></i>
+                <span>Воронка</span>
+            </a>
+            
+            <a href="/admin/services" class="sidebar-nav-item {% block nav_services %}{% endblock %}">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Услуги</span>
+            </a>
+            
+            {% if current_user and current_user.role == 'admin' %}
+            <a href="/admin/users" class="sidebar-nav-item {% block nav_users %}{% endblock %}">
+                <i class="fas fa-user-shield"></i>
+                <span>Пользователи</span>
+            </a>
+            {% endif %}
+            
+            <a href="/admin/calendar" class="sidebar-nav-item {% block nav_calendar %}{% endblock %}">
+                <i class="fas fa-calendar"></i>
+                <span>Календарь</span>
+            </a>
+            
+            {% if current_user and current_user.role == 'admin' %}
+            <a href="/admin/settings" class="sidebar-nav-item {% block nav_settings %}{% endblock %}">
+                <i class="fas fa-cog"></i>
+                <span>Настройки</span>
+            </a>
+            {% endif %}
+            
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;"></div>
+            
+            <a href="/logout" class="sidebar-nav-item" style="color: #ef4444;">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Выход</span>
+            </a>
+        </nav>
+    </aside>
 
-                    <li>
-                        <a href="/admin/calendar" class="nav-link {% block nav_calendar %}{% endblock %}">
-                            <i class="fas fa-calendar"></i>
-                            <span>Календарь</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="/admin/settings" class="nav-link {% block nav_settings %}{% endblock %}">
-                            <i class="fas fa-cog"></i>
-                            <span>Настройки</span>
-                        </a>
-                    </li>
-                    
-                    {% if current_user and current_user.role == 'admin' %}
-                    <li>
-                        <a href="/admin/users" class="nav-link {% block nav_users %}{% endblock %}">
-                            <i class="fas fa-user-cog"></i>
-                            <span>Пользователи</span>
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </nav>
-
-            <!-- User Profile Footer - fixed at bottom -->
-            <div class="p-4 border-t border-gray-200 flex-shrink-0">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
-                        {{ current_user.full_name[0] if current_user and current_user.full_name else 'A' }}
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-900 truncate">
-                            {{ current_user.full_name if current_user else 'Администратор' }}
-                        </p>
-                        <p class="text-xs text-gray-500">
-                            {{ current_user.role if current_user else 'admin' }}
-                        </p>
-                    </div>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="admin-header-left">
+                <button class="admin-header-icon md:hidden" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="admin-header-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Поиск..." id="globalSearch">
                 </div>
-                <a href="/logout" class="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Выход</span>
-                </a>
             </div>
-        </aside>
 
-        <!-- Main Content - scrollable -->
-        <main class="flex-1 overflow-y-auto bg-gray-50">
-            <div class="p-8">
-                {% block content %}{% endblock %}
+            <div class="admin-header-right">
+                <div class="admin-header-icon" onclick="toggleNotifications()">
+                    <i class="fas fa-bell"></i>
+                    {% if unread_count > 0 %}
+                    <span class="badge-dot"></span>
+                    {% endif %}
+                </div>
+
+                <div class="admin-header-user" onclick="toggleUserMenu()">
+                    <div class="admin-header-avatar">
+                        {{ current_user.username[0].upper() if current_user else 'A' }}
+                    </div>
+                    <div class="admin-header-user-info">
+                        <div class="admin-header-username">{{ current_user.username if current_user else 'Admin' }}</div>
+                        <div class="admin-header-role">{{ current_user.role if current_user else 'Администратор' }}</div>
+                    </div>
+                    <i class="fas fa-chevron-down" style="color: #9ca3af; font-size: 0.75rem;"></i>
+                </div>
             </div>
-        </main>
-    </div>
+        </header>
 
-    <!-- Notification Container -->
-    <div id="notification-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+        <!-- Page Content -->
+        <div class="page-container animate-fade-in">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
 
+    <!-- Notification Toast Container -->
+    <div id="notificationContainer" style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;"></div>
+
+    <!-- Scripts -->
     <script>
-        // Notification System
-        function showNotification(message, type = 'info') {
-            const container = document.getElementById('notification-container');
+        // Sidebar toggle для мобильных
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('open');
+        }
+
+        // Notifications (заглушка)
+        function toggleNotifications() {
+            alert('Уведомления пока не реализованы');
+        }
+
+        // User menu (заглушка)
+        function toggleUserMenu() {
+            if (confirm('Выйти из системы?')) {
+                window.location.href = '/logout';
+            }
+        }
+
+        // Global search
+        document.getElementById('globalSearch')?.addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            console.log('Поиск:', query);
+            // Здесь будет логика глобального поиска
+        });
+
+        // Notification system
+        function showNotification(message, type = 'success') {
+            const container = document.getElementById('notificationContainer');
+            
             const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
             
-            const colors = {
-                success: 'bg-green-500',
-                error: 'bg-red-500',
-                warning: 'bg-yellow-500',
-                info: 'bg-blue-500'
-            };
-            
-            const icons = {
+            const icon = {
                 success: 'fa-check-circle',
-                error: 'fa-exclamation-circle',
-                warning: 'fa-exclamation-triangle',
+                error: 'fa-times-circle',
+                warning: 'fa-exclamation-circle',
                 info: 'fa-info-circle'
-            };
+            }[type] || 'fa-info-circle';
             
-            notification.className = `${colors[type]} text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 animate-slide-in`;
+            const color = {
+                success: '#10b981',
+                error: '#ef4444',
+                warning: '#f59e0b',
+                info: '#3b82f6'
+            }[type] || '#3b82f6';
+            
             notification.innerHTML = `
-                <i class="fas ${icons[type]}"></i>
-                <span>${message}</span>
+                <i class="fas ${icon}" style="color: ${color}; font-size: 1.25rem;"></i>
+                <span style="font-weight: 500; color: #111827;">${message}</span>
+                <button onclick="this.parentElement.remove()" style="margin-left: auto; padding: 0.25rem; color: #6b7280; cursor: pointer; background: none; border: none;">
+                    <i class="fas fa-times"></i>
+                </button>
             `;
             
             container.appendChild(notification);
             
             setTimeout(() => {
-                notification.classList.remove('animate-slide-in');
-                notification.classList.add('animate-slide-out');
+                notification.style.animation = 'slideOutRight 0.3s ease-out';
                 setTimeout(() => notification.remove(), 300);
-            }, 3000);
+            }, 5000);
         }
-        
-        // Глобальная функция для показа уведомлений
-        window.showNotification = showNotification;
+
+        // Закрытие sidebar при клике вне его на мобильных
+        document.addEventListener('click', function(e) {
+            const sidebar = document.querySelector('.sidebar');
+            const toggle = document.querySelector('.admin-header-icon');
+            
+            if (window.innerWidth <= 1024 && 
+                sidebar.classList.contains('open') && 
+                !sidebar.contains(e.target) && 
+                !toggle?.contains(e.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        // Auto-refresh unread count каждые 30 секунд
+        setInterval(async function() {
+            try {
+                const response = await fetch('/admin/api/unread-count');
+                const data = await response.json();
+                
+                const badge = document.querySelector('.sidebar-badge');
+                if (data.count > 0) {
+                    if (badge) {
+                        badge.textContent = data.count;
+                    }
+                    document.title = `(${data.count}) {{ salon_info.name }}`;
+                } else {
+                    if (badge) {
+                        badge.remove();
+                    }
+                    document.title = '{{ salon_info.name }}';
+                }
+            } catch (error) {
+                console.error('Ошибка обновления счётчика:', error);
+            }
+        }, 30000);
     </script>
 
     {% block extra_scripts %}{% endblock %}
