@@ -25,7 +25,7 @@ from database import (
 )
 
 # ===== ИМПОРТЫ BOT =====
-from bot import ask_gemini, build_genius_prompt, extract_booking_info, is_booking_complete
+from bot import ask_gemini_v2, build_genius_prompt, extract_booking_info, is_booking_complete
 
 # ===== ИМПОРТЫ INSTAGRAM =====
 from instagram import send_message, send_typing_indicator
