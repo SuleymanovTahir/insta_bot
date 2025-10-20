@@ -1,942 +1,669 @@
 {% extends "admin/base.html" %}
 
-{% block title %}Чат с клиентами - {{ salon_info.name }}{% endblock %}
-
+{% block title %}Чат - {{ salon_info.name }}{% endblock %}
 {% block nav_chat %}active{% endblock %}
 
-
 {% block content %}
-<div class="flex h-[calc(100vh-2rem)] gap-0 rounded-2xl overflow-hidden shadow-2xl">
-    <!-- Список клиентов -->
-    <div class="w-80 bg-white flex flex-col">
-        <!-- Заголовок списка -->
-        <div class="p-4 chat-header-glass">
-            <div class="flex items-center justify-between mb-3">
-                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-                    <span class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
-                        <i class="fas fa-comments text-white text-sm"></i>
-                    </span>
-                    Чаты
-                </h3>
-                {% if unread_count > 0 %}
-                <span class="notification-badge bg-gradient-to-r from-red-500 to-pink-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg" 
-                      id="totalUnreadBadge">
-                    {{ unread_count }}
-                </span>
-                {% endif %}
-            </div>
-            <div class="relative">
-                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                <input type="text" 
-                       class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
-                       placeholder="🔍 Поиск..." 
-                       onkeyup="searchChats()" 
-                       id="chatSearch">
+<style>
+    .chat-container {
+        display: flex;
+        height: calc(100vh - 140px);
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Clients List */
+    .clients-list {
+        width: 350px;
+        border-right: 1px solid #e5e7eb;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .clients-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .clients-header h2 {
+        color: white;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .clients-search {
+        position: relative;
+    }
+
+    .clients-search input {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 2.5rem;
+        border: none;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        backdrop-filter: blur(10px);
+    }
+
+    .clients-search input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .clients-search i {
+        position: absolute;
+        left: 0.875rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .clients-list-scroll {
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .client-item {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #f3f4f6;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .client-item:hover {
+        background: #f9fafb;
+    }
+
+    .client-item.active {
+        background: #ede9fe;
+        border-left: 3px solid #8b5cf6;
+    }
+
+    .client-item.pinned {
+        background: #fef3c7;
+    }
+
+    /* Chat Area */
+    .chat-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 10%);
+    }
+
+    .message-group {
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .message-group.outgoing {
+        flex-direction: row-reverse;
+    }
+
+    .message-bubble {
+        max-width: 60%;
+        padding: 0.875rem 1.125rem;
+        border-radius: 16px;
+        position: relative;
+        animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .message-bubble.incoming {
+        background: white;
+        border-bottom-left-radius: 4px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .message-bubble.outgoing {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-bottom-right-radius: 4px;
+    }
+
+    .message-time {
+        font-size: 0.75rem;
+        opacity: 0.7;
+        margin-top: 0.25rem;
+    }
+
+    .chat-input-area {
+        padding: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+        background: white;
+    }
+
+    .chat-input-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .chat-input {
+        flex: 1;
+        padding: 0.875rem 1.125rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        resize: none;
+        font-family: inherit;
+        transition: all 0.2s;
+    }
+
+    .chat-input:focus {
+        outline: none;
+        border-color: #8b5cf6;
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    }
+
+    .chat-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        border: none;
+        background: #f3f4f6;
+        color: #6b7280;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .chat-btn:hover {
+        background: #e5e7eb;
+        color: #111827;
+    }
+
+    .chat-btn-send {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        width: auto;
+        padding: 0 1.5rem;
+    }
+
+    .chat-btn-send:hover {
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        transform: translateY(-2px);
+    }
+
+    /* Client Info Panel */
+    .client-info {
+        width: 320px;
+        border-left: 1px solid #e5e7eb;
+        padding: 1.5rem;
+        overflow-y: auto;
+    }
+
+    .client-avatar-large {
+        width: 80px;
+        height: 80px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0 auto 1rem;
+    }
+
+    .info-section {
+        background: #f9fafb;
+        padding: 1rem;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+    }
+
+    .info-section h3 {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #6b7280;
+        margin-bottom: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .info-field {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .info-field:last-child {
+        border-bottom: none;
+    }
+
+    .info-label {
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+
+    .info-value {
+        color: #111827;
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+
+    /* Empty State */
+    .empty-state {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #9ca3af;
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+    }
+
+    .empty-state h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #6b7280;
+    }
+
+    .empty-state p {
+        font-size: 0.875rem;
+    }
+</style>
+
+<div class="chat-container">
+    <!-- Clients List -->
+    <div class="clients-list">
+        <div class="clients-header">
+            <h2>💬 Чаты</h2>
+            <div class="clients-search">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Поиск..." id="chatSearch" onkeyup="searchChats()">
             </div>
         </div>
         
-        <!-- Список чатов -->
-        <div class="flex-1 overflow-y-auto" id="clientsList">
+        <div class="clients-list-scroll" id="clientsList">
             {% if chats %}
-            {% for chat in chats %}
-            <div class="client-item p-4 border-b border-gray-100 {% if active_client == chat.instagram_id %}active{% endif %} {% if chat.is_pinned %}pinned{% endif %}"
-                 onclick="openChat('{{ chat.instagram_id }}')"
-                 data-client-id="{{ chat.instagram_id }}"
-                 data-name="{{ chat.name or chat.username or 'Клиент' }}"
-                 data-username="{{ chat.username or '' }}">
-                <div class="flex items-center gap-3">
-                    <!-- Аватар -->
-                    <div class="relative">
-                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center overflow-hidden shadow-lg">
-                            {% if chat.profile_pic %}
-                            <img src="{{ chat.profile_pic }}" alt="{{ chat.name }}"
-                                 class="w-full h-full object-cover">
-                            {% else %}
-                            <span class="text-white font-bold text-lg">
-                                {{ chat.name[0] if chat.name else chat.username[0] if chat.username else '?' }}
-                            </span>
-                            {% endif %}
-                        </div>
-                        {% if chat.unread_count > 0 %}
-                        <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">
-                            {{ chat.unread_count }}
-                        </span>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Информация -->
-                    <div class="flex-1 min-w-0">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="text-sm font-semibold text-gray-900 truncate flex items-center gap-1">
-                                {% if chat.is_pinned %}
-                                <i class="fas fa-thumbtack text-amber-500"></i>
+                {% for chat in chats %}
+                <div class="client-item {% if active_client == chat.instagram_id %}active{% endif %} {% if chat.is_pinned %}pinned{% endif %}"
+                     onclick="openChat('{{ chat.instagram_id }}')"
+                     data-client-id="{{ chat.instagram_id }}"
+                     data-name="{{ chat.name or chat.username or 'Клиент' }}">
+                    <div class="flex items-center gap-3">
+                        <div class="relative">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center text-white font-bold overflow-hidden">
+                                {% if chat.profile_pic %}
+                                <img src="{{ chat.profile_pic }}" alt="{{ chat.name }}" class="w-full h-full object-cover">
+                                {% else %}
+                                <span>{{ chat.name[0] if chat.name else chat.username[0] if chat.username else '?' }}</span>
                                 {% endif %}
-                                {{ chat.display_name }}
+                            </div>
+                            {% if chat.unread_count > 0 %}
+                            <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                                {{ chat.unread_count }}
                             </span>
-                            <span class="text-xs text-gray-500" data-time="{{ chat.last_message_time }}">
-                                {{ chat.last_message_time }}
-                            </span>
-                        </div>
-                        <div class="text-xs text-gray-600 truncate mb-1" data-last-message>
-                            {{ chat.last_message[:40] }}...
-                        </div>
-                        <div class="flex justify-between items-center">
-                            {% if chat.instagram_url %}
-                            <a href="{{ chat.instagram_url }}" target="_blank" 
-                               onclick="event.stopPropagation();" 
-                               class="text-xs text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
-                                <i class="fab fa-instagram"></i>
-                                @{{ chat.username }}
-                            </a>
-                            {% else %}
-                            <span class="text-xs text-gray-400">{{ chat.instagram_id[:15] }}...</span>
                             {% endif %}
-                            <span class="badge badge-{{ chat.status }}">
-                                {{ client_statuses[chat.status].label if chat.status in client_statuses else chat.status }}
-                            </span>
+                        </div>
+                        
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-semibold text-gray-900 truncate flex items-center gap-1">
+                                    {% if chat.is_pinned %}
+                                    <i class="fas fa-thumbtack text-amber-500"></i>
+                                    {% endif %}
+                                    {{ chat.display_name }}
+                                </span>
+                                <span class="text-xs text-gray-500">{{ chat.last_message_time }}</span>
+                            </div>
+                            <div class="text-xs text-gray-600 truncate">
+                                {{ chat.last_message[:40] }}...
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
+                {% endfor %}
             {% else %}
-            <div class="p-8 text-center text-gray-500">
-                <i class="fas fa-comments text-6xl opacity-20 mb-4"></i>
-                <p class="font-medium">Нет активных чатов</p>
-                <p class="text-sm mt-2">Чаты появятся после первого сообщения</p>
-            </div>
+                <div class="p-8 text-center text-gray-500">
+                    <i class="fas fa-comments text-6xl opacity-20 mb-4"></i>
+                    <p class="font-medium">Нет активных чатов</p>
+                </div>
             {% endif %}
         </div>
     </div>
 
-    <!-- Область сообщений -->
-    <div class="flex-1 flex flex-col bg-white">
-        {% if active_client %}
-        <!-- Заголовок чата -->
-        <div class="p-4 chat-header-glass">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center overflow-hidden shadow-lg">
-                        {% if active_client_info.profile_pic %}
-                        <img src="{{ active_client_info.profile_pic }}" 
-                             alt="{{ active_client_info.name }}" 
-                             class="w-full h-full object-cover">
-                        {% else %}
-                        <span class="text-white font-bold">
-                            {{ active_client_info.name[0] if active_client_info.name else '?' }}
-                        </span>
-                        {% endif %}
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-                            {{ active_client_info.name or active_client_info.username or 'Клиент' }}
-                            <button class="text-gray-400 hover:text-amber-500 transition-colors" 
-                                    onclick="pinClient('{{ active_client }}')" 
-                                    title="Закрепить">
-                                <i class="fas fa-thumbtack"></i>
-                            </button>
-                        </h3>
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            {% if active_client_info.phone %}
-                            <span><i class="fas fa-phone"></i> {{ active_client_info.phone }}</span>
-                            {% endif %}
-                            {% if active_client_info.instagram_url %}
-                            <a href="{{ active_client_info.instagram_url }}" 
-                               target="_blank" 
-                               class="text-indigo-600 hover:text-indigo-800">
-                                <i class="fab fa-instagram"></i> @{{ active_client_info.username }}
-                            </a>
-                            {% endif %}
-                        </div>
-                        <p id="typingIndicator" class="text-sm text-green-500 hidden">
-                            <i class="fas fa-circle text-xs animate-pulse"></i> Печатает...
-                        </p>
-                    </div>
+    <!-- Chat Area -->
+    {% if active_client %}
+    <div class="chat-area">
+        <div class="chat-header">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center text-white font-bold overflow-hidden">
+                    {% if active_client_info.profile_pic %}
+                    <img src="{{ active_client_info.profile_pic }}" alt="{{ active_client_info.name }}" class="w-full h-full object-cover">
+                    {% else %}
+                    <span>{{ active_client_info.name[0] if active_client_info.name else '?' }}</span>
+                    {% endif %}
                 </div>
-                <button class="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all" 
-                        onclick="toggleClientInfo()" 
-                        id="toggleInfoBtn">
-                    <i class="fas fa-info-circle mr-2"></i> Инфо
-                </button>
+                <div>
+                    <h3 class="font-bold text-gray-900">
+                        {{ active_client_info.name or active_client_info.username or 'Клиент' }}
+                    </h3>
+                    {% if active_client_info.phone %}
+                    <p class="text-sm text-gray-600">{{ active_client_info.phone }}</p>
+                    {% endif %}
+                </div>
             </div>
+            <button class="chat-btn" onclick="toggleClientInfo()">
+                <i class="fas fa-info-circle"></i>
+            </button>
         </div>
-        
-        <!-- Сообщения -->
-        <div class="flex-1 overflow-y-auto p-6 space-y-4 bg-gradient-to-br from-gray-50 to-white" 
-             id="chatMessages">
+
+        <div class="chat-messages" id="chatMessages">
             {% for message in messages %}
-            <div class="chat-message flex {% if message.sender == 'client' %}justify-start{% else %}justify-end{% endif %}" 
-                 data-message-id="{{ loop.index }}">
-                <div class="message-bubble p-4">
-                    <div class="message-content">
-                        {% if message.type == 'voice' %}
-                        {% set voice_parts = message.message.split('|') %}
-                        {% if voice_parts|length >= 2 %}
-                        {% set duration = voice_parts[0].replace('🎤', '').replace('s', '').strip() %}
-                        {% set filename = voice_parts[1].strip() %}
-                        <div class="flex items-center gap-3">
-                            <button class="audio-play-btn text-white" 
-                                    onclick="playVoiceMessage('/admin/api/uploads/voice/{{ filename }}', this)">
-                                <i class="fas fa-play"></i>
-                            </button>
-                            <div class="audio-waveform h-6 flex-1 max-w-[200px]"></div>
-                            <span class="audio-duration text-xs opacity-80">{{ duration }}s</span>
-                        </div>
-                        {% else %}
-                        {{ message.message }}
-                        {% endif %}
-                        {% elif message.type == 'image' %}
-                        {% set filename = message.message.replace('🖼️', '').strip() %}
-                        <div class="cursor-pointer" onclick="openImageModal('/admin/api/uploads/images/{{ filename }}')">
-                            <img src="/admin/api/uploads/images/{{ filename }}" 
-                                 alt="Image" 
-                                 class="max-w-full rounded-lg shadow-lg hover:shadow-xl transition-shadow"
-                                 onerror="this.parentElement.innerHTML='<div class=&quot;p-4 text-center text-red-500&quot;><i class=&quot;fas fa-exclamation-triangle&quot;></i><br>Ошибка загрузки</div>'">
-                        </div>
-                        {% elif message.type == 'file' %}
-                        {% set filename = message.message.replace('📎', '').strip() %}
-                        <a href="/admin/api/uploads/files/{{ filename }}" 
-                           class="flex items-center gap-2 hover:opacity-80 transition-opacity" 
-                           download>
-                            <i class="fas fa-file-alt text-2xl"></i>
-                            <span class="text-sm">{{ filename[:30] }}{% if filename|length > 30 %}...{% endif %}</span>
-                            <i class="fas fa-download"></i>
-                        </a>
-                        {% else %}
-                        {{ message.message }}
-                        {% endif %}
-                    </div>
-                    <div class="flex items-center gap-2 mt-2 text-xs {% if message.sender == 'bot' %}text-white/70{% else %}text-gray-500{% endif %}">
-                        <span>{{ message.timestamp[11:16] }}</span>
-                        {% if message.sender == 'bot' %}
-                        <i class="fas fa-check-double"></i>
-                        {% endif %}
-                    </div>
+            <div class="message-group {% if message.sender == 'bot' %}outgoing{% else %}incoming{% endif %}">
+                <div class="message-bubble {% if message.sender == 'bot' %}outgoing{% else %}incoming{% endif %}">
+                    <div>{{ message.message }}</div>
+                    <div class="message-time">{{ message.timestamp[11:16] }}</div>
                 </div>
             </div>
             {% endfor %}
         </div>
-        
-        <!-- Поле ввода -->
-        <div class="chat-input-container p-4">
-            <div class="flex items-center gap-2">
-                <button class="btn-icon" title="Загрузить фото" onclick="attachImage()">
+
+        <div class="chat-input-area">
+            <div class="chat-input-wrapper">
+                <button class="chat-btn" onclick="attachImage()" title="Фото">
                     <i class="fas fa-image"></i>
                 </button>
-                <button class="btn-icon" title="Прикрепить файл" onclick="attachFile()">
+                <button class="chat-btn" onclick="attachFile()" title="Файл">
                     <i class="fas fa-paperclip"></i>
                 </button>
-                <button class="btn-icon" id="voiceBtn" title="Голосовое сообщение" onclick="recordVoice()">
-                    <i class="fas fa-microphone"></i>
-                </button>
-                <textarea class="flex-1 chat-input resize-none" 
-                          id="messageInput" 
-                          placeholder="Введите сообщение..." 
-                          rows="1" 
-                          oninput="handleTyping()" 
-                          onkeypress="handleKeyPress(event)"></textarea>
-                <button class="btn-send" onclick="sendMessage()">
-                    <i class="fas fa-paper-plane"></i>
+                <textarea class="chat-input" id="messageInput" placeholder="Введите сообщение..." rows="1" onkeypress="handleKeyPress(event)"></textarea>
+                <button class="chat-btn chat-btn-send" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane mr-2"></i> Отправить
                 </button>
             </div>
-            <input type="file" id="fileInput" style="display: none;" accept=".pdf,.doc,.docx,.txt,.zip,.rar" onchange="handleFileSelect(event, false)">
+            <input type="file" id="fileInput" style="display: none;" accept=".pdf,.doc,.docx,.txt" onchange="handleFileSelect(event, false)">
             <input type="file" id="imageInput" style="display: none;" accept="image/*" onchange="handleFileSelect(event, true)">
         </div>
-        
-        <!-- Модал для просмотра картинок -->
-        <div class="image-modal fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center" 
-             id="imageModal" 
-             onclick="closeImageModal()">
-            <button class="absolute top-4 right-4 text-white text-4xl hover:scale-110 transition-transform" 
-                    onclick="closeImageModal()">
-                &times;
-            </button>
-            <img class="image-modal-content max-w-[90%] max-h-[90%] rounded-2xl shadow-2xl" 
-                 id="modalImage">
-        </div>
-        {% else %}
-        <!-- Пустое состояние -->
-        <div class="flex-1 flex items-center justify-center">
-            <div class="text-center">
-                <div class="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center">
-                    <i class="fas fa-comment-dots text-6xl text-white"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">Выберите чат</h3>
-                <p class="text-gray-500">Выберите клиента из списка слева для начала общения</p>
-            </div>
-        </div>
-        {% endif %}
     </div>
 
-    <!-- Панель информации о клиенте -->
-    {% if active_client_info %}
-    <div class="w-80 bg-white border-l border-gray-200 flex-col info-panel" id="clientInfoPanel">
-        <div class="p-4 chat-header-glass flex justify-between items-center">
-            <h3 class="text-lg font-bold text-gray-900">Информация</h3>
-            <button class="text-gray-500 hover:text-red-500 transition-colors" onclick="toggleClientInfo()">
-                <i class="fas fa-times"></i>
-            </button>
+    <!-- Client Info -->
+    <div class="client-info" id="clientInfoPanel">
+        <div class="text-center mb-6">
+            <div class="client-avatar-large">
+                {{ active_client_info.name[0] if active_client_info.name else '?' }}
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-1">
+                {{ active_client_info.name or 'Клиент' }}
+            </h3>
+            <p class="text-sm text-gray-600">@{{ active_client_info.username or active_client_info.instagram_id[:15] }}</p>
         </div>
-        <div class="p-4 flex-1 overflow-y-auto">
-            <div class="text-center mb-6">
-                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center overflow-hidden mx-auto shadow-xl mb-3">
-                    {% if active_client_info.profile_pic %}
-                    <img src="{{ active_client_info.profile_pic }}" alt="{{ active_client_info.name }}" class="w-full h-full object-cover">
-                    {% else %}
-                    <span class="text-white font-bold text-2xl">{{ active_client_info.name[0] if active_client_info.name else '?' }}</span>
-                    {% endif %}
-                </div>
-                <h3 contenteditable="true" 
-                    id="clientName" 
-                    onblur="updateClientField('name', this.textContent)" 
-                    class="text-xl font-bold text-gray-900 hover:text-purple-600 transition-colors">
-                    {{ active_client_info.name or 'Клиент' }}
-                </h3>
-                <p class="text-sm text-gray-500">@{{ active_client_info.username or active_client_info.instagram_id[:15] }}</p>
+
+        <div class="info-section">
+            <h3>Контакты</h3>
+            <div class="info-field">
+                <span class="info-label">Телефон:</span>
+                <span class="info-value">{{ active_client_info.phone or '-' }}</span>
             </div>
-            
-            <div class="space-y-6">
-                <!-- Контакты -->
-                <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-xl">
-                    <h4 class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
-                        <i class="fas fa-user text-purple-600"></i> Контакты
-                    </h4>
-                    <div class="space-y-2">
-                        <input type="text" 
-                               class="w-full p-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white" 
-                               id="clientPhone" 
-                               value="{{ active_client_info.phone or '' }}" 
-                               placeholder="Телефон"
-                               onblur="updateClientField('phone', this.value)">
-                        {% if active_client_info.instagram_url %}
-                        <a href="{{ active_client_info.instagram_url }}" 
-                           target="_blank" 
-                           class="block text-sm text-indigo-600 hover:text-indigo-800">
-                            <i class="fab fa-instagram"></i> @{{ active_client_info.username }}
-                        </a>
-                        {% endif %}
-                    </div>
-                </div>
-                
-                <!-- Статистика -->
-                <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-4 rounded-xl">
-                    <h4 class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
-                        <i class="fas fa-chart-line text-blue-600"></i> Статистика
-                    </h4>
-                    <div class="space-y-3">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Сообщений</span>
-                            <span class="font-bold text-blue-600">{{ active_client_info.total_messages }}</span>
-                        </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">LTV</span>
-                            <span class="font-bold text-green-600">{{ active_client_info.lifetime_value }} AED</span>
-                        </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Первый контакт</span>
-                            <span class="font-medium">{{ active_client_info.first_contact[:10] }}</span>
-                        </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Последний контакт</span>
-                            <span class="font-medium">{{ active_client_info.last_contact[:10] }}</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Статус -->
-                <div>
-                    <h4 class="text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
-                        <i class="fas fa-tag text-purple-600"></i> Статус
-                    </h4>
-                    <select class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                            id="clientStatus" 
-                            onchange="updateClientStatus(this.value)">
-                        {% for key, status in client_statuses.items() %}
-                        <option value="{{ key }}" {% if active_client_info.status==key %}selected{% endif %}>
-                            {{ status.label }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                
-                <!-- Заметки -->
-                <div>
-                    <h4 class="text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
-                        <i class="fas fa-sticky-note text-yellow-600"></i> Заметки
-                    </h4>
-                    <textarea class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
-                              id="clientNotes" 
-                              rows="4"
-                              placeholder="Добавьте заметки о клиенте..." 
-                              onblur="saveNotes()">{{ active_client_info.notes or '' }}</textarea>
-                </div>
-                
-                <!-- Действия -->
-                <div>
-                    <button class="w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white px-4 py-3 rounded-xl flex items-center justify-center gap-2 transition-all hover:shadow-lg"
-                            onclick="blockClient()">
-                        <i class="fas fa-ban"></i> Заблокировать
-                    </button>
-                </div>
+        </div>
+
+        <div class="info-section">
+            <h3>Статистика</h3>
+            <div class="info-field">
+                <span class="info-label">Сообщений:</span>
+                <span class="info-value">{{ active_client_info.total_messages }}</span>
             </div>
+            <div class="info-field">
+                <span class="info-label">LTV:</span>
+                <span class="info-value text-green-600">{{ active_client_info.lifetime_value }} AED</span>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>Статус</h3>
+            <select class="w-full p-2 border border-gray-300 rounded-lg" id="clientStatus" onchange="updateClientStatus(this.value)">
+                {% for key, status in client_statuses.items() %}
+                <option value="{{ key }}" {% if active_client_info.status==key %}selected{% endif %}>
+                    {{ status.label }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="info-section">
+            <h3>Заметки</h3>
+            <textarea class="w-full p-2 border border-gray-300 rounded-lg resize-none" id="clientNotes" rows="4" placeholder="Добавьте заметки..." onblur="saveNotes()">{{ active_client_info.notes or '' }}</textarea>
+        </div>
+    </div>
+    {% else %}
+    <div class="chat-area">
+        <div class="empty-state">
+            <i class="fas fa-comment-dots"></i>
+            <h3>Выберите чат</h3>
+            <p>Выберите клиента из списка для начала общения</p>
         </div>
     </div>
     {% endif %}
 </div>
-
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
-    const activeClient = '{{ active_client }}';
-    let lastMessageCount = {{ messages| length if messages else 0 }};
-    let isAutoScrollEnabled = true;
-    let typingTimeout;
+const activeClient = '{{ active_client }}';
 
-    // ===== ИНИЦИАЛИЗАЦИЯ =====
-    document.addEventListener('DOMContentLoaded', function () {
-        console.log('🟢 Чат инициализирован');
+function openChat(clientId) {
+    if (!clientId || activeClient === clientId) return;
+    window.location.href = `/admin/chat?client=${clientId}`;
+}
 
-        // Добавляем обработчики клика на все элементы клиентов
-        document.querySelectorAll('.client-item').forEach(item => {
-            const clientId = item.getAttribute('data-client-id');
-            if (clientId) {
-                item.addEventListener('click', function (e) {
-                    if (e.target.tagName === 'A' || e.target.closest('a')) {
-                        return;
-                    }
-                    openChat(clientId);
-                });
-            }
-        });
+function searchChats() {
+    const input = document.getElementById('chatSearch');
+    const filter = input.value.toUpperCase();
+    const items = document.querySelectorAll('.client-item');
 
-        // Авто-скролл вниз при загрузке
-        if (activeClient) {
-            const chatMessages = document.getElementById('chatMessages');
-            if (chatMessages) {
-                setTimeout(() => {
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }, 100);
-            }
-            
-            // Фокус на поле ввода
-            const input = document.getElementById('messageInput');
-            if (input) {
-                input.focus();
-            }
-        }
+    items.forEach(item => {
+        const text = item.textContent || item.innerText;
+        item.style.display = text.toUpperCase().indexOf(filter) > -1 ? '' : 'none';
     });
+}
 
-    // ===== ФУНКЦИЯ ОТКРЫТИЯ ЧАТА =====
-    function openChat(clientId) {
-        if (!clientId || activeClient === clientId) return;
-        window.location.href = `/admin/chat?client=${clientId}`;
+function handleKeyPress(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
     }
+}
 
-    // ===== ПОИСК ЧАТОВ =====
-    function searchChats() {
-        const input = document.getElementById('chatSearch');
-        const filter = input.value.toUpperCase();
-        const items = document.querySelectorAll('.client-item');
+async function sendMessage() {
+    const input = document.getElementById('messageInput');
+    const message = input.value.trim();
 
-        items.forEach(item => {
-            const text = item.textContent || item.innerText;
-            item.style.display = text.toUpperCase().indexOf(filter) > -1 ? '' : 'none';
+    if (!message || !activeClient) return;
+
+    try {
+        const response = await fetch('/admin/api/chat/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                instagram_id: activeClient,
+                message: message
+            })
         });
-    }
 
-    // ===== ОБРАБОТКА ENTER =====
-    function handleKeyPress(event) {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault();
-            sendMessage();
-        }
-    }
+        const data = await response.json();
 
-    // ===== АВТО-РЕСАЙЗ TEXTAREA =====
-    const messageInput = document.getElementById('messageInput');
-    if (messageInput) {
-        messageInput.addEventListener('input', function () {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-        });
-    }
-
-    // ===== ИНДИКАТОР ПЕЧАТИ =====
-    function handleTyping() {
-        clearTimeout(typingTimeout);
-        typingTimeout = setTimeout(() => {
-            // Клиент перестал печатать
-        }, 1000);
-    }
-
-    // ===== ВОСПРОИЗВЕДЕНИЕ ГОЛОСОВЫХ СООБЩЕНИЙ =====
-    let currentAudio = null;
-    let currentButton = null;
-
-    function playVoiceMessage(filePath, button) {
-        const icon = button.querySelector('i');
-        const waveform = button.parentElement.querySelector('.audio-waveform');
-        const durationSpan = button.parentElement.querySelector('.audio-duration');
-
-        if (currentAudio && !currentAudio.paused && currentButton === button) {
-            currentAudio.pause();
-            icon.className = 'fas fa-play';
-            button.classList.remove('playing');
-            waveform.classList.remove('playing');
+        if (data.success) {
+            input.value = '';
+            await loadMessages();
+            showNotification('Сообщение отправлено', 'success');
         } else {
-            if (currentAudio) {
-                currentAudio.pause();
-                if (currentButton) {
-                    currentButton.querySelector('i').className = 'fas fa-play';
-                    currentButton.classList.remove('playing');
-                    const prevWave = currentButton.parentElement.querySelector('.audio-waveform');
-                    if (prevWave) prevWave.classList.remove('playing');
-                }
-            }
-
-            currentAudio = new Audio(filePath);
-            currentButton = button;
-
-            currentAudio.addEventListener('loadedmetadata', () => {
-                const totalDuration = Math.floor(currentAudio.duration);
-                durationSpan.textContent = totalDuration + 's';
-            });
-
-            currentAudio.addEventListener('timeupdate', () => {
-                const remaining = Math.ceil(currentAudio.duration - currentAudio.currentTime);
-                durationSpan.textContent = remaining + 's';
-            });
-
-            currentAudio.play();
-            icon.className = 'fas fa-pause';
-            button.classList.add('playing');
-            waveform.classList.add('playing');
-
-            currentAudio.onended = () => {
-                icon.className = 'fas fa-play';
-                button.classList.remove('playing');
-                waveform.classList.remove('playing');
-                currentButton = null;
-            };
-
-            currentAudio.onerror = () => {
-                showNotification('Ошибка воспроизведения аудио', 'error');
-                icon.className = 'fas fa-play';
-                button.classList.remove('playing');
-                waveform.classList.remove('playing');
-            };
+            showNotification('Ошибка отправки', 'error');
         }
+    } catch (error) {
+        showNotification('Ошибка соединения', 'error');
     }
+}
 
-    // ===== ОТПРАВКА СООБЩЕНИЯ =====
-    async function sendMessage() {
-        const input = document.getElementById('messageInput');
-        const message = input.value.trim();
+async function loadMessages() {
+    if (!activeClient) return;
 
-        if (!message || !activeClient) return;
+    try {
+        const response = await fetch(`/admin/api/chat/messages?client=${activeClient}`);
+        const data = await response.json();
 
-        const sendBtn = document.querySelector('.btn-send');
-        sendBtn.disabled = true;
-        sendBtn.style.opacity = '0.6';
+        if (data.messages) {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = '';
 
-        try {
-            const response = await fetch('/admin/api/chat/send', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    instagram_id: activeClient,
-                    message: message
-                })
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                input.value = '';
-                input.style.height = 'auto';
-                await loadMessages();
-                showNotification('Сообщение отправлено', 'success');
-            } else {
-                showNotification('Ошибка отправки', 'error');
-            }
-        } catch (error) {
-            showNotification('Ошибка соединения', 'error');
-        } finally {
-            sendBtn.disabled = false;
-            sendBtn.style.opacity = '1';
-            input.focus();
-        }
-    }
-
-    // ===== ЗАГРУЗКА СООБЩЕНИЙ =====
-    async function loadMessages() {
-        if (!activeClient) return;
-
-        try {
-            const response = await fetch(`/admin/api/chat/messages?client=${activeClient}`);
-            const data = await response.json();
-
-            if (data.messages && data.messages.length !== lastMessageCount) {
-                const container = document.getElementById('chatMessages');
-                const wasScrolledToBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 50;
-
-                container.innerHTML = '';
-
-                data.messages.forEach((msg, index) => {
-                    const div = createMessageElement(msg, index);
-                    container.appendChild(div);
-                });
-
-                if (wasScrolledToBottom || (data.messages.length > 0 && data.messages[data.messages.length - 1].sender === 'client')) {
-                    container.scrollTop = container.scrollHeight;
-                }
-
-                lastMessageCount = data.messages.length;
-            }
-        } catch (error) {
-            console.error('Ошибка загрузки сообщений:', error);
-        }
-    }
-
-    // ===== СОЗДАНИЕ ЭЛЕМЕНТА СООБЩЕНИЯ =====
-    function createMessageElement(msg, index) {
-        const div = document.createElement('div');
-        div.className = `chat-message flex ${msg.sender === 'client' ? 'justify-start' : 'justify-end'}`;
-        div.setAttribute('data-message-id', index);
-
-        let contentHtml = '';
-        const messageText = msg.message || '';
-
-        if (msg.type === 'voice' || messageText.includes('🎤')) {
-            const match = messageText.match(/🎤\s*(\d+)s\|(.+)/);
-            const duration = match ? match[1] : '0';
-            const filename = match ? match[2].trim() : '';
-
-            if (filename) {
-                contentHtml = `
-                    <div class="flex items-center gap-3">
-                        <button class="audio-play-btn ${msg.sender === 'bot' ? 'text-white' : 'text-indigo-600'}" onclick="playVoiceMessage('/admin/api/uploads/voice/${filename}', this)">
-                            <i class="fas fa-play"></i>
-                        </button>
-                        <div class="audio-waveform h-6 flex-1 max-w-[200px]"></div>
-                        <span class="audio-duration text-xs opacity-80">${duration}s</span>
+            data.messages.forEach(msg => {
+                const messageGroup = document.createElement('div');
+                messageGroup.className = `message-group ${msg.sender === 'bot' ? 'outgoing' : 'incoming'}`;
+                
+                messageGroup.innerHTML = `
+                    <div class="message-bubble ${msg.sender === 'bot' ? 'outgoing' : 'incoming'}">
+                        <div>${msg.message}</div>
+                        <div class="message-time">${msg.timestamp.substring(11, 16)}</div>
                     </div>
                 `;
-            } else {
-                contentHtml = escapeHtml(messageText);
-            }
-        } else if (msg.type === 'image' || messageText.includes('🖼️')) {
-            const filename = messageText.includes(': ') ? messageText.split(': ')[1].trim() : '';
-            if (filename) {
-                contentHtml = `
-                    <div class="cursor-pointer" onclick="openImageModal('/admin/api/uploads/images/${filename}')">
-                        <img src="/admin/api/uploads/images/${filename}" alt="Image" class="max-w-full rounded-lg shadow-lg hover:shadow-xl transition-shadow" 
-                             onerror="this.parentElement.innerHTML='<div class=&quot;p-4 text-center text-red-500&quot;><i class=&quot;fas fa-exclamation-triangle&quot;></i><br>Ошибка загрузки</div>'">
-                    </div>
-                `;
-            } else {
-                contentHtml = escapeHtml(messageText);
-            }
-        } else if (msg.type === 'file' || messageText.includes('📎')) {
-            const fileName = messageText.includes(': ') ? messageText.split(': ')[1].trim() : 'Файл';
-            if (fileName && fileName !== 'Файл') {
-                contentHtml = `
-                    <a href="/admin/api/uploads/files/${fileName}" class="flex items-center gap-2 hover:opacity-80 transition-opacity" download>
-                        <i class="fas fa-file-alt text-2xl"></i>
-                        <span class="text-sm">${escapeHtml(fileName.length > 30 ? fileName.substring(0, 27) + '...' : fileName)}</span>
-                        <i class="fas fa-download"></i>
-                    </a>
-                `;
-            } else {
-                contentHtml = escapeHtml(messageText);
-            }
+                
+                container.appendChild(messageGroup);
+            });
+
+            container.scrollTop = container.scrollHeight;
+        }
+    } catch (error) {
+        console.error('Ошибка загрузки сообщений:', error);
+    }
+}
+
+function toggleClientInfo() {
+    const panel = document.getElementById('clientInfoPanel');
+    if (panel) {
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    }
+}
+
+async function updateClientStatus(status) {
+    try {
+        const response = await fetch(`/admin/api/clients/${activeClient}/status`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: status })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            showNotification('Статус обновлен', 'success');
+        }
+    } catch (error) {
+        showNotification('Ошибка обновления', 'error');
+    }
+}
+
+async function saveNotes() {
+    if (!activeClient) return;
+
+    const notes = document.getElementById('clientNotes').value;
+
+    try {
+        const response = await fetch(`/admin/api/clients/${activeClient}/notes`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ notes: notes })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            showNotification('Заметки сохранены', 'success');
+        }
+    } catch (error) {
+        showNotification('Ошибка сохранения', 'error');
+    }
+}
+
+function attachFile() {
+    document.getElementById('fileInput').click();
+}
+
+function attachImage() {
+    document.getElementById('imageInput').click();
+}
+
+async function handleFileSelect(event, isImage) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (file.size > 10 * 1024 * 1024) {
+        showNotification('Файл слишком большой (макс 10MB)', 'error');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('instagram_id', activeClient);
+    formData.append('is_image', isImage);
+
+    try {
+        const response = await fetch('/admin/api/chat/upload', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showNotification(isImage ? 'Картинка отправлена' : 'Файл отправлен', 'success');
+            await loadMessages();
         } else {
-            contentHtml = escapeHtml(messageText);
-        }
-
-        div.innerHTML = `
-            <div class="message-bubble p-4">
-                <div class="message-content">
-                    ${contentHtml}
-                </div>
-                <div class="flex items-center gap-2 mt-2 text-xs ${msg.sender === 'bot' ? 'text-white/70' : 'text-gray-500'}">
-                    <span>${msg.timestamp.substring(11, 16)}</span>
-                    ${msg.sender === 'bot' ? '<i class="fas fa-check-double"></i>' : ''}
-                </div>
-            </div>
-        `;
-
-        return div;
-    }
-
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
-    // ===== УПРАВЛЕНИЕ ПАНЕЛЬЮ ИНФОРМАЦИИ =====
-    function toggleClientInfo() {
-        const panel = document.getElementById('clientInfoPanel');
-        if (panel) {
-            panel.classList.toggle('hidden');
-        }
-    }
-
-    // ===== ОБНОВЛЕНИЕ ДАННЫХ КЛИЕНТА =====
-    async function updateClientStatus(status) {
-        try {
-            const response = await fetch(`/admin/api/clients/${activeClient}/status`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: status })
-            });
-
-            const data = await response.json();
-            if (data.success) {
-                showNotification('Статус обновлен', 'success');
-            }
-        } catch (error) {
-            showNotification('Ошибка обновления', 'error');
-        }
-    }
-
-    async function updateClientField(field, value) {
-        if (!activeClient || !value) return;
-
-        try {
-            const response = await fetch(`/admin/api/clients/${activeClient}/update`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ [field]: value })
-            });
-
-            const data = await response.json();
-            if (data.success) {
-                showNotification('Обновлено', 'success');
-            }
-        } catch (error) {
-            showNotification('Ошибка обновления', 'error');
-        }
-    }
-
-    async function saveNotes() {
-        if (!activeClient) return;
-
-        const notes = document.getElementById('clientNotes').value;
-
-        try {
-            const response = await fetch(`/admin/api/clients/${activeClient}/notes`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ notes: notes })
-            });
-
-            const data = await response.json();
-            if (data.success) {
-                showNotification('Заметки сохранены', 'success');
-            }
-        } catch (error) {
-            showNotification('Ошибка сохранения', 'error');
-        }
-    }
-
-    async function pinClient(clientId) {
-        try {
-            const response = await fetch(`/admin/api/clients/${clientId}/pin`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
-            });
-
-            const data = await response.json();
-            if (data.success) {
-                showNotification(data.pinned ? 'Закреплено' : 'Откреплено', 'success');
-                location.reload();
-            }
-        } catch (error) {
-            showNotification('Ошибка', 'error');
-        }
-    }
-
-    function blockClient() {
-        if (confirm('Заблокировать этого клиента?')) {
-            updateClientStatus('blocked');
-        }
-    }
-
-    // ===== РАБОТА С ФАЙЛАМИ =====
-    function attachFile() {
-        document.getElementById('fileInput').click();
-    }
-
-    function attachImage() {
-        document.getElementById('imageInput').click();
-    }
-
-    async function handleFileSelect(event, isImage) {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        if (file.size > 10 * 1024 * 1024) {
-            showNotification('Файл слишком большой (макс 10MB)', 'error');
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('instagram_id', activeClient);
-        formData.append('is_image', isImage);
-
-        try {
-            showNotification(isImage ? 'Загрузка картинки...' : 'Загрузка файла...', 'info');
-
-            const response = await fetch('/admin/api/chat/upload', {
-                method: 'POST',
-                body: formData
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                showNotification(isImage ? 'Картинка отправлена' : 'Файл отправлен', 'success');
-                await loadMessages();
-            } else {
-                showNotification(data.message || 'Ошибка загрузки', 'error');
-            }
-        } catch (error) {
             showNotification('Ошибка загрузки', 'error');
         }
-
-        event.target.value = '';
+    } catch (error) {
+        showNotification('Ошибка загрузки', 'error');
     }
 
-    // ===== ГОЛОСОВЫЕ СООБЩЕНИЯ =====
-    let mediaRecorder;
-    let audioChunks = [];
+    event.target.value = '';
+}
 
-    async function recordVoice() {
-        const recordBtn = event.target.closest('.btn-icon');
-
-        if (!mediaRecorder || mediaRecorder.state === 'inactive') {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                audioChunks = [];
-
-                mediaRecorder.ondataavailable = (event) => {
-                    audioChunks.push(event.data);
-                };
-
-                mediaRecorder.onstop = async () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                    await sendVoiceMessage(audioBlob);
-                    stream.getTracks().forEach(track => track.stop());
-                };
-
-                mediaRecorder.start();
-                recordBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
-                recordBtn.querySelector('i').className = 'fas fa-stop';
-                showNotification('Запись началась...', 'info');
-            } catch (error) {
-                showNotification('Нет доступа к микрофону', 'error');
-            }
-        } else {
-            mediaRecorder.stop();
-            recordBtn.style.background = '';
-            recordBtn.querySelector('i').className = 'fas fa-microphone';
-        }
+// Auto scroll
+if (activeClient) {
+    const chatMessages = document.getElementById('chatMessages');
+    if (chatMessages) {
+        setTimeout(() => {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 100);
     }
 
-    async function sendVoiceMessage(audioBlob) {
-        const formData = new FormData();
-        formData.append('voice', audioBlob, 'voice.webm');
-        formData.append('instagram_id', activeClient);
-        
-        const duration = Math.round(audioBlob.size / 16000);
-        formData.append('duration', duration.toString());
-
-        try {
-            showNotification('Отправка голосового...', 'info');
-
-            const response = await fetch('/admin/api/chat/voice', {
-                method: 'POST',
-                body: formData
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                showNotification('Голосовое сообщение отправлено', 'success');
-                await loadMessages();
-            } else {
-                showNotification('Ошибка отправки: ' + (data.message || 'Неизвестная ошибка'), 'error');
-            }
-        } catch (error) {
-            showNotification('Ошибка отправки голосового', 'error');
-        }
-    }
-
-    // ===== МОДАЛЬНОЕ ОКНО ДЛЯ ИЗОБРАЖЕНИЙ =====
-    function openImageModal(src) {
-        const modal = document.getElementById('imageModal');
-        const img = document.getElementById('modalImage');
-        modal.classList.add('active');
-        img.src = src;
-        document.addEventListener('keydown', closeOnEscape);
-    }
-
-    function closeImageModal() {
-        document.getElementById('imageModal').classList.remove('active');
-        document.removeEventListener('keydown', closeOnEscape);
-    }
-
-    function closeOnEscape(e) {
-        if (e.key === 'Escape') {
-            closeImageModal();
-        }
-    }
-
-    // ===== ОБНОВЛЕНИЕ СПИСКА ЧАТОВ =====
-    async function updateChatsList() {
-        try {
-            const response = await fetch('/admin/api/chats-update');
-            const data = await response.json();
-
-            if (data.chats) {
-                data.chats.forEach(chat => {
-                    const clientItem = document.querySelector(`[data-client-id="${chat.instagram_id}"]`);
-                    if (clientItem) {
-                        const lastMessageEl = clientItem.querySelector('[data-last-message]');
-                        if (lastMessageEl && chat.last_message) {
-                            lastMessageEl.textContent = chat.last_message.substring(0, 40) + '...';
-                        }
-
-                        const timeEl = clientItem.querySelector('[data-time]');
-                        if (timeEl && chat.last_message_time) {
-                            timeEl.textContent = chat.last_message_time;
-                        }
-                    }
-                });
-
-                const totalBadge = document.getElementById('totalUnreadBadge');
-                if (data.total_unread > 0) {
-                    if (totalBadge) {
-                        totalBadge.textContent = data.total_unread;
-                    }
-                } else if (totalBadge) {
-                    totalBadge.remove();
-                }
-            }
-        } catch (error) {
-            console.error('Ошибка обновления списка чатов:', error);
-        }
-    }
-
-    // ===== ПЕРИОДИЧЕСКОЕ ОБНОВЛЕНИЕ =====
-    if (activeClient) {
-        setInterval(loadMessages, 3000);
-        setInterval(updateChatsList, 5000);
-    }
+    setInterval(loadMessages, 3000);
+}
 </script>
 {% endblock %}

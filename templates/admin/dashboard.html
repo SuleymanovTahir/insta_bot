@@ -1,7 +1,6 @@
 {% extends "admin/base.html" %}
 
 {% block title %}Панель управления - {{ salon_info.name }}{% endblock %}
-
 {% block nav_dashboard %}active{% endblock %}
 
 {% block head_scripts %}
@@ -9,179 +8,183 @@
 {% endblock %}
 
 {% block content %}
-<!-- Page Header -->
-<div class="page-header">
-    <h1 class="page-title">
-        <i class="fas fa-home gradient-text"></i>
-        Панель управления
+<div class="mb-8">
+    <h1 class="text-4xl font-bold text-gray-900 mb-2">
+        <span class="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Панель управления</span>
     </h1>
-    <p class="page-subtitle">Добро пожаловать в CRM-систему салона красоты</p>
+    <p class="text-lg text-gray-600">Добро пожаловать в CRM-систему салона красоты</p>
 </div>
 
-<!-- Stats Grid -->
-<div class="stats-grid">
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <!-- Total Clients -->
-    <div class="stat-card card-hover">
-        <div class="stat-card-header">
-            <div class="stat-card-icon stat-card-icon-blue">
-                <i class="fas fa-users"></i>
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                <i class="fas fa-users text-white text-xl"></i>
+            </div>
+            <div class="text-right">
+                <div class="text-3xl font-bold text-gray-900">{{ stats.total_clients }}</div>
+                <div class="text-sm text-gray-500 mt-1">Клиентов</div>
             </div>
         </div>
-        <div class="stat-card-value">{{ stats.total_clients }}</div>
-        <div class="stat-card-label">Всего клиентов</div>
-        <div class="stat-card-trend">
-            <span class="trend-up">
-                <i class="fas fa-arrow-up"></i> +12%
+        <div class="flex items-center text-sm">
+            <span class="text-green-600 flex items-center gap-1">
+                <i class="fas fa-arrow-up"></i>
+                <span class="font-semibold">+12%</span>
             </span>
-            <span class="trend-neutral">за месяц</span>
+            <span class="text-gray-500 ml-2">за месяц</span>
         </div>
     </div>
 
     <!-- Total Bookings -->
-    <div class="stat-card card-hover">
-        <div class="stat-card-header">
-            <div class="stat-card-icon stat-card-icon-pink">
-                <i class="fas fa-calendar-check"></i>
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center">
+                <i class="fas fa-calendar-check text-white text-xl"></i>
+            </div>
+            <div class="text-right">
+                <div class="text-3xl font-bold text-gray-900">{{ stats.total_bookings }}</div>
+                <div class="text-sm text-gray-500 mt-1">Записей</div>
             </div>
         </div>
-        <div class="stat-card-value">{{ stats.total_bookings }}</div>
-        <div class="stat-card-label">Всего записей</div>
-        <div class="stat-card-trend">
-            <span class="trend-up">
-                <i class="fas fa-arrow-up"></i> +8%
+        <div class="flex items-center text-sm">
+            <span class="text-green-600 flex items-center gap-1">
+                <i class="fas fa-arrow-up"></i>
+                <span class="font-semibold">+8%</span>
             </span>
-            <span class="trend-neutral">за месяц</span>
+            <span class="text-gray-500 ml-2">за месяц</span>
         </div>
     </div>
 
-    <!-- Completed Bookings -->
-    <div class="stat-card card-hover">
-        <div class="stat-card-header">
-            <div class="stat-card-icon stat-card-icon-green">
-                <i class="fas fa-check-circle"></i>
+    <!-- Completed -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+                <i class="fas fa-check-circle text-white text-xl"></i>
+            </div>
+            <div class="text-right">
+                <div class="text-3xl font-bold text-gray-900">{{ stats.completed_bookings }}</div>
+                <div class="text-sm text-gray-500 mt-1">Завершено</div>
             </div>
         </div>
-        <div class="stat-card-value">{{ stats.completed_bookings }}</div>
-        <div class="stat-card-label">Завершенных</div>
-        <div class="stat-card-trend">
-            <span class="trend-up">
-                <i class="fas fa-arrow-up"></i> +15%
+        <div class="flex items-center text-sm">
+            <span class="text-green-600 flex items-center gap-1">
+                <i class="fas fa-arrow-up"></i>
+                <span class="font-semibold">+15%</span>
             </span>
-            <span class="trend-neutral">за месяц</span>
+            <span class="text-gray-500 ml-2">за месяц</span>
         </div>
     </div>
 
-    <!-- Conversion Rate -->
-    <div class="stat-card card-hover">
-        <div class="stat-card-header">
-            <div class="stat-card-icon stat-card-icon-purple">
-                <i class="fas fa-percentage"></i>
+    <!-- Conversion -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
+                <i class="fas fa-percentage text-white text-xl"></i>
+            </div>
+            <div class="text-right">
+                <div class="text-3xl font-bold text-gray-900">{{ stats.conversion_rate }}%</div>
+                <div class="text-sm text-gray-500 mt-1">Конверсия</div>
             </div>
         </div>
-        <div class="stat-card-value">{{ stats.conversion_rate }}%</div>
-        <div class="stat-card-label">Конверсия</div>
-        <div class="stat-card-trend">
-            <span class="trend-up">
-                <i class="fas fa-arrow-up"></i> +3%
+        <div class="flex items-center text-sm">
+            <span class="text-green-600 flex items-center gap-1">
+                <i class="fas fa-arrow-up"></i>
+                <span class="font-semibold">+3%</span>
             </span>
-            <span class="trend-neutral">за месяц</span>
+            <span class="text-gray-500 ml-2">за месяц</span>
         </div>
     </div>
 </div>
 
-<!-- Charts Grid -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+<!-- Charts Row -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
     <!-- Bookings Chart -->
-    <div class="table-container" style="padding: 1.5rem;">
-        <h2 style="font-size: 1.25rem; font-weight: 700; color: #111827; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <i class="fas fa-chart-line" style="color: #ec4899;"></i>
-            Записи за 30 дней
-        </h2>
-        <div style="height: 300px;">
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <i class="fas fa-chart-line text-pink-500"></i>
+                Записи за 30 дней
+            </h2>
+        </div>
+        <div style="height: 300px; position: relative;">
             <canvas id="bookingsChart"></canvas>
         </div>
     </div>
 
     <!-- Services Chart -->
-    <div class="table-container" style="padding: 1.5rem;">
-        <h2 style="font-size: 1.25rem; font-weight: 700; color: #111827; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-            <i class="fas fa-chart-pie" style="color: #8b5cf6;"></i>
-            Популярные услуги
-        </h2>
-        <div style="height: 300px;">
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <i class="fas fa-chart-pie text-purple-500"></i>
+                Популярные услуги
+            </h2>
+        </div>
+        <div style="height: 300px; position: relative;">
             <canvas id="servicesChart"></canvas>
         </div>
     </div>
 </div>
 
-<!-- Recent Activity Grid -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem;">
+<!-- Recent Activity -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <!-- Recent Clients -->
-    <div class="table-container">
-        <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
-            <h2 style="font-size: 1.25rem; font-weight: 700; color: #111827; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fas fa-user-plus" style="color: #3b82f6;"></i>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-6 border-b border-gray-100">
+            <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <i class="fas fa-user-plus text-blue-500"></i>
                 Последние клиенты
             </h2>
         </div>
-        <div style="overflow-x: auto;">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Имя</th>
-                        <th>Телефон</th>
-                        <th>Статус</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for client in recent_clients %}
-                    <tr>
-                        <td>
-                            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                <div style="width: 36px; height: 36px; border-radius: 0.5rem; background: linear-gradient(135deg, #ec4899, #8b5cf6); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.875rem;">
-                                    {{ client[3][0] if client[3] else '?' }}
-                                </div>
-                                <span style="font-weight: 600;">{{ client[3] or 'Не указано' }}</span>
-                            </div>
-                        </td>
-                        <td style="color: #6b7280;">{{ client[2] or '-' }}</td>
-                        <td>
-                            <span class="badge badge-{{ client[8] }}">{{ client[8] }}</span>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="divide-y divide-gray-100">
+            {% for client in recent_clients %}
+            <div class="p-4 hover:bg-gray-50 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
+                        {{ client[3][0] if client[3] else '?' }}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="font-semibold text-gray-900 truncate">
+                            {{ client[3] or 'Не указано' }}
+                        </div>
+                        <div class="text-sm text-gray-500">{{ client[2] or '-' }}</div>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-medium
+                                {% if client[8] == 'new' %}bg-green-100 text-green-800
+                                {% elif client[8] == 'lead' %}bg-blue-100 text-blue-800
+                                {% elif client[8] == 'customer' %}bg-purple-100 text-purple-800
+                                {% else %}bg-gray-100 text-gray-800{% endif %}">
+                        {{ client[8] }}
+                    </span>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 
     <!-- Recent Bookings -->
-    <div class="table-container">
-        <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
-            <h2 style="font-size: 1.25rem; font-weight: 700; color: #111827; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fas fa-calendar-alt" style="color: #ec4899;"></i>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-6 border-b border-gray-100">
+            <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <i class="fas fa-calendar-alt text-pink-500"></i>
                 Последние записи
             </h2>
         </div>
-        <div style="overflow-x: auto;">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Услуга</th>
-                        <th>Клиент</th>
-                        <th>Дата</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for booking in recent_bookings %}
-                    <tr>
-                        <td style="font-weight: 600;">{{ booking[2] }}</td>
-                        <td style="color: #6b7280;">{{ booking[5] }}</td>
-                        <td style="color: #6b7280;">{{ booking[3][:16] }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="divide-y divide-gray-100">
+            {% for booking in recent_bookings %}
+            <div class="p-4 hover:bg-gray-50 transition-colors">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="font-semibold text-gray-900">{{ booking[2] }}</div>
+                        <div class="text-sm text-gray-500">{{ booking[5] }}</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm text-gray-600">{{ booking[3][:16] }}</div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
@@ -190,126 +193,100 @@
 {% block extra_scripts %}
 <script>
 // Bookings Chart
-const bookingsCtx = document.getElementById('bookingsChart').getContext('2d');
-const bookingsChart = new Chart(bookingsCtx, {
-    type: 'line',
-    data: {
-        labels: {{ analytics.bookings_by_day | map(attribute=0) | list | tojson }},
-        datasets: [{
-            label: 'Записи',
-            data: {{ analytics.bookings_by_day | map(attribute=1) | list | tojson }},
-            borderColor: '#ec4899',
-            backgroundColor: 'rgba(236, 72, 153, 0.1)',
-            tension: 0.4,
-            fill: true,
-            borderWidth: 3,
-            pointBackgroundColor: '#ec4899',
-            pointBorderColor: '#fff',
-            pointBorderWidth: 2,
-            pointRadius: 5,
-            pointHoverRadius: 7
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
-            },
-            tooltip: {
-                backgroundColor: '#111827',
-                padding: 12,
-                cornerRadius: 8,
-                titleFont: {
-                    size: 14,
-                    weight: 'bold'
-                },
-                bodyFont: {
-                    size: 13
-                }
-            }
+const bookingsCtx = document.getElementById('bookingsChart');
+if (bookingsCtx) {
+    new Chart(bookingsCtx.getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: {{ analytics.bookings_by_day | map(attribute=0) | list | tojson }},
+            datasets: [{
+                label: 'Записи',
+                data: {{ analytics.bookings_by_day | map(attribute=1) | list | tojson }},
+                borderColor: '#ec4899',
+                backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                tension: 0.4,
+                fill: true,
+                borderWidth: 3,
+                pointBackgroundColor: '#ec4899',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7
+            }]
         },
-        scales: {
-            y: {
-                beginAtZero: true,
-                grid: {
-                    color: 'rgba(0, 0, 0, 0.05)',
-                    drawBorder: false
-                },
-                ticks: {
-                    font: {
-                        size: 12
-                    },
-                    color: '#6b7280'
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#111827',
+                    padding: 12,
+                    cornerRadius: 8,
+                    titleFont: { size: 14, weight: 'bold' },
+                    bodyFont: { size: 13 }
                 }
             },
-            x: {
-                grid: {
-                    display: false,
-                    drawBorder: false
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(0, 0, 0, 0.05)', drawBorder: false },
+                    ticks: { font: { size: 12 }, color: '#6b7280' }
                 },
-                ticks: {
-                    font: {
-                        size: 12
-                    },
-                    color: '#6b7280'
+                x: {
+                    grid: { display: false, drawBorder: false },
+                    ticks: { font: { size: 12 }, color: '#6b7280' }
                 }
             }
         }
-    }
-});
+    });
+}
 
 // Services Chart
-const servicesCtx = document.getElementById('servicesChart').getContext('2d');
-const servicesChart = new Chart(servicesCtx, {
-    type: 'doughnut',
-    data: {
-        labels: {{ analytics.services_stats | map(attribute=0) | list | tojson }},
-        datasets: [{
-            data: {{ analytics.services_stats | map(attribute=1) | list | tojson }},
-            backgroundColor: [
-                '#ec4899',
-                '#8b5cf6',
-                '#3b82f6',
-                '#10b981',
-                '#f59e0b',
-                '#ef4444'
-            ],
-            borderWidth: 0,
-            hoverOffset: 10
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: {
-                    padding: 15,
-                    font: {
-                        size: 12
-                    },
-                    color: '#6b7280',
-                    usePointStyle: true,
-                    pointStyle: 'circle'
-                }
-            },
-            tooltip: {
-                backgroundColor: '#111827',
-                padding: 12,
-                cornerRadius: 8,
-                titleFont: {
-                    size: 14,
-                    weight: 'bold'
+const servicesCtx = document.getElementById('servicesChart');
+if (servicesCtx) {
+    new Chart(servicesCtx.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: {{ analytics.services_stats | map(attribute=0) | list | tojson }},
+            datasets: [{
+                data: {{ analytics.services_stats | map(attribute=1) | list | tojson }},
+                backgroundColor: [
+                    '#ec4899',
+                    '#8b5cf6',
+                    '#3b82f6',
+                    '#10b981',
+                    '#f59e0b',
+                    '#ef4444'
+                ],
+                borderWidth: 0,
+                hoverOffset: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 15,
+                        font: { size: 12 },
+                        color: '#6b7280',
+                        usePointStyle: true,
+                        pointStyle: 'circle'
+                    }
                 },
-                bodyFont: {
-                    size: 13
+                tooltip: {
+                    backgroundColor: '#111827',
+                    padding: 12,
+                    cornerRadius: 8,
+                    titleFont: { size: 14, weight: 'bold' },
+                    bodyFont: { size: 13 }
                 }
             }
         }
-    }
-});
+    });
+}
 </script>
 {% endblock %}

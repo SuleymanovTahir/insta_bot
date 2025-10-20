@@ -6,11 +6,7 @@
     <title>{% block title %}{{ salon_info.name }}{% endblock %}</title>
     
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
     <link rel="stylesheet" href="/static/css/index.css?v={{ css_version }}">
-    
-    <!-- Кастомные стили -->
     <link rel="stylesheet" href="/static/css/globals.css?v={{ css_version }}">
     
     <!-- Font Awesome -->
@@ -22,18 +18,323 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     {% block head_scripts %}{% endblock %}
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-logo i {
+            color: white;
+            font-size: 24px;
+        }
+
+        .sidebar-title {
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .sidebar-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .sidebar-nav-item i {
+            font-size: 1.125rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-nav-item:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-nav-item.active {
+            color: white;
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.2) 0%, transparent 100%);
+            border-left: 3px solid #667eea;
+        }
+
+        .sidebar-badge {
+            margin-left: auto;
+            background: #ef4444;
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            background: transparent;
+        }
+
+        /* Header */
+        .admin-header {
+            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .admin-header-search {
+            position: relative;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .admin-header-search i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        .admin-header-search input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .admin-header-search input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .admin-header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .admin-header-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            color: #6b7280;
+        }
+
+        .admin-header-icon:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        .badge-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .admin-header-user {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .admin-header-user:hover {
+            background: #f3f4f6;
+        }
+
+        .admin-header-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .admin-header-username {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #111827;
+        }
+
+        .admin-header-role {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        /* Page Container */
+        .page-container {
+            padding: 2rem;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 9999;
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        /* Mobile */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .admin-header-user-info {
+                display: none;
+            }
+        }
+    </style>
 </head>
-<body class="bg-gray-50">
+<body>
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">
                 <i class="fas fa-gem"></i>
             </div>
-            <div>
-                <div class="sidebar-title">{{ salon_info.name }}</div>
-                <div style="font-size: 0.75rem; color: #6b7280;">CRM System</div>
-            </div>
+            <div class="sidebar-title">{{ salon_info.name }}</div>
+            <div style="font-size: 0.75rem; color: rgba(255,255,255,0.5);">CRM System</div>
         </div>
 
         <nav class="sidebar-nav">
@@ -99,7 +400,7 @@
             </a>
             {% endif %}
             
-            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;"></div>
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);"></div>
             
             <a href="/logout" class="sidebar-nav-item" style="color: #ef4444;">
                 <i class="fas fa-sign-out-alt"></i>
@@ -113,7 +414,7 @@
         <!-- Header -->
         <header class="admin-header">
             <div class="admin-header-left">
-                <button class="admin-header-icon md:hidden" onclick="toggleSidebar()">
+                <button class="admin-header-icon" onclick="toggleSidebar()" style="display: none;">
                     <i class="fas fa-bars"></i>
                 </button>
                 
@@ -150,58 +451,41 @@
         </div>
     </main>
 
-    <!-- Notification Toast Container -->
-    <div id="notificationContainer" style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;"></div>
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
 
-    <!-- Scripts -->
     <script>
-        // Sidebar toggle для мобильных
         function toggleSidebar() {
             document.querySelector('.sidebar').classList.toggle('open');
         }
 
-        // Notifications (заглушка)
         function toggleNotifications() {
             alert('Уведомления пока не реализованы');
         }
 
-        // User menu (заглушка)
         function toggleUserMenu() {
             if (confirm('Выйти из системы?')) {
                 window.location.href = '/logout';
             }
         }
 
-        // Global search
-        document.getElementById('globalSearch')?.addEventListener('input', function(e) {
-            const query = e.target.value.toLowerCase();
-            console.log('Поиск:', query);
-            // Здесь будет логика глобального поиска
-        });
-
-        // Notification system
         function showNotification(message, type = 'success') {
             const container = document.getElementById('notificationContainer');
             
             const notification = document.createElement('div');
-            notification.className = `notification notification-${type}`;
+            notification.className = 'notification';
             
-            const icon = {
-                success: 'fa-check-circle',
-                error: 'fa-times-circle',
-                warning: 'fa-exclamation-circle',
-                info: 'fa-info-circle'
-            }[type] || 'fa-info-circle';
+            const icons = {
+                success: { icon: 'fa-check-circle', color: '#10b981' },
+                error: { icon: 'fa-times-circle', color: '#ef4444' },
+                warning: { icon: 'fa-exclamation-circle', color: '#f59e0b' },
+                info: { icon: 'fa-info-circle', color: '#3b82f6' }
+            };
             
-            const color = {
-                success: '#10b981',
-                error: '#ef4444',
-                warning: '#f59e0b',
-                info: '#3b82f6'
-            }[type] || '#3b82f6';
+            const config = icons[type] || icons.info;
             
             notification.innerHTML = `
-                <i class="fas ${icon}" style="color: ${color}; font-size: 1.25rem;"></i>
+                <i class="fas ${config.icon}" style="color: ${config.color}; font-size: 1.25rem;"></i>
                 <span style="font-weight: 500; color: #111827;">${message}</span>
                 <button onclick="this.parentElement.remove()" style="margin-left: auto; padding: 0.25rem; color: #6b7280; cursor: pointer; background: none; border: none;">
                     <i class="fas fa-times"></i>
@@ -216,7 +500,7 @@
             }, 5000);
         }
 
-        // Закрытие sidebar при клике вне его на мобильных
+        // Mobile sidebar close
         document.addEventListener('click', function(e) {
             const sidebar = document.querySelector('.sidebar');
             const toggle = document.querySelector('.admin-header-icon');
@@ -229,28 +513,19 @@
             }
         });
 
-        // Auto-refresh unread count каждые 30 секунд
-        setInterval(async function() {
-            try {
-                const response = await fetch('/admin/api/unread-count');
-                const data = await response.json();
-                
-                const badge = document.querySelector('.sidebar-badge');
-                if (data.count > 0) {
-                    if (badge) {
-                        badge.textContent = data.count;
-                    }
-                    document.title = `(${data.count}) {{ salon_info.name }}`;
-                } else {
-                    if (badge) {
-                        badge.remove();
-                    }
-                    document.title = '{{ salon_info.name }}';
-                }
-            } catch (error) {
-                console.error('Ошибка обновления счётчика:', error);
+        // Show mobile toggle on small screens
+        if (window.innerWidth <= 1024) {
+            document.querySelector('.admin-header-icon').style.display = 'flex';
+        }
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 1024) {
+                document.querySelector('.admin-header-icon').style.display = 'flex';
+            } else {
+                document.querySelector('.admin-header-icon').style.display = 'none';
+                document.querySelector('.sidebar').classList.remove('open');
             }
-        }, 30000);
+        });
     </script>
 
     {% block extra_scripts %}{% endblock %}
