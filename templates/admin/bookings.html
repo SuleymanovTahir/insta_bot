@@ -4,291 +4,115 @@
 
 {% block nav_bookings %}active{% endblock %}
 
-{% block extra_css %}
-<style>
-    /* Улучшенные карточки статистики */
-    .stat-card-modern {
-        position: relative;
-        overflow: hidden;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .stat-card-modern::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
-    .stat-card-modern:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-    }
-
-    .stat-card-modern:hover::before {
-        opacity: 1;
-    }
-
-    /* Модальное окно */
-    .modal-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(4px);
-        z-index: 50;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-    }
-
-    .modal-overlay.active {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    .modal-content {
-        background: white;
-        border-radius: 20px;
-        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-        max-width: 42rem;
-        width: 100%;
-        max-height: 90vh;
-        overflow-y: auto;
-        transform: scale(0.9);
-        transition: transform 0.3s ease;
-    }
-
-    .modal-overlay.active .modal-content {
-        transform: scale(1);
-    }
-
-    /* Таблица */
-    .bookings-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-    }
-
-    .bookings-table thead th {
-        background: #f9fafb;
-        padding: 1rem 1.5rem;
-        text-align: left;
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: #6b7280;
-        border-bottom: 2px solid #e5e7eb;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-    }
-
-    .bookings-table tbody tr {
-        transition: all 0.2s ease;
-    }
-
-    .bookings-table tbody tr:hover {
-        background: #f9fafb;
-    }
-
-    .bookings-table tbody td {
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid #f3f4f6;
-    }
-
-    /* Аватар клиента */
-    .client-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 12px;
-        background: linear-gradient(135deg, #ec4899, #8b5cf6);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: 700;
-        font-size: 1.125rem;
-    }
-
-    /* Статус селект */
-    .status-select {
-        padding: 0.5rem 0.75rem;
-        border-radius: 9999px;
-        border: none;
-        font-size: 0.75rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-
-    .status-select:focus {
-        outline: none;
-        ring: 2px;
-        ring-offset: 2px;
-    }
-
-    .status-pending {
-        background: #fef3c7;
-        color: #92400e;
-    }
-
-    .status-confirmed {
-        background: #d1fae5;
-        color: #065f46;
-    }
-
-    .status-completed {
-        background: #dbeafe;
-        color: #1e40af;
-    }
-
-    .status-cancelled {
-        background: #fee2e2;
-        color: #991b1b;
-    }
-
-    /* Кнопки действий */
-    .action-btn {
-        padding: 0.5rem;
-        border-radius: 0.5rem;
-        transition: all 0.2s ease;
-        border: none;
-        cursor: pointer;
-    }
-
-    .action-btn:hover {
-        transform: scale(1.1);
-    }
-
-    .action-btn-view {
-        color: #2563eb;
-        background: #eff6ff;
-    }
-
-    .action-btn-view:hover {
-        background: #dbeafe;
-    }
-
-    .action-btn-contact {
-        color: #059669;
-        background: #d1fae5;
-    }
-
-    .action-btn-contact:hover {
-        background: #a7f3d0;
-    }
-
-    .action-btn-delete {
-        color: #dc2626;
-        background: #fee2e2;
-    }
-
-    .action-btn-delete:hover {
-        background: #fecaca;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<!-- Header -->
-<div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900 mb-2">📅 Управление записями</h1>
-    <p class="text-gray-600">Всего записей: {{ bookings|length }}</p>
+<!-- Page Header -->
+<div class="page-header" style="margin-bottom: 2rem;">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+        <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-calendar-alt" style="color: white; font-size: 1.5rem;"></i>
+        </div>
+        <div>
+            <h1 style="font-size: 2rem; font-weight: 700; color: #111827; margin: 0;">Управление записями</h1>
+            <p style="color: #6b7280; font-size: 1rem; margin: 0;">Всего записей: {{ bookings|length }}</p>
+        </div>
+    </div>
 </div>
 
 <!-- Stats Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <div class="stat-card-modern bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-        <div class="flex items-center justify-between mb-4">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Ожидают подтверждения -->
+    <div class="stat-card">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
             <div>
-                <p class="text-sm text-gray-500 mb-1">Ожидают подтверждения</p>
-                <h3 class="text-3xl font-bold text-yellow-600">{{ stats.pending_bookings }}</h3>
+                <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.25rem;">Ожидают подтверждения</p>
+                <h3 style="font-size: 2.25rem; font-weight: 700; color: #f59e0b; margin: 0;">{{ stats.pending_bookings }}</h3>
             </div>
-            <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-clock text-yellow-600 text-xl"></i>
+            <div style="width: 48px; height: 48px; background: #fef3c7; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-clock" style="color: #f59e0b; font-size: 1.25rem;"></i>
             </div>
         </div>
     </div>
 
-    <div class="stat-card-modern bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-        <div class="flex items-center justify-between mb-4">
+    <!-- Завершенных -->
+    <div class="stat-card">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
             <div>
-                <p class="text-sm text-gray-500 mb-1">Завершенных</p>
-                <h3 class="text-3xl font-bold text-blue-600">{{ stats.completed_bookings }}</h3>
+                <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.25rem;">Завершенных</p>
+                <h3 style="font-size: 2.25rem; font-weight: 700; color: #3b82f6; margin: 0;">{{ stats.completed_bookings }}</h3>
             </div>
-            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-check-circle text-blue-600 text-xl"></i>
+            <div style="width: 48px; height: 48px; background: #dbeafe; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-check-circle" style="color: #3b82f6; font-size: 1.25rem;"></i>
             </div>
         </div>
     </div>
 
-    <div class="stat-card-modern bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-        <div class="flex items-center justify-between mb-4">
+    <!-- Всего записей -->
+    <div class="stat-card">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
             <div>
-                <p class="text-sm text-gray-500 mb-1">Всего записей</p>
-                <h3 class="text-3xl font-bold text-gray-900">{{ stats.total_bookings }}</h3>
+                <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.25rem;">Всего записей</p>
+                <h3 style="font-size: 2.25rem; font-weight: 700; color: #111827; margin: 0;">{{ stats.total_bookings }}</h3>
             </div>
-            <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-calendar-alt text-gray-600 text-xl"></i>
+            <div style="width: 48px; height: 48px; background: #f3f4f6; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-calendar-alt" style="color: #6b7280; font-size: 1.25rem;"></i>
             </div>
         </div>
     </div>
 
-    <div class="stat-card-modern bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-        <div class="flex items-center justify-between mb-4">
+    <!-- Общий доход -->
+    <div class="stat-card">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
             <div>
-                <p class="text-sm text-gray-500 mb-1">Общий доход</p>
-                <h3 class="text-3xl font-bold text-green-600">{{ stats.total_revenue }}</h3>
-                <p class="text-xs text-gray-500 mt-1">AED</p>
+                <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.25rem;">Общий доход</p>
+                <h3 style="font-size: 2.25rem; font-weight: 700; color: #10b981; margin: 0;">{{ stats.total_revenue }}</h3>
+                <p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">AED</p>
             </div>
-            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-dollar-sign text-green-600 text-xl"></i>
+            <div style="width: 48px; height: 48px; background: #d1fae5; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-dollar-sign" style="color: #10b981; font-size: 1.25rem;"></i>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Search and Filter -->
-<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
-    <div class="flex flex-col md:flex-row gap-4">
-        <div class="flex-1 relative">
-            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-            <input type="text" 
-                   class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" 
-                   id="searchInput" 
-                   placeholder="🔍 Поиск по имени, телефону, услуге..."
-                   onkeyup="searchTable()">
+<div class="card" style="margin-bottom: 1.5rem;">
+    <div class="card-body" style="padding: 1.5rem;">
+        <div style="display: grid; grid-template-columns: 1fr auto auto auto; gap: 1rem; align-items: center;">
+            <div style="position: relative;">
+                <i class="fas fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #9ca3af;"></i>
+                <input type="text" 
+                       class="form-input" 
+                       id="searchInput" 
+                       placeholder="🔍 Поиск по имени, телефону, услуге..."
+                       onkeyup="searchTable()"
+                       style="padding-left: 2.75rem;">
+            </div>
+
+            <select class="form-input" id="statusFilter" onchange="filterByStatus()">
+                <option value="all">Все статусы</option>
+                <option value="pending">Ожидают</option>
+                <option value="confirmed">Подтверждены</option>
+                <option value="completed">Завершены</option>
+                <option value="cancelled">Отменены</option>
+            </select>
+
+            <button class="btn btn-secondary" onclick="resetFilters()">
+                <i class="fas fa-undo"></i>
+                <span>Сбросить</span>
+            </button>
+
+            <button class="btn btn-primary" onclick="addBooking()">
+                <i class="fas fa-plus"></i>
+                <span>Добавить запись</span>
+            </button>
         </div>
-
-        <select class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" 
-                id="statusFilter" 
-                onchange="filterByStatus()">
-            <option value="all">Все статусы</option>
-            <option value="pending">Ожидают</option>
-            <option value="confirmed">Подтверждены</option>
-            <option value="completed">Завершены</option>
-            <option value="cancelled">Отменены</option>
-        </select>
-
-        <button class="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all whitespace-nowrap" 
-                onclick="addBooking()">
-            <i class="fas fa-plus mr-2"></i> Добавить запись
-        </button>
     </div>
 </div>
 
 <!-- Bookings Table -->
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-    <div class="overflow-x-auto">
-        <table class="bookings-table" id="bookingsTable">
+<div class="table-container">
+    <div style="overflow-x: auto;">
+        <table class="table" id="bookingsTable">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -305,23 +129,24 @@
                 {% if bookings %}
                 {% for booking in bookings %}
                 <tr data-status="{{ booking[6] }}">
-                    <td class="text-sm font-medium text-gray-900">#{{ booking[0] }}</td>
+                    <td style="font-size: 0.875rem; font-weight: 500; color: #111827;">#{{ booking[0] }}</td>
                     <td>
-                        <div class="flex items-center gap-3">
-                            <div class="client-avatar">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.125rem;">
                                 {{ booking[5][0] if booking[5] else '?' }}
                             </div>
                             <div>
-                                <p class="text-sm font-medium text-gray-900">{{ booking[5] }}</p>
-                                <p class="text-xs text-gray-500">{{ booking[1][:15] }}...</p>
+                                <p style="font-size: 0.875rem; font-weight: 500; color: #111827; margin: 0;">{{ booking[5] }}</p>
+                                <p style="font-size: 0.75rem; color: #6b7280; margin: 0;">{{ booking[1][:15] }}...</p>
                             </div>
                         </div>
                     </td>
-                    <td class="text-sm font-medium text-gray-900">{{ booking[2] }}</td>
-                    <td class="text-sm text-gray-600">{{ booking[3] }}</td>
-                    <td class="text-sm text-gray-600">{{ booking[4] }}</td>
+                    <td style="font-size: 0.875rem; font-weight: 500; color: #111827;">{{ booking[2] }}</td>
+                    <td style="font-size: 0.875rem; color: #6b7280;">{{ booking[3] }}</td>
+                    <td style="font-size: 0.875rem; color: #6b7280;">{{ booking[4] }}</td>
                     <td>
-                        <select class="status-select status-{{ booking[6] }}" 
+                        <select class="badge badge-{{ booking[6] }}" 
+                                style="border: none; cursor: pointer; padding: 0.375rem 0.875rem;"
                                 onchange="changeStatus({{ booking[0] }}, this.value)">
                             <option value="pending" {% if booking[6]=='pending' %}selected{% endif %}>Ожидает</option>
                             <option value="confirmed" {% if booking[6]=='confirmed' %}selected{% endif %}>Подтвержден</option>
@@ -329,22 +154,22 @@
                             <option value="cancelled" {% if booking[6]=='cancelled' %}selected{% endif %}>Отменен</option>
                         </select>
                     </td>
-                    <td class="text-sm text-gray-600">{{ booking[7][:16] if booking[7] else '-' }}</td>
+                    <td style="font-size: 0.875rem; color: #6b7280;">{{ booking[7][:16] if booking[7] else '-' }}</td>
                     <td>
-                        <div class="flex items-center gap-2">
-                            <button class="action-btn action-btn-view" 
-                                    onclick="viewBooking({{ booking[0] }})" 
-                                    title="Просмотр">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <button onclick="viewBooking({{ booking[0] }})" 
+                                    title="Просмотр"
+                                    style="padding: 0.5rem; border-radius: 0.5rem; transition: all 0.2s; border: none; cursor: pointer; color: #2563eb; background: #eff6ff;">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            <button class="action-btn action-btn-contact" 
-                                    onclick="contactClient('{{ booking[1] }}')" 
-                                    title="Связаться">
+                            <button onclick="contactClient('{{ booking[1] }}')" 
+                                    title="Связаться"
+                                    style="padding: 0.5rem; border-radius: 0.5rem; transition: all 0.2s; border: none; cursor: pointer; color: #059669; background: #d1fae5;">
                                 <i class="fas fa-comment"></i>
                             </button>
-                            <button class="action-btn action-btn-delete" 
-                                    onclick="deleteBooking({{ booking[0] }})" 
-                                    title="Удалить">
+                            <button onclick="deleteBooking({{ booking[0] }})" 
+                                    title="Удалить"
+                                    style="padding: 0.5rem; border-radius: 0.5rem; transition: all 0.2s; border: none; cursor: pointer; color: #dc2626; background: #fee2e2;">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
@@ -353,11 +178,11 @@
                 {% endfor %}
                 {% else %}
                 <tr>
-                    <td colspan="8" class="px-6 py-20 text-center">
-                        <div class="flex flex-col items-center">
-                            <i class="fas fa-calendar-times text-gray-300 text-6xl mb-4"></i>
-                            <h3 class="text-xl font-medium text-gray-900 mb-2">Пока нет записей</h3>
-                            <p class="text-gray-500">Записи появятся когда клиенты забронируют время</p>
+                    <td colspan="8" style="padding: 5rem 1.5rem; text-align: center;">
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <i class="fas fa-calendar-times" style="font-size: 4rem; color: #e5e7eb; margin-bottom: 1rem;"></i>
+                            <h3 style="font-size: 1.25rem; font-weight: 500; color: #111827; margin-bottom: 0.5rem;">Пока нет записей</h3>
+                            <p style="color: #6b7280;">Записи появятся когда клиенты забронируют время</p>
                         </div>
                     </td>
                 </tr>
@@ -368,21 +193,20 @@
 </div>
 
 <!-- Modal для добавления записи -->
-<div class="modal-overlay" id="addBookingModal">
-    <div class="modal-content">
-        <div class="p-6 border-b border-gray-200 flex items-center justify-between">
-            <h2 class="text-2xl font-bold text-gray-900">Добавить запись</h2>
-            <button onclick="closeBookingModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
-                <i class="fas fa-times text-xl"></i>
+<div id="addBookingModal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 50; align-items: center; justify-content: center; padding: 1rem; opacity: 0; transition: opacity 0.3s ease;">
+    <div style="background: white; border-radius: 20px; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25); max-width: 42rem; width: 100%; max-height: 90vh; overflow-y: auto; transform: scale(0.9); transition: transform 0.3s ease;">
+        <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; color: #111827; margin: 0;">Добавить запись</h2>
+            <button onclick="closeBookingModal()" style="color: #9ca3af; cursor: pointer; background: none; border: none; font-size: 1.5rem; padding: 0; transition: color 0.2s;">
+                <i class="fas fa-times"></i>
             </button>
         </div>
         
-        <form id="addBookingForm" onsubmit="submitBooking(event)" class="p-6">
-            <div class="space-y-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Выбрать клиента</label>
-                    <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" 
-                            id="bookingClient" required>
+        <form id="addBookingForm" onsubmit="submitBooking(event)" style="padding: 1.5rem;">
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <div class="form-group">
+                    <label class="form-label">Выбрать клиента</label>
+                    <select class="form-input" id="bookingClient">
                         <option value="">Выберите клиента</option>
                         {% for client in clients %}
                         <option value="{{ client[0] }}" 
@@ -395,24 +219,21 @@
                     </select>
                 </div>
                 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Имя *</label>
-                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" 
-                               id="bookingName" required>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Имя *</label>
+                        <input type="text" class="form-input" id="bookingName" required>
                     </div>
                     
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Телефон *</label>
-                        <input type="tel" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" 
-                               id="bookingPhone" required>
+                    <div class="form-group">
+                        <label class="form-label">Телефон *</label>
+                        <input type="tel" class="form-input" id="bookingPhone" required>
                     </div>
                 </div>
                 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Услуга *</label>
-                    <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" 
-                            id="bookingService" required>
+                <div class="form-group">
+                    <label class="form-label">Услуга *</label>
+                    <select class="form-input" id="bookingService" required>
                         <option value="">Выберите услугу</option>
                         <option value="Маникюр">Маникюр</option>
                         <option value="Педикюр">Педикюр</option>
@@ -425,28 +246,27 @@
                     </select>
                 </div>
                 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Дата *</label>
-                        <input type="date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" 
-                               id="bookingDate" required>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Дата *</label>
+                        <input type="date" class="form-input" id="bookingDate" required>
                     </div>
                     
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Время *</label>
-                        <input type="time" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" 
-                               id="bookingTime" required>
+                    <div class="form-group">
+                        <label class="form-label">Время *</label>
+                        <input type="time" class="form-input" id="bookingTime" required>
                     </div>
                 </div>
             </div>
             
-            <div class="flex gap-3 mt-8">
-                <button type="submit" class="flex-1 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg transition-all">
-                    <i class="fas fa-save mr-2"></i> Создать запись
+            <div style="display: flex; gap: 0.75rem; margin-top: 2rem;">
+                <button type="submit" class="btn btn-primary" style="flex: 1;">
+                    <i class="fas fa-save"></i>
+                    <span>Создать запись</span>
                 </button>
-                <button type="button" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" 
-                        onclick="closeBookingModal()">
-                    <i class="fas fa-times mr-2"></i> Отмена
+                <button type="button" class="btn btn-secondary" onclick="closeBookingModal()">
+                    <i class="fas fa-times"></i>
+                    <span>Отмена</span>
                 </button>
             </div>
         </form>
@@ -456,6 +276,7 @@
 
 {% block extra_scripts %}
 <script>
+    // Search function
     function searchTable() {
         const input = document.getElementById('searchInput');
         const filter = input.value.toUpperCase();
@@ -480,6 +301,7 @@
         }
     }
 
+    // Filter by status
     function filterByStatus() {
         const select = document.getElementById('statusFilter');
         const status = select.value;
@@ -496,6 +318,15 @@
         }
     }
 
+    // Reset filters
+    function resetFilters() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('statusFilter').value = 'all';
+        searchTable();
+        filterByStatus();
+    }
+
+    // Change booking status
     function changeStatus(bookingId, newStatus) {
         fetch(`/admin/api/bookings/${bookingId}/status`, {
             method: 'POST',
@@ -512,14 +343,17 @@
             });
     }
 
+    // View booking details
     function viewBooking(id) {
         window.location.href = `/admin/bookings/${id}`;
     }
 
+    // Contact client
     function contactClient(id) {
         window.location.href = `/admin/chat?client=${id}`;
     }
 
+    // Delete booking
     function deleteBooking(id) {
         if (confirm('Удалить эту запись?')) {
             fetch(`/admin/api/bookings/${id}/delete`, {
@@ -536,28 +370,46 @@
         }
     }
     
+    // Add booking modal
     function addBooking() {
         const modal = document.getElementById('addBookingModal');
-        modal.classList.add('active');
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            modal.style.opacity = '1';
+            modal.querySelector('div').style.transform = 'scale(1)';
+        }, 10);
+        
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('bookingDate').value = today;
     }
 
+    // Close booking modal
     function closeBookingModal() {
         const modal = document.getElementById('addBookingModal');
-        modal.classList.remove('active');
-        document.getElementById('addBookingForm').reset();
+        modal.style.opacity = '0';
+        modal.querySelector('div').style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            modal.style.display = 'none';
+            document.getElementById('addBookingForm').reset();
+        }, 300);
     }
 
-    document.getElementById('bookingClient').addEventListener('change', function () {
-        const selectedOption = this.options[this.selectedIndex];
-        const name = selectedOption.getAttribute('data-name') || '';
-        const phone = selectedOption.getAttribute('data-phone') || '';
+    // Auto-fill client data
+    document.addEventListener('DOMContentLoaded', function() {
+        const clientSelect = document.getElementById('bookingClient');
+        if (clientSelect) {
+            clientSelect.addEventListener('change', function () {
+                const selectedOption = this.options[this.selectedIndex];
+                const name = selectedOption.getAttribute('data-name') || '';
+                const phone = selectedOption.getAttribute('data-phone') || '';
 
-        document.getElementById('bookingName').value = name;
-        document.getElementById('bookingPhone').value = phone;
+                document.getElementById('bookingName').value = name;
+                document.getElementById('bookingPhone').value = phone;
+            });
+        }
     });
 
+    // Submit booking form
     async function submitBooking(event) {
         event.preventDefault();
 
@@ -591,12 +443,19 @@
         }
     }
 
-    // Закрытие модального окна при клике вне его
+    // Close modal on outside click
     window.onclick = function (event) {
         const modal = document.getElementById('addBookingModal');
         if (event.target === modal) {
             closeBookingModal();
         }
     }
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeBookingModal();
+        }
+    });
 </script>
 {% endblock %}

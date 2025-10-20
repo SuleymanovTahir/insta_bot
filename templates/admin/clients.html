@@ -4,249 +4,124 @@
 
 {% block nav_clients %}active{% endblock %}
 
-{% block extra_css %}
-<style>
-    /* Улучшенные карточки клиентов */
-    .client-card {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1px solid #e5e7eb;
-    }
-
-    .client-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-        border-color: #ec4899;
-    }
-
-    /* Аватар клиента с градиентом */
-    .client-avatar {
-        width: 48px;
-        height: 48px;
-        border-radius: 14px;
-        background: linear-gradient(135deg, #ec4899, #8b5cf6);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: 700;
-        font-size: 1.25rem;
-        transition: all 0.3s ease;
-    }
-
-    .client-card:hover .client-avatar {
-        transform: scale(1.1) rotate(-5deg);
-    }
-
-    /* Статусы клиентов */
-    .client-status {
-        padding: 0.375rem 0.75rem;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.375rem;
-    }
-
-    .status-new {
-        background: #dcfce7;
-        color: #166534;
-    }
-
-    .status-lead {
-        background: #dbeafe;
-        color: #1e40af;
-    }
-
-    .status-customer {
-        background: #f3e8ff;
-        color: #6b21a8;
-    }
-
-    .status-vip {
-        background: #fef3c7;
-        color: #92400e;
-    }
-
-    .status-inactive {
-        background: #fee2e2;
-        color: #991b1b;
-    }
-
-    /* Иконка закрепления */
-    .pin-icon {
-        color: #f59e0b;
-        font-size: 0.875rem;
-        margin-left: 0.375rem;
-    }
-
-    /* Кнопки действий */
-    .client-action-btn {
-        padding: 0.5rem;
-        border-radius: 0.5rem;
-        transition: all 0.2s ease;
-        border: none;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .client-action-btn:hover {
-        transform: scale(1.1);
-    }
-
-    .btn-view {
-        color: #2563eb;
-        background: #eff6ff;
-    }
-
-    .btn-view:hover {
-        background: #dbeafe;
-    }
-
-    .btn-chat {
-        color: #059669;
-        background: #d1fae5;
-    }
-
-    .btn-chat:hover {
-        background: #a7f3d0;
-    }
-
-    /* Таблица клиентов */
-    .clients-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-    }
-
-    .clients-table thead th {
-        background: #f9fafb;
-        padding: 1rem 1.5rem;
-        text-align: left;
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: #6b7280;
-        border-bottom: 2px solid #e5e7eb;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-    }
-
-    .clients-table tbody tr {
-        transition: all 0.2s ease;
-    }
-
-    .clients-table tbody tr:hover {
-        background: #f9fafb;
-    }
-
-    .clients-table tbody td {
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid #f3f4f6;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900 mb-2">👥 Управление клиентами</h1>
-    <p class="text-gray-600">Всего клиентов: {{ clients|length }}</p>
-</div>
-
-<!-- Stats -->
-<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between mb-4">
+<!-- Page Header -->
+<div class="page-header" style="margin-bottom: 2rem;">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-users" style="color: white; font-size: 1.5rem;"></i>
+            </div>
             <div>
-                <p class="text-sm text-gray-500 mb-1">Новые клиенты</p>
-                <h3 class="text-3xl font-bold text-green-600">{{ stats.new_clients }}</h3>
-            </div>
-            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-user-plus text-green-600 text-xl"></i>
-            </div>
-        </div>
-    </div>
-
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between mb-4">
-            <div>
-                <p class="text-sm text-gray-500 mb-1">Лиды</p>
-                <h3 class="text-3xl font-bold text-blue-600">{{ stats.leads }}</h3>
-            </div>
-            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-user-clock text-blue-600 text-xl"></i>
-            </div>
-        </div>
-    </div>
-
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between mb-4">
-            <div>
-                <p class="text-sm text-gray-500 mb-1">Постоянные клиенты</p>
-                <h3 class="text-3xl font-bold text-purple-600">{{ stats.customers }}</h3>
-            </div>
-            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-user-check text-purple-600 text-xl"></i>
-            </div>
-        </div>
-    </div>
-
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between mb-4">
-            <div>
-                <p class="text-sm text-gray-500 mb-1">Всего клиентов</p>
-                <h3 class="text-3xl font-bold text-gray-900">{{ stats.total_clients }}</h3>
-            </div>
-            <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-users text-gray-600 text-xl"></i>
+                <h1 style="font-size: 2rem; font-weight: 700; color: #111827; margin: 0;">База клиентов</h1>
+                <p style="color: #6b7280; font-size: 1rem; margin: 0;">{{ clients|length }} клиентов в системе</p>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Search and Filter -->
-<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
-    <div class="flex flex-col md:flex-row gap-4">
-        <div class="flex-1 relative">
-            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-            <input type="text" 
-                   class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" 
-                   id="searchInput" 
-                   placeholder="🔍 Поиск по имени, телефону, username..."
-                   onkeyup="searchTable()">
+<!-- Stats Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Всего клиентов -->
+    <div class="stat-card">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.25rem;">Всего клиентов</p>
+                <h3 style="font-size: 2.25rem; font-weight: 700; color: #111827; margin: 0;">{{ clients|length }}</h3>
+            </div>
+            <div style="width: 48px; height: 48px; background: #f3f4f6; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-users" style="color: #6b7280; font-size: 1.25rem;"></i>
+            </div>
         </div>
+    </div>
 
-        <select class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" 
-                id="exportFormat" 
-                style="width: auto;">
-            <option value="">Экспорт...</option>
-            <option value="csv">CSV</option>
-            <option value="excel">Excel (XLSX)</option>
-            <option value="pdf">PDF</option>
-        </select>
+    <!-- VIP клиентов -->
+    <div class="stat-card">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.25rem;">VIP клиентов</p>
+                <h3 style="font-size: 2.25rem; font-weight: 700; color: #a855f7; margin: 0;">
+                    {{ clients | selectattr("8", "equalto", "vip") | list | length if clients else 0 }}
+                </h3>
+            </div>
+            <div style="width: 48px; height: 48px; background: #f3e8ff; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-crown" style="color: #a855f7; font-size: 1.25rem;"></i>
+            </div>
+        </div>
+    </div>
 
-        <button class="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all whitespace-nowrap" 
-                onclick="exportClients()">
-            <i class="fas fa-file-export mr-2"></i> Экспорт
-        </button>
+    <!-- Новых за месяц -->
+    <div class="stat-card">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.25rem;">Новых за месяц</p>
+                <h3 style="font-size: 2.25rem; font-weight: 700; color: #10b981; margin: 0;">
+                    {{ clients | selectattr("8", "equalto", "new") | list | length if clients else 0 }}
+                </h3>
+            </div>
+            <div style="width: 48px; height: 48px; background: #d1fae5; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-user-plus" style="color: #10b981; font-size: 1.25rem;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Активных -->
+    <div class="stat-card">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.25rem;">Активных</p>
+                <h3 style="font-size: 2.25rem; font-weight: 700; color: #3b82f6; margin: 0;">
+                    {{ clients | selectattr("8", "equalto", "regular") | list | length if clients else 0 }}
+                </h3>
+            </div>
+            <div style="width: 48px; height: 48px; background: #dbeafe; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-user-check" style="color: #3b82f6; font-size: 1.25rem;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search and Filters -->
+<div class="card" style="margin-bottom: 1.5rem;">
+    <div class="card-body" style="padding: 1.5rem;">
+        <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 1rem; align-items: center;">
+            <div style="position: relative;">
+                <i class="fas fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #9ca3af;"></i>
+                <input type="text" 
+                       class="form-input" 
+                       id="searchInput" 
+                       placeholder="🔍 Поиск по имени, телефону, Instagram..."
+                       onkeyup="searchTable()"
+                       style="padding-left: 2.75rem;">
+            </div>
+
+            <select class="form-input" id="statusFilter" onchange="filterByStatus()">
+                <option value="all">Все статусы</option>
+                <option value="vip">VIP</option>
+                <option value="regular">Постоянные</option>
+                <option value="new">Новые</option>
+            </select>
+
+            <button class="btn btn-primary" onclick="addClient()">
+                <i class="fas fa-user-plus"></i>
+                <span>Добавить клиента</span>
+            </button>
+        </div>
     </div>
 </div>
 
 <!-- Clients Table -->
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-    <div class="overflow-x-auto">
-        <table class="clients-table" id="clientsTable">
+<div class="table-container">
+    <div style="overflow-x: auto;">
+        <table class="table" id="clientsTable">
             <thead>
                 <tr>
                     <th>Клиент</th>
-                    <th>Телефон</th>
-                    <th>Instagram</th>
-                    <th>Статус</th>
-                    <th>Сообщений</th>
+                    <th>Контакты</th>
+                    <th>Визиты</th>
                     <th>LTV</th>
-                    <th>Последний контакт</th>
+                    <th>Последний визит</th>
+                    <th>Статус</th>
                     <th>Действия</th>
                 </tr>
             </thead>
@@ -255,47 +130,71 @@
                 {% for client in clients %}
                 <tr data-status="{{ client[8] }}">
                     <td>
-                        <div class="flex items-center gap-3">
-                            <div class="client-avatar">
-                                {{ client[3][0] if client[3] else client[1][0] if client[1] else '?' }}
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.125rem;">
+                                {{ client[3][0] if client[3] else (client[1][0] if client[1] else '?') }}
                             </div>
                             <div>
-                                <strong class="text-sm font-medium text-gray-900">{{ get_client_display_name(client) }}</strong>
-                                {% if client|length > 12 and client[12] %}
-                                <i class="pin-icon fas fa-thumbtack" title="Закреплен"></i>
-                                {% endif %}
+                                <p style="font-size: 0.875rem; font-weight: 500; color: #111827; margin: 0;">
+                                    {{ client[3] if client[3] else 'Клиент' }}
+                                </p>
+                                <p style="font-size: 0.75rem; color: #6b7280; margin: 0;">
+                                    @{{ client[1] if client[1] else client[0][:15] }}
+                                </p>
                             </div>
                         </div>
                     </td>
-                    <td class="text-sm text-gray-600">{{ client[2] or '-' }}</td>
                     <td>
-                        {% if client[1] %}
-                        <a href="https://instagram.com/{{ client[1] }}" target="_blank" class="text-sm text-blue-600 hover:text-blue-800 hover:underline">
-                            @{{ client[1] }}
-                        </a>
+                        <p style="font-size: 0.875rem; color: #111827; margin: 0;">{{ client[2] if client[2] else '-' }}</p>
+                        <p style="font-size: 0.75rem; color: #6b7280; margin: 0;">
+                            <i class="fab fa-instagram" style="margin-right: 0.25rem;"></i>
+                            {{ client[1] if client[1] else 'Не указан' }}
+                        </p>
+                    </td>
+                    <td style="font-size: 0.875rem; font-weight: 500; color: #111827;">
+                        {{ client[7] if client|length > 7 else 0 }}
+                    </td>
+                    <td style="font-size: 0.875rem; font-weight: 600; color: #10b981;">
+                        {{ client[9] if client|length > 9 else 0 }} AED
+                    </td>
+                    <td style="font-size: 0.875rem; color: #6b7280;">
+                        {{ client[5][:10] if client[5] else 'Никогда' }}
+                    </td>
+                    <td>
+                        {% if client[8] == 'vip' %}
+                        <span class="badge" style="background: #f3e8ff; color: #7c3aed;">
+                            <i class="fas fa-crown"></i> VIP
+                        </span>
+                        {% elif client[8] == 'regular' %}
+                        <span class="badge" style="background: #dbeafe; color: #1e40af;">
+                            <i class="fas fa-user-check"></i> Постоянный
+                        </span>
+                        {% elif client[8] == 'new' %}
+                        <span class="badge" style="background: #d1fae5; color: #166534;">
+                            <i class="fas fa-user-plus"></i> Новый
+                        </span>
                         {% else %}
-                        <span class="text-sm text-gray-400">{{ client[0][:15] }}...</span>
+                        <span class="badge" style="background: #f3f4f6; color: #6b7280;">
+                            <i class="fas fa-user"></i> Обычный
+                        </span>
                         {% endif %}
                     </td>
                     <td>
-                        <span class="client-status status-{{ client[8] }}">
-                            {{ client_statuses[client[8]].label if client[8] in client_statuses else client[8] }}
-                        </span>
-                    </td>
-                    <td class="text-sm text-gray-900 font-medium">{{ client[6] }}</td>
-                    <td class="text-sm font-medium text-green-600">{{ client[9] }} AED</td>
-                    <td class="text-sm text-gray-600">{{ client[5][:16] if client[5] else '-' }}</td>
-                    <td>
-                        <div class="flex items-center gap-2">
-                            <button class="client-action-btn btn-view" 
-                                    onclick="viewClient('{{ client[0] }}')" 
-                                    title="Просмотр">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <button onclick="viewClient('{{ client[0] }}')" 
+                                    title="Просмотр"
+                                    style="padding: 0.5rem; border-radius: 0.5rem; transition: all 0.2s; border: none; cursor: pointer; color: #2563eb; background: #eff6ff;">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            <button class="client-action-btn btn-chat" 
-                                    onclick="openChat('{{ client[0] }}')" 
-                                    title="Чат">
+                            <button onclick="chatWithClient('{{ client[0] }}')" 
+                                    title="Написать"
+                                    style="padding: 0.5rem; border-radius: 0.5rem; transition: all 0.2s; border: none; cursor: pointer; color: #059669; background: #d1fae5;">
                                 <i class="fas fa-comment"></i>
+                            </button>
+                            <button onclick="editClient('{{ client[0] }}')" 
+                                    title="Редактировать"
+                                    style="padding: 0.5rem; border-radius: 0.5rem; transition: all 0.2s; border: none; cursor: pointer; color: #f59e0b; background: #fef3c7;">
+                                <i class="fas fa-edit"></i>
                             </button>
                         </div>
                     </td>
@@ -303,11 +202,11 @@
                 {% endfor %}
                 {% else %}
                 <tr>
-                    <td colspan="8" class="px-6 py-20 text-center">
-                        <div class="flex flex-col items-center">
-                            <i class="fas fa-users text-gray-300 text-6xl mb-4"></i>
-                            <h3 class="text-xl font-medium text-gray-900 mb-2">Нет клиентов</h3>
-                            <p class="text-gray-500">Клиенты появятся после первого контакта с ботом</p>
+                    <td colspan="7" style="padding: 5rem 1.5rem; text-align: center;">
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <i class="fas fa-users" style="font-size: 4rem; color: #e5e7eb; margin-bottom: 1rem;"></i>
+                            <h3 style="font-size: 1.25rem; font-weight: 500; color: #111827; margin-bottom: 0.5rem;">Нет клиентов</h3>
+                            <p style="color: #6b7280;">Клиенты появятся после первых обращений</p>
                         </div>
                     </td>
                 </tr>
@@ -316,10 +215,67 @@
         </table>
     </div>
 </div>
+
+<!-- Modal для добавления клиента -->
+<div id="addClientModal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 50; align-items: center; justify-content: center; padding: 1rem; opacity: 0; transition: opacity 0.3s ease;">
+    <div style="background: white; border-radius: 20px; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25); max-width: 42rem; width: 100%; max-height: 90vh; overflow-y: auto; transform: scale(0.9); transition: transform 0.3s ease;">
+        <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; color: #111827; margin: 0;">Добавить клиента</h2>
+            <button onclick="closeClientModal()" style="color: #9ca3af; cursor: pointer; background: none; border: none; font-size: 1.5rem; padding: 0; transition: color 0.2s;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <form id="addClientForm" onsubmit="submitClient(event)" style="padding: 1.5rem;">
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <div class="form-group">
+                    <label class="form-label">Имя *</label>
+                    <input type="text" class="form-input" id="clientName" required placeholder="Введите имя клиента">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Телефон *</label>
+                    <input type="tel" class="form-input" id="clientPhone" required placeholder="+971 50 123 4567">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Instagram</label>
+                    <input type="text" class="form-input" id="clientInstagram" placeholder="@username">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Статус</label>
+                    <select class="form-input" id="clientStatus">
+                        <option value="new">Новый</option>
+                        <option value="regular">Постоянный</option>
+                        <option value="vip">VIP</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Заметки</label>
+                    <textarea class="form-input" id="clientNotes" rows="4" placeholder="Дополнительная информация о клиенте..." style="resize: vertical;"></textarea>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 0.75rem; margin-top: 2rem;">
+                <button type="submit" class="btn btn-primary" style="flex: 1;">
+                    <i class="fas fa-save"></i>
+                    <span>Сохранить</span>
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="closeClientModal()">
+                    <i class="fas fa-times"></i>
+                    <span>Отмена</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
+    // Search function
     function searchTable() {
         const input = document.getElementById('searchInput');
         const filter = input.value.toUpperCase();
@@ -344,24 +300,119 @@
         }
     }
 
-    function viewClient(clientId) {
-        window.location.href = `/admin/clients/${clientId}`;
-    }
+    // Filter by status
+    function filterByStatus() {
+        const select = document.getElementById('statusFilter');
+        const status = select.value;
+        const table = document.getElementById('clientsTable');
+        const tr = table.getElementsByTagName('tr');
 
-    function openChat(clientId) {
-        window.location.href = `/admin/chat?client=${clientId}`;
-    }
-
-    function exportClients() {
-        const format = document.getElementById('exportFormat').value;
-
-        if (!format) {
-            showNotification('Выберите формат экспорта', 'warning');
-            return;
+        for (let i = 1; i < tr.length; i++) {
+            if (status === 'all') {
+                tr[i].style.display = '';
+            } else {
+                const rowStatus = tr[i].getAttribute('data-status');
+                tr[i].style.display = rowStatus === status ? '' : 'none';
+            }
         }
-
-        window.location.href = `/admin/api/export/clients?format=${format}`;
-        showNotification('Экспорт начат...', 'info');
     }
+
+    // View client details
+    function viewClient(id) {
+        window.location.href = `/admin/clients/${id}`;
+    }
+
+    // Chat with client
+    function chatWithClient(id) {
+        window.location.href = `/admin/chat?client=${id}`;
+    }
+
+    // Edit client
+    function editClient(id) {
+        window.location.href = `/admin/clients/${id}/edit`;
+    }
+
+    // Add client modal
+    function addClient() {
+        const modal = document.getElementById('addClientModal');
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            modal.style.opacity = '1';
+            modal.querySelector('div').style.transform = 'scale(1)';
+        }, 10);
+    }
+
+    // Close client modal
+    function closeClientModal() {
+        const modal = document.getElementById('addClientModal');
+        modal.style.opacity = '0';
+        modal.querySelector('div').style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            modal.style.display = 'none';
+            document.getElementById('addClientForm').reset();
+        }, 300);
+    }
+
+    // Submit client form
+    async function submitClient(event) {
+        event.preventDefault();
+
+        const formData = {
+            name: document.getElementById('clientName').value,
+            phone: document.getElementById('clientPhone').value,
+            instagram: document.getElementById('clientInstagram').value,
+            status: document.getElementById('clientStatus').value,
+            notes: document.getElementById('clientNotes').value
+        };
+
+        try {
+            const response = await fetch('/admin/api/clients/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showNotification('Клиент успешно добавлен', 'success');
+                closeClientModal();
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                showNotification(data.message || 'Ошибка добавления клиента', 'error');
+            }
+        } catch (error) {
+            showNotification('Ошибка соединения', 'error');
+        }
+    }
+
+    // Close modal on outside click
+    window.onclick = function (event) {
+        const modal = document.getElementById('addClientModal');
+        if (event.target === modal) {
+            closeClientModal();
+        }
+    }
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeClientModal();
+        }
+    });
+
+    // Format phone input
+    document.addEventListener('DOMContentLoaded', function() {
+        const phoneInput = document.getElementById('clientPhone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 0 && !value.startsWith('971')) {
+                    value = '971' + value;
+                }
+                e.target.value = value;
+            });
+        }
+    });
 </script>
 {% endblock %}
