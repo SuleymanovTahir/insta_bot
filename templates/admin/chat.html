@@ -5,393 +5,116 @@
 
 {% block content %}
 <style>
-    .chat-container {
-        display: flex;
-        height: calc(100vh - 140px);
-        background: white;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
+.chat-wrapper {
+    display: grid;
+    grid-template-columns: 300px 1fr 280px;
+    gap: 1.5rem;
+    height: calc(100vh - 200px);
+}
 
-    /* Clients List */
-    .clients-list {
-        width: 350px;
-        border-right: 1px solid #e5e7eb;
-        display: flex;
-        flex-direction: column;
-    }
+.clients-list { background: white; border-radius: 12px; border: 1px solid #e5e7eb; display: flex; flex-direction: column; overflow: hidden; }
+.clients-header { padding: 1rem; background: linear-gradient(135deg, #ec4899, #8b5cf6); color: white; }
+.clients-header h2 { font-size: 1.125rem; font-weight: 700; margin-bottom: 0.75rem; }
+.search-input { width: 100%; padding: 0.625rem 0.75rem 0.625rem 2.25rem; border: none; border-radius: 8px; background: rgba(255,255,255,0.2); color: white; font-size: 0.875rem; position: relative; }
+.search-input::placeholder { color: rgba(255,255,255,0.7); }
 
-    .clients-header {
-        padding: 1.5rem;
-        border-bottom: 1px solid #e5e7eb;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
+.clients-scroll { flex: 1; overflow-y: auto; }
+.client-item { padding: 0.875rem 1rem; border-bottom: 1px solid #f3f4f6; cursor: pointer; transition: all 0.2s; display: flex; gap: 0.75rem; align-items: center; }
+.client-item:hover { background: #f9fafb; }
+.client-item.active { background: rgba(236, 72, 153, 0.1); border-left: 3px solid #ec4899; }
 
-    .clients-header h2 {
-        color: white;
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-    }
+.avatar { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #ec4899, #8b5cf6); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.875rem; flex-shrink: 0; position: relative; }
+.unread-badge { position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; background: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem; font-weight: 700; border: 2px solid white; }
 
-    .clients-search {
-        position: relative;
-    }
+.client-name { font-weight: 600; color: #111827; font-size: 0.875rem; }
+.client-msg { font-size: 0.75rem; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    .clients-search input {
-        width: 100%;
-        padding: 0.75rem 1rem 0.75rem 2.5rem;
-        border: none;
-        border-radius: 10px;
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
-        backdrop-filter: blur(10px);
-    }
+.chat-main { background: white; border-radius: 12px; border: 1px solid #e5e7eb; display: flex; flex-direction: column; }
+.chat-header { padding: 1rem; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; }
+.chat-messages { flex: 1; overflow-y: auto; padding: 1rem; background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%); }
+.message-group { display: flex; margin-bottom: 1rem; }
+.message-group.sent { justify-content: flex-end; }
+.message-bubble { max-width: 70%; padding: 0.875rem 1.125rem; border-radius: 16px; font-size: 0.875rem; line-height: 1.5; }
+.message-bubble.received { background: white; border-bottom-left-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.message-bubble.sent { background: linear-gradient(135deg, #ec4899, #8b5cf6); color: white; border-bottom-right-radius: 4px; }
+.message-time { font-size: 0.75rem; opacity: 0.7; margin-top: 0.25rem; }
 
-    .clients-search input::placeholder {
-        color: rgba(255, 255, 255, 0.7);
-    }
+.chat-input { padding: 1rem; border-top: 1px solid #e5e7eb; background: white; }
+.input-wrapper { display: flex; gap: 0.75rem; align-items: flex-end; }
+.input-wrapper textarea { flex: 1; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 8px; resize: none; font-family: inherit; font-size: 0.875rem; }
+.input-wrapper textarea:focus { outline: none; border-color: #ec4899; box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1); }
+.chat-btn { width: 40px; height: 40px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; color: #6b7280; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.chat-btn:hover { background: #f3f4f6; color: #111827; }
+.btn-send { background: linear-gradient(135deg, #ec4899, #8b5cf6); color: white; border: none; width: auto; padding: 0 1rem; }
+.btn-send:hover { box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4); }
 
-    .clients-search i {
-        position: absolute;
-        left: 0.875rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: rgba(255, 255, 255, 0.7);
-    }
+.client-panel { background: white; border-radius: 12px; border: 1px solid #e5e7eb; padding: 1rem; overflow-y: auto; }
+.panel-section { background: #f9fafb; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; }
+.panel-section h3 { font-size: 0.75rem; font-weight: 700; color: #6b7280; text-transform: uppercase; margin-bottom: 0.5rem; }
+.panel-field { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #e5e7eb; font-size: 0.875rem; }
 
-    .clients-list-scroll {
-        flex: 1;
-        overflow-y: auto;
-    }
-
-    .client-item {
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid #f3f4f6;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-
-    .client-item:hover {
-        background: #f9fafb;
-    }
-
-    .client-item.active {
-        background: #ede9fe;
-        border-left: 3px solid #8b5cf6;
-    }
-
-    .client-item.pinned {
-        background: #fef3c7;
-    }
-
-    /* Chat Area */
-    .chat-area {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .chat-header {
-        padding: 1.5rem;
-        border-bottom: 1px solid #e5e7eb;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .chat-messages {
-        flex: 1;
-        overflow-y: auto;
-        padding: 1.5rem;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 10%);
-    }
-
-    .message-group {
-        display: flex;
-        gap: 0.75rem;
-        margin-bottom: 1rem;
-    }
-
-    .message-group.outgoing {
-        flex-direction: row-reverse;
-    }
-
-    .message-bubble {
-        max-width: 60%;
-        padding: 0.875rem 1.125rem;
-        border-radius: 16px;
-        position: relative;
-        animation: slideIn 0.3s ease;
-    }
-
-    @keyframes slideIn {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .message-bubble.incoming {
-        background: white;
-        border-bottom-left-radius: 4px;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    }
-
-    .message-bubble.outgoing {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border-bottom-right-radius: 4px;
-    }
-
-    .message-time {
-        font-size: 0.75rem;
-        opacity: 0.7;
-        margin-top: 0.25rem;
-    }
-
-    .chat-input-area {
-        padding: 1.5rem;
-        border-top: 1px solid #e5e7eb;
-        background: white;
-    }
-
-    .chat-input-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-
-    .chat-input {
-        flex: 1;
-        padding: 0.875rem 1.125rem;
-        border: 1px solid #e5e7eb;
-        border-radius: 12px;
-        resize: none;
-        font-family: inherit;
-        transition: all 0.2s;
-    }
-
-    .chat-input:focus {
-        outline: none;
-        border-color: #8b5cf6;
-        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-    }
-
-    .chat-btn {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-        border: none;
-        background: #f3f4f6;
-        color: #6b7280;
-        cursor: pointer;
-        transition: all 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .chat-btn:hover {
-        background: #e5e7eb;
-        color: #111827;
-    }
-
-    .chat-btn-send {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        width: auto;
-        padding: 0 1.5rem;
-    }
-
-    .chat-btn-send:hover {
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        transform: translateY(-2px);
-    }
-
-    /* Client Info Panel */
-    .client-info {
-        width: 320px;
-        border-left: 1px solid #e5e7eb;
-        padding: 1.5rem;
-        overflow-y: auto;
-    }
-
-    .client-avatar-large {
-        width: 80px;
-        height: 80px;
-        border-radius: 16px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 2rem;
-        font-weight: 700;
-        margin: 0 auto 1rem;
-    }
-
-    .info-section {
-        background: #f9fafb;
-        padding: 1rem;
-        border-radius: 12px;
-        margin-bottom: 1rem;
-    }
-
-    .info-section h3 {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: #6b7280;
-        margin-bottom: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-
-    .info-field {
-        display: flex;
-        justify-content: space-between;
-        padding: 0.5rem 0;
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    .info-field:last-child {
-        border-bottom: none;
-    }
-
-    .info-label {
-        color: #6b7280;
-        font-size: 0.875rem;
-    }
-
-    .info-value {
-        color: #111827;
-        font-weight: 600;
-        font-size: 0.875rem;
-    }
-
-    /* Empty State */
-    .empty-state {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: #9ca3af;
-    }
-
-    .empty-state i {
-        font-size: 4rem;
-        margin-bottom: 1rem;
-        opacity: 0.3;
-    }
-
-    .empty-state h3 {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        color: #6b7280;
-    }
-
-    .empty-state p {
-        font-size: 0.875rem;
-    }
+@media (max-width: 1200px) { .chat-wrapper { grid-template-columns: 1fr; } .client-panel { display: none; } }
+@media (max-width: 768px) { .chat-wrapper { grid-template-columns: 1fr; } .clients-list { display: none; } }
 </style>
 
-<div class="chat-container">
-    <!-- Clients List -->
+<div class="chat-wrapper">
+    <!-- Список клиентов -->
     <div class="clients-list">
         <div class="clients-header">
             <h2>💬 Чаты</h2>
-            <div class="clients-search">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Поиск..." id="chatSearch" onkeyup="searchChats()">
+            <div style="position: relative; margin-top: 0.75rem;">
+                <i class="fas fa-search" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.7);"></i>
+                <input type="text" id="chatSearch" class="search-input" placeholder="Поиск..." onkeyup="searchChats()">
             </div>
         </div>
         
-        <div class="clients-list-scroll" id="clientsList">
+        <div class="clients-scroll" id="clientsList">
             {% if chats %}
                 {% for chat in chats %}
-                <div class="client-item {% if active_client == chat.instagram_id %}active{% endif %} {% if chat.is_pinned %}pinned{% endif %}"
-                     onclick="openChat('{{ chat.instagram_id }}')"
-                     data-client-id="{{ chat.instagram_id }}"
-                     data-name="{{ chat.name or chat.username or 'Клиент' }}">
-                    <div class="flex items-center gap-3">
-                        <div class="relative">
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center text-white font-bold overflow-hidden">
-                                {% if chat.profile_pic %}
-                                <img src="{{ chat.profile_pic }}" alt="{{ chat.name }}" class="w-full h-full object-cover">
-                                {% else %}
-                                <span>{{ chat.name[0] if chat.name else chat.username[0] if chat.username else '?' }}</span>
-                                {% endif %}
-                            </div>
-                            {% if chat.unread_count > 0 %}
-                            <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                                {{ chat.unread_count }}
-                            </span>
-                            {% endif %}
-                        </div>
-                        
-                        <div class="flex-1 min-w-0">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-sm font-semibold text-gray-900 truncate flex items-center gap-1">
-                                    {% if chat.is_pinned %}
-                                    <i class="fas fa-thumbtack text-amber-500"></i>
-                                    {% endif %}
-                                    {{ chat.display_name }}
-                                </span>
-                                <span class="text-xs text-gray-500">{{ chat.last_message_time }}</span>
-                            </div>
-                            <div class="text-xs text-gray-600 truncate">
-                                {{ chat.last_message[:40] }}...
-                            </div>
-                        </div>
+                <div class="client-item {% if active_client == chat.instagram_id %}active{% endif %}" 
+                     onclick="openChat('{{ chat.instagram_id }}')" data-client-id="{{ chat.instagram_id }}">
+                    <div class="avatar">
+                        {{ chat.name[0] if chat.name else chat.username[0] if chat.username else '?' }}
+                        {% if chat.unread_count > 0 %}
+                        <span class="unread-badge">{{ chat.unread_count }}</span>
+                        {% endif %}
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div class="client-name">{{ chat.name or chat.username or 'Клиент' }}</div>
+                        <div class="client-msg">{{ chat.last_message[:30] or 'Нет сообщений' }}</div>
                     </div>
                 </div>
                 {% endfor %}
             {% else %}
-                <div class="p-8 text-center text-gray-500">
-                    <i class="fas fa-comments text-6xl opacity-20 mb-4"></i>
-                    <p class="font-medium">Нет активных чатов</p>
+                <div style="text-align: center; padding: 2rem 1rem; color: #9ca3af;">
+                    <i class="fas fa-comments" style="font-size: 2rem; opacity: 0.3; margin-bottom: 0.5rem;"></i>
+                    <p style="font-size: 0.875rem;">Нет активных чатов</p>
                 </div>
             {% endif %}
         </div>
     </div>
 
-    <!-- Chat Area -->
+    <!-- Основной чат -->
     {% if active_client %}
-    <div class="chat-area">
+    <div class="chat-main">
         <div class="chat-header">
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center text-white font-bold overflow-hidden">
-                    {% if active_client_info.profile_pic %}
-                    <img src="{{ active_client_info.profile_pic }}" alt="{{ active_client_info.name }}" class="w-full h-full object-cover">
-                    {% else %}
-                    <span>{{ active_client_info.name[0] if active_client_info.name else '?' }}</span>
-                    {% endif %}
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div class="avatar" style="width: 40px; height: 40px;">
+                    {{ active_client_info.name[0] if active_client_info.name else '?' }}
                 </div>
                 <div>
-                    <h3 class="font-bold text-gray-900">
-                        {{ active_client_info.name or active_client_info.username or 'Клиент' }}
-                    </h3>
+                    <div style="font-weight: 600; color: #111827;">{{ active_client_info.name or 'Клиент' }}</div>
                     {% if active_client_info.phone %}
-                    <p class="text-sm text-gray-600">{{ active_client_info.phone }}</p>
+                    <div style="font-size: 0.75rem; color: #6b7280;">{{ active_client_info.phone }}</div>
                     {% endif %}
                 </div>
             </div>
-            <button class="chat-btn" onclick="toggleClientInfo()">
-                <i class="fas fa-info-circle"></i>
-            </button>
         </div>
 
         <div class="chat-messages" id="chatMessages">
             {% for message in messages %}
-            <div class="message-group {% if message.sender == 'bot' %}outgoing{% else %}incoming{% endif %}">
-                <div class="message-bubble {% if message.sender == 'bot' %}outgoing{% else %}incoming{% endif %}">
+            <div class="message-group {% if message.sender == 'bot' %}sent{% else %}received{% endif %}">
+                <div class="message-bubble {% if message.sender == 'bot' %}sent{% else %}received{% endif %}">
                     <div>{{ message.message }}</div>
                     <div class="message-time">{{ message.timestamp[11:16] }}</div>
                 </div>
@@ -399,85 +122,73 @@
             {% endfor %}
         </div>
 
-        <div class="chat-input-area">
-            <div class="chat-input-wrapper">
-                <button class="chat-btn" onclick="attachImage()" title="Фото">
-                    <i class="fas fa-image"></i>
-                </button>
+        <div class="chat-input">
+            <div class="input-wrapper">
                 <button class="chat-btn" onclick="attachFile()" title="Файл">
                     <i class="fas fa-paperclip"></i>
                 </button>
-                <textarea class="chat-input" id="messageInput" placeholder="Введите сообщение..." rows="1" onkeypress="handleKeyPress(event)"></textarea>
-                <button class="chat-btn chat-btn-send" onclick="sendMessage()">
-                    <i class="fas fa-paper-plane mr-2"></i> Отправить
+                <textarea id="messageInput" placeholder="Введите сообщение..." rows="1" onkeypress="handleKeyPress(event)"></textarea>
+                <button class="chat-btn btn-send" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
                 </button>
             </div>
-            <input type="file" id="fileInput" style="display: none;" accept=".pdf,.doc,.docx,.txt" onchange="handleFileSelect(event, false)">
-            <input type="file" id="imageInput" style="display: none;" accept="image/*" onchange="handleFileSelect(event, true)">
-        </div>
-    </div>
-
-    <!-- Client Info -->
-    <div class="client-info" id="clientInfoPanel">
-        <div class="text-center mb-6">
-            <div class="client-avatar-large">
-                {{ active_client_info.name[0] if active_client_info.name else '?' }}
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-1">
-                {{ active_client_info.name or 'Клиент' }}
-            </h3>
-            <p class="text-sm text-gray-600">@{{ active_client_info.username or active_client_info.instagram_id[:15] }}</p>
-        </div>
-
-        <div class="info-section">
-            <h3>Контакты</h3>
-            <div class="info-field">
-                <span class="info-label">Телефон:</span>
-                <span class="info-value">{{ active_client_info.phone or '-' }}</span>
-            </div>
-        </div>
-
-        <div class="info-section">
-            <h3>Статистика</h3>
-            <div class="info-field">
-                <span class="info-label">Сообщений:</span>
-                <span class="info-value">{{ active_client_info.total_messages }}</span>
-            </div>
-            <div class="info-field">
-                <span class="info-label">LTV:</span>
-                <span class="info-value text-green-600">{{ active_client_info.lifetime_value }} AED</span>
-            </div>
-        </div>
-
-        <div class="info-section">
-            <h3>Статус</h3>
-            <select class="w-full p-2 border border-gray-300 rounded-lg" id="clientStatus" onchange="updateClientStatus(this.value)">
-                {% for key, status in client_statuses.items() %}
-                <option value="{{ key }}" {% if active_client_info.status==key %}selected{% endif %}>
-                    {{ status.label }}
-                </option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <div class="info-section">
-            <h3>Заметки</h3>
-            <textarea class="w-full p-2 border border-gray-300 rounded-lg resize-none" id="clientNotes" rows="4" placeholder="Добавьте заметки..." onblur="saveNotes()">{{ active_client_info.notes or '' }}</textarea>
+            <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect(event)">
         </div>
     </div>
     {% else %}
-    <div class="chat-area">
-        <div class="empty-state">
-            <i class="fas fa-comment-dots"></i>
-            <h3>Выберите чат</h3>
-            <p>Выберите клиента из списка для начала общения</p>
+    <div class="chat-main" style="display: flex; align-items: center; justify-content: center;">
+        <div style="text-align: center; color: #9ca3af;">
+            <i class="fas fa-comment-dots" style="font-size: 3rem; opacity: 0.3; margin-bottom: 1rem;"></i>
+            <h3 style="font-size: 1.125rem; color: #6b7280; margin-bottom: 0.5rem;">Выберите чат</h3>
+            <p style="font-size: 0.875rem;">Выберите клиента из списка для начала общения</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Панель информации о клиенте -->
+    {% if active_client %}
+    <div class="client-panel">
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            <div class="avatar" style="width: 64px; height: 64px; margin: 0 auto 0.75rem; font-size: 1.5rem;">
+                {{ active_client_info.name[0] if active_client_info.name else '?' }}
+            </div>
+            <h3 style="font-weight: 700; color: #111827; margin-bottom: 0.25rem;">
+                {{ active_client_info.name or 'Клиент' }}
+            </h3>
+            {% if active_client_info.username %}
+            <p style="font-size: 0.875rem; color: #6b7280;">@{{ active_client_info.username }}</p>
+            {% endif %}
+        </div>
+
+        <div class="panel-section">
+            <h3>Контакты</h3>
+            <div class="panel-field">
+                <span style="color: #6b7280;">Телефон:</span>
+                <span style="font-weight: 600; color: #111827;">{{ active_client_info.phone or '-' }}</span>
+            </div>
+        </div>
+
+        <div class="panel-section">
+            <h3>Статистика</h3>
+            <div class="panel-field">
+                <span style="color: #6b7280;">Сообщений:</span>
+                <span style="font-weight: 600; color: #111827;">{{ active_client_info.total_messages }}</span>
+            </div>
+            <div class="panel-field">
+                <span style="color: #6b7280;">LTV:</span>
+                <span style="font-weight: 600; color: #10b981;">{{ active_client_info.lifetime_value }} AED</span>
+            </div>
+        </div>
+
+        <div class="panel-section">
+            <h3>Заметки</h3>
+            <textarea style="width: 100%; padding: 0.5rem; border: 1px solid #e5e7eb; border-radius: 6px; resize: none; font-size: 0.875rem;" 
+                      rows="4" id="clientNotes" onblur="saveNotes()">{{ active_client_info.notes or '' }}</textarea>
         </div>
     </div>
     {% endif %}
 </div>
-{% endblock %}
 
-{% block extra_scripts %}
 <script>
 const activeClient = '{{ active_client }}';
 
@@ -487,13 +198,11 @@ function openChat(clientId) {
 }
 
 function searchChats() {
-    const input = document.getElementById('chatSearch');
-    const filter = input.value.toUpperCase();
+    const filter = document.getElementById('chatSearch').value.toUpperCase();
     const items = document.querySelectorAll('.client-item');
-
     items.forEach(item => {
-        const text = item.textContent || item.innerText;
-        item.style.display = text.toUpperCase().indexOf(filter) > -1 ? '' : 'none';
+        const text = item.textContent.toUpperCase();
+        item.style.display = text.includes(filter) ? '' : 'none';
     });
 }
 
@@ -507,105 +216,62 @@ function handleKeyPress(event) {
 async function sendMessage() {
     const input = document.getElementById('messageInput');
     const message = input.value.trim();
-
     if (!message || !activeClient) return;
 
     try {
         const response = await fetch('/admin/api/chat/send', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                instagram_id: activeClient,
-                message: message
-            })
+            body: JSON.stringify({ instagram_id: activeClient, message: message })
         });
-
         const data = await response.json();
-
         if (data.success) {
             input.value = '';
             await loadMessages();
             showNotification('Сообщение отправлено', 'success');
-        } else {
-            showNotification('Ошибка отправки', 'error');
         }
     } catch (error) {
-        showNotification('Ошибка соединения', 'error');
+        showNotification('Ошибка отправки', 'error');
     }
 }
 
 async function loadMessages() {
     if (!activeClient) return;
-
     try {
         const response = await fetch(`/admin/api/chat/messages?client=${activeClient}`);
         const data = await response.json();
-
         if (data.messages) {
             const container = document.getElementById('chatMessages');
             container.innerHTML = '';
-
             data.messages.forEach(msg => {
-                const messageGroup = document.createElement('div');
-                messageGroup.className = `message-group ${msg.sender === 'bot' ? 'outgoing' : 'incoming'}`;
-                
-                messageGroup.innerHTML = `
-                    <div class="message-bubble ${msg.sender === 'bot' ? 'outgoing' : 'incoming'}">
+                const group = document.createElement('div');
+                group.className = `message-group ${msg.sender === 'bot' ? 'sent' : 'received'}`;
+                group.innerHTML = `
+                    <div class="message-bubble ${msg.sender === 'bot' ? 'sent' : 'received'}">
                         <div>${msg.message}</div>
                         <div class="message-time">${msg.timestamp.substring(11, 16)}</div>
                     </div>
                 `;
-                
-                container.appendChild(messageGroup);
+                container.appendChild(group);
             });
-
             container.scrollTop = container.scrollHeight;
         }
     } catch (error) {
-        console.error('Ошибка загрузки сообщений:', error);
-    }
-}
-
-function toggleClientInfo() {
-    const panel = document.getElementById('clientInfoPanel');
-    if (panel) {
-        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-    }
-}
-
-async function updateClientStatus(status) {
-    try {
-        const response = await fetch(`/admin/api/clients/${activeClient}/status`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status: status })
-        });
-
-        const data = await response.json();
-        if (data.success) {
-            showNotification('Статус обновлен', 'success');
-        }
-    } catch (error) {
-        showNotification('Ошибка обновления', 'error');
+        console.error('Ошибка загрузки:', error);
     }
 }
 
 async function saveNotes() {
     if (!activeClient) return;
-
     const notes = document.getElementById('clientNotes').value;
-
     try {
         const response = await fetch(`/admin/api/clients/${activeClient}/notes`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ notes: notes })
         });
-
         const data = await response.json();
-        if (data.success) {
-            showNotification('Заметки сохранены', 'success');
-        }
+        if (data.success) showNotification('Заметки сохранены', 'success');
     } catch (error) {
         showNotification('Ошибка сохранения', 'error');
     }
@@ -615,54 +281,20 @@ function attachFile() {
     document.getElementById('fileInput').click();
 }
 
-function attachImage() {
-    document.getElementById('imageInput').click();
-}
-
-async function handleFileSelect(event, isImage) {
+function handleFileSelect(event) {
     const file = event.target.files[0];
-    if (!file) return;
-
-    if (file.size > 10 * 1024 * 1024) {
-        showNotification('Файл слишком большой (макс 10MB)', 'error');
+    if (!file || file.size > 10 * 1024 * 1024) {
+        showNotification('Файл слишком большой', 'error');
         return;
     }
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('instagram_id', activeClient);
-    formData.append('is_image', isImage);
-
-    try {
-        const response = await fetch('/admin/api/chat/upload', {
-            method: 'POST',
-            body: formData
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            showNotification(isImage ? 'Картинка отправлена' : 'Файл отправлен', 'success');
-            await loadMessages();
-        } else {
-            showNotification('Ошибка загрузки', 'error');
-        }
-    } catch (error) {
-        showNotification('Ошибка загрузки', 'error');
-    }
-
-    event.target.value = '';
+    // Функция загрузки файла
 }
 
-// Auto scroll
 if (activeClient) {
-    const chatMessages = document.getElementById('chatMessages');
-    if (chatMessages) {
-        setTimeout(() => {
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }, 100);
-    }
-
+    setTimeout(() => {
+        const container = document.getElementById('chatMessages');
+        if (container) container.scrollTop = container.scrollHeight;
+    }, 100);
     setInterval(loadMessages, 3000);
 }
 </script>

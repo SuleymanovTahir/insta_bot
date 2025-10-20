@@ -1,188 +1,139 @@
 {% extends "admin/base.html" %}
 
 {% block title %}История сообщений - {{ salon_info.name }}{% endblock %}
-
 {% block nav_messages %}active{% endblock %}
 
 {% block content %}
-<div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900 mb-2">💬 История сообщений</h1>
-    <p class="text-gray-600">Все сообщения между ботом и клиентами</p>
+<div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2rem; font-weight: 700; color: #111827; margin-bottom: 0.5rem;">
+        💬 История сообщений
+    </h1>
+    <p style="color: #6b7280;">Все сообщения между ботом и клиентами</p>
 </div>
 
-<!-- Stats -->
-<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between mb-4">
-            <div>
-                <p class="text-sm text-gray-500 mb-1">От клиентов</p>
-                <h3 class="text-3xl font-bold text-blue-600">{{ stats.total_client_messages }}</h3>
-            </div>
-            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-user text-blue-600 text-xl"></i>
-            </div>
+<!-- Статистика -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="stat-card">
+        <div class="stat-card-icon" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe);">
+            <i class="fas fa-user" style="color: #1e40af; font-size: 1.5rem;"></i>
         </div>
+        <div class="stat-card-value" style="color: #111827;">{{ stats.total_client_messages }}</div>
+        <div class="stat-card-label" style="color: #6b7280;">От клиентов</div>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between mb-4">
-            <div>
-                <p class="text-sm text-gray-500 mb-1">От бота</p>
-                <h3 class="text-3xl font-bold text-green-600">{{ stats.total_bot_messages }}</h3>
-            </div>
-            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-robot text-green-600 text-xl"></i>
-            </div>
+    <div class="stat-card">
+        <div class="stat-card-icon" style="background: linear-gradient(135deg, #dcfce7, #bbf7d0);">
+            <i class="fas fa-robot" style="color: #15803d; font-size: 1.5rem;"></i>
         </div>
+        <div class="stat-card-value" style="color: #111827;">{{ stats.total_bot_messages }}</div>
+        <div class="stat-card-label" style="color: #6b7280;">От бота</div>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between mb-4">
-            <div>
-                <p class="text-sm text-gray-500 mb-1">Всего сообщений</p>
-                <h3 class="text-3xl font-bold text-gray-900">{{ stats.total_client_messages + stats.total_bot_messages }}</h3>
-            </div>
-            <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-comments text-gray-600 text-xl"></i>
-            </div>
+    <div class="stat-card">
+        <div class="stat-card-icon" style="background: linear-gradient(135deg, #e9d5ff, #ddd6fe);">
+            <i class="fas fa-comments" style="color: #7e22ce; font-size: 1.5rem;"></i>
         </div>
+        <div class="stat-card-value" style="color: #111827;">{{ stats.total_client_messages + stats.total_bot_messages }}</div>
+        <div class="stat-card-label" style="color: #6b7280;">Всего</div>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-        <div class="flex items-center justify-between mb-4">
-            <div>
-                <p class="text-sm text-gray-500 mb-1">Активных диалогов</p>
-                <h3 class="text-3xl font-bold text-purple-600">{{ stats.total_clients }}</h3>
-            </div>
-            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                <i class="fas fa-users text-purple-600 text-xl"></i>
-            </div>
+    <div class="stat-card">
+        <div class="stat-card-icon" style="background: linear-gradient(135deg, #fce7f3, #fbcfe8);">
+            <i class="fas fa-users" style="color: #be185d; font-size: 1.5rem;"></i>
         </div>
+        <div class="stat-card-value" style="color: #111827;">{{ stats.total_clients }}</div>
+        <div class="stat-card-label" style="color: #6b7280;">Активных диалогов</div>
     </div>
 </div>
 
-<!-- Search and Filter -->
-<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
-    <div class="flex flex-col md:flex-row gap-4">
-        <div class="flex-1 relative">
-            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-            <input type="text" 
-                   class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" 
-                   id="searchInput" 
-                   placeholder="🔍 Поиск по тексту сообщения..."
-                   onkeyup="searchTable()">
+<!-- Фильтры -->
+<div class="card" style="margin-bottom: 1.5rem;">
+    <div class="card-body">
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+            <div style="flex: 1; min-width: 200px; position: relative;">
+                <i class="fas fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #9ca3af;"></i>
+                <input type="text" id="searchInput" placeholder="🔍 Поиск сообщения..." 
+                       style="width: 100%; padding: 0.75rem 1rem 0.75rem 2.75rem; border: 1px solid #e5e7eb; border-radius: 0.75rem; font-size: 1rem;"
+                       onkeyup="searchTable()">
+            </div>
+            <select id="senderFilter" onchange="filterBySender()"
+                    style="padding: 0.75rem 1rem; border: 1px solid #e5e7eb; border-radius: 0.75rem; font-size: 1rem;">
+                <option value="all">Все сообщения</option>
+                <option value="client">От клиентов</option>
+                <option value="bot">От бота</option>
+            </select>
+            <a href="/admin/chat" class="btn btn-primary">
+                <i class="fas fa-comment-dots"></i> Открыть чат
+            </a>
         </div>
-
-        <select class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" 
-                id="senderFilter" 
-                onchange="filterBySender()">
-            <option value="all">Все сообщения</option>
-            <option value="client">От клиентов</option>
-            <option value="bot">От бота</option>
-        </select>
-
-        <button class="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all whitespace-nowrap" 
-                onclick="window.location.href='/admin/chat'">
-            <i class="fas fa-comment-dots mr-2"></i> Открыть чат
-        </button>
     </div>
 </div>
 
-<!-- Messages Table -->
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-    <div class="overflow-x-auto">
-        <table class="w-full" id="messagesTable">
-            <thead class="bg-gray-50 border-b border-gray-200">
-                <tr>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">ID</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">От кого</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Клиент</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Сообщение</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Время</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200">
-                {% if messages %}
+<!-- Таблица -->
+<div class="table-container">
+    <table class="table" id="messagesTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>От кого</th>
+                <th>Клиент</th>
+                <th>Сообщение</th>
+                <th>Время</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if messages %}
                 {% for message in messages %}
-                <tr class="hover:bg-gray-50 transition-colors" data-sender="{{ message[3] }}">
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900">#{{ message[0] }}</td>
-                    <td class="px-6 py-4">
+                <tr data-sender="{{ message[3] }}">
+                    <td style="font-weight: 600; color: #111827;">#{{ message[0] }}</td>
+                    <td>
                         {% if message[3] == 'client' %}
-                        <span class="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            <i class="fas fa-user mr-1"></i> Клиент
-                        </span>
+                            <span class="badge badge-info">
+                                <i class="fas fa-user"></i> Клиент
+                            </span>
                         {% else %}
-                        <span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            <i class="fas fa-robot mr-1"></i> Бот
-                        </span>
+                            <span class="badge badge-success">
+                                <i class="fas fa-robot"></i> Бот
+                            </span>
                         {% endif %}
                     </td>
-                    <td class="px-6 py-4">
-                        <small class="text-sm text-gray-600">{{ message[1][:20] }}...</small>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="max-w-md text-sm text-gray-900 truncate">
-                            {{ message[2] }}
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-600">{{ message[4] if message[4] else '-' }}</td>
+                    <td style="font-size: 0.875rem; color: #6b7280;">{{ message[1][:20] }}</td>
+                    <td style="max-width: 400px; overflow: hidden; text-overflow: ellipsis;">{{ message[2] }}</td>
+                    <td style="font-size: 0.875rem; color: #6b7280; white-space: nowrap;">{{ message[4] or '-' }}</td>
                 </tr>
                 {% endfor %}
-                {% else %}
-                <tr>
-                    <td colspan="5" class="px-6 py-20 text-center">
-                        <div class="flex flex-col items-center">
-                            <i class="fas fa-comments text-gray-300 text-6xl mb-4"></i>
-                            <h3 class="text-xl font-medium text-gray-900 mb-2">Нет сообщений</h3>
-                            <p class="text-gray-500">Сообщения появятся когда клиенты начнут общаться с ботом</p>
-                        </div>
-                    </td>
-                </tr>
-                {% endif %}
-            </tbody>
-        </table>
-    </div>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 3rem;">
+                    <i class="fas fa-comments" style="font-size: 2rem; color: #d1d5db; margin-bottom: 1rem;"></i>
+                    <p style="color: #6b7280;">Сообщения появятся когда клиенты начнут общаться</p>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
 </div>
-{% endblock %}
 
-{% block extra_scripts %}
 <script>
 function searchTable() {
-    const input = document.getElementById('searchInput');
-    const filter = input.value.toUpperCase();
-    const table = document.getElementById('messagesTable');
-    const tr = table.getElementsByTagName('tr');
-
-    for (let i = 1; i < tr.length; i++) {
-        const td = tr[i].getElementsByTagName('td');
-        let found = false;
-
-        for (let j = 0; j < td.length; j++) {
-            if (td[j]) {
-                const txtValue = td[j].textContent || td[j].innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    found = true;
-                    break;
-                }
-            }
-        }
-
-        tr[i].style.display = found ? '' : 'none';
+    const input = document.getElementById('searchInput').value.toUpperCase();
+    const rows = document.getElementById('messagesTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+    
+    for (let row of rows) {
+        const text = row.textContent.toUpperCase();
+        row.style.display = text.includes(input) ? '' : 'none';
     }
 }
 
 function filterBySender() {
-    const select = document.getElementById('senderFilter');
-    const sender = select.value;
-    const table = document.getElementById('messagesTable');
-    const tr = table.getElementsByTagName('tr');
-
-    for (let i = 1; i < tr.length; i++) {
+    const sender = document.getElementById('senderFilter').value;
+    const rows = document.getElementById('messagesTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+    
+    for (let row of rows) {
         if (sender === 'all') {
-            tr[i].style.display = '';
+            row.style.display = '';
         } else {
-            const rowSender = tr[i].getAttribute('data-sender');
-            tr[i].style.display = rowSender === sender ? '' : 'none';
+            row.style.display = row.dataset.sender === sender ? '' : 'none';
         }
     }
 }

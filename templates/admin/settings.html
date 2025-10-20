@@ -1,260 +1,135 @@
 {% extends "admin/base.html" %}
 
 {% block title %}Настройки - {{ salon_info.name }}{% endblock %}
-
 {% block nav_settings %}active{% endblock %}
 
 {% block content %}
-<!-- Header -->
-<div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-3">
-        <i class="fas fa-cog text-pink-600"></i>
-        Настройки системы
-    </h1>
-    <p class="text-gray-600">Управление параметрами CRM</p>
-</div>
+<!-- Заголовок -->
+<h1 style="font-size: 2rem; font-weight: 700; color: #111827; margin-bottom: 2rem;">
+    ⚙️ Настройки системы
+</h1>
 
-<!-- Tabs -->
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
-    <div class="border-b border-gray-200">
-        <nav class="flex -mb-px overflow-x-auto" aria-label="Tabs">
-            <button onclick="switchTab('general')" class="tab-button active px-6 py-4 border-b-2 border-transparent hover:border-pink-500 transition-colors" data-tab="general">
-                <i class="fas fa-globe mr-2"></i>
-                <span>Общие</span>
-            </button>
-            <button onclick="switchTab('bot')" class="tab-button px-6 py-4 border-b-2 border-transparent hover:border-pink-500 transition-colors" data-tab="bot">
-                <i class="fas fa-robot mr-2"></i>
-                <span>Бот</span>
-            </button>
-            <button onclick="switchTab('notifications')" class="tab-button px-6 py-4 border-b-2 border-transparent hover:border-pink-500 transition-colors" data-tab="notifications">
-                <i class="fas fa-bell mr-2"></i>
-                <span>Уведомления</span>
-            </button>
-            <button onclick="switchTab('security')" class="tab-button px-6 py-4 border-b-2 border-transparent hover:border-pink-500 transition-colors" data-tab="security">
-                <i class="fas fa-shield-alt mr-2"></i>
-                <span>Безопасность</span>
-            </button>
-        </nav>
+<!-- Вкладки -->
+<div class="card" style="margin-bottom: 2rem;">
+    <div style="display: flex; border-bottom: 1px solid #e5e7eb;">
+        <button onclick="showTab('general')" class="tab-btn active" style="padding: 1rem 1.5rem; border: none; background: none; font-weight: 600; color: #ec4899; border-bottom: 2px solid #ec4899; cursor: pointer;">
+            <i class="fas fa-globe" style="margin-right: 0.5rem;"></i> Общие
+        </button>
+        <button onclick="showTab('bot')" class="tab-btn" style="padding: 1rem 1.5rem; border: none; background: none; font-weight: 600; color: #6b7280; cursor: pointer; transition: all 0.2s;">
+            <i class="fas fa-robot" style="margin-right: 0.5rem;"></i> Бот
+        </button>
+        <button onclick="showTab('notifications')" class="tab-btn" style="padding: 1rem 1.5rem; border: none; background: none; font-weight: 600; color: #6b7280; cursor: pointer; transition: all 0.2s;">
+            <i class="fas fa-bell" style="margin-right: 0.5rem;"></i> Уведомления
+        </button>
+        <button onclick="showTab('security')" class="tab-btn" style="padding: 1rem 1.5rem; border: none; background: none; font-weight: 600; color: #6b7280; cursor: pointer; transition: all 0.2s;">
+            <i class="fas fa-shield-alt" style="margin-right: 0.5rem;"></i> Безопасность
+        </button>
     </div>
 
-    <!-- General Tab -->
-    <div id="tab-general" class="tab-content p-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Основные настройки</h2>
-        <form class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Название салона *</label>
-                    <input type="text" value="{{ salon_info.name }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Город</label>
-                    <input type="text" value="{{ salon_info.city }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
-                </div>
+    <!-- TAB: General -->
+    <div id="tab-general" class="card-body" style="display: block;">
+        <h2 style="font-size: 1.25rem; font-weight: 700; color: #111827; margin-bottom: 1.5rem;">
+            Основные параметры
+        </h2>
+        <form style="max-width: 600px;">
+            <div class="form-group">
+                <label class="form-label">Название салона *</label>
+                <input type="text" class="form-input" value="{{ salon_info.name }}" required>
             </div>
-            
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Адрес</label>
-                <input type="text" value="{{ salon_info.address }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+            <div class="form-group">
+                <label class="form-label">Город</label>
+                <input type="text" class="form-input" value="{{ salon_info.city or '' }}">
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Телефон</label>
-                    <input type="tel" value="{{ salon_info.phone }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Instagram</label>
-                    <input type="text" value="{{ salon_info.instagram }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
-                </div>
+            <div class="form-group">
+                <label class="form-label">Адрес</label>
+                <input type="text" class="form-input" value="{{ salon_info.address or '' }}">
             </div>
-
-            <button type="submit" class="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg transition-all">
-                <i class="fas fa-save mr-2"></i>Сохранить изменения
+            <div class="form-group">
+                <label class="form-label">Телефон</label>
+                <input type="tel" class="form-input" value="{{ salon_info.phone or '' }}">
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Сохранить
             </button>
         </form>
     </div>
 
-    <!-- Bot Tab -->
-    <div id="tab-bot" class="tab-content hidden p-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Настройки бота</h2>
-        <p class="text-gray-600 mb-6">Управление автоответами и поведением AI-ассистента</p>
-        
-        <div class="space-y-6">
-            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div class="flex items-center gap-3">
-                    <i class="fas fa-robot text-pink-600 text-xl"></i>
-                    <div>
-                        <p class="text-sm font-medium text-gray-900">Включить бота</p>
-                        <p class="text-xs text-gray-600">Автоматические ответы на сообщения</p>
-                    </div>
+    <!-- TAB: Bot -->
+    <div id="tab-bot" class="card-body" style="display: none;">
+        <h2 style="font-size: 1.25rem; font-weight: 700; color: #111827; margin-bottom: 1.5rem;">
+            Настройки бота
+        </h2>
+        <p style="color: #6b7280; margin-bottom: 1.5rem;">
+            Управление автоответами и поведением AI-ассистента
+        </p>
+        <div style="background: linear-gradient(135deg, #dbeafe, #bfdbfe); padding: 1rem; border-radius: 0.75rem; margin-bottom: 1.5rem;">
+            <p style="color: #1e40af; font-size: 0.875rem;">
+                <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>
+                Функция управления ботом находится в разработке
+            </p>
+        </div>
+    </div>
+
+    <!-- TAB: Notifications -->
+    <div id="tab-notifications" class="card-body" style="display: none;">
+        <h2 style="font-size: 1.25rem; font-weight: 700; color: #111827; margin-bottom: 1.5rem;">
+            Уведомления
+        </h2>
+        <div style="max-width: 600px; space-y: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f9fafb; border-radius: 0.75rem; margin-bottom: 1rem;">
+                <div>
+                    <div style="font-weight: 600; color: #111827;">Email уведомления</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">Получать на почту</div>
                 </div>
-                <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" checked class="sr-only peer">
-                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pink-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600"></div>
-                </label>
+                <input type="checkbox" checked style="width: 20px; height: 20px; cursor: pointer;">
             </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Приветственное сообщение</label>
-                <textarea class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent min-h-[100px]" placeholder="Здравствуйте! Спасибо за обращение..."></textarea>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f9fafb; border-radius: 0.75rem; margin-bottom: 1rem;">
+                <div>
+                    <div style="font-weight: 600; color: #111827;">SMS уведомления</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">Получать на телефон</div>
+                </div>
+                <input type="checkbox" style="width: 20px; height: 20px; cursor: pointer;">
             </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Часы работы</label>
-                <input type="text" value="9:00 - 21:00" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
-            </div>
-
-            <button class="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg transition-all">
-                <i class="fas fa-save mr-2"></i>Сохранить настройки бота
+            <button class="btn btn-primary">
+                <i class="fas fa-save"></i> Сохранить
             </button>
         </div>
     </div>
 
-    <!-- Notifications Tab -->
-    <div id="tab-notifications" class="tab-content hidden p-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Настройки уведомлений</h2>
-        
-        <div class="space-y-4 mb-8">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Каналы уведомлений</h3>
-
-            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div class="flex items-center gap-3">
-                    <i class="fas fa-envelope text-blue-600 text-xl"></i>
-                    <div>
-                        <p class="text-sm font-medium text-gray-900">Email уведомления</p>
-                        <p class="text-xs text-gray-600">Получать уведомления на почту</p>
-                    </div>
-                </div>
-                <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" checked class="sr-only peer">
-                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pink-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600"></div>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div class="flex items-center gap-3">
-                    <i class="fas fa-mobile-alt text-green-600 text-xl"></i>
-                    <div>
-                        <p class="text-sm font-medium text-gray-900">SMS уведомления</p>
-                        <p class="text-xs text-gray-600">Получать SMS на телефон</p>
-                    </div>
-                </div>
-                <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" class="sr-only peer">
-                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pink-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600"></div>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div class="flex items-center gap-3">
-                    <i class="fas fa-bell text-purple-600 text-xl"></i>
-                    <div>
-                        <p class="text-sm font-medium text-gray-900">Push уведомления</p>
-                        <p class="text-xs text-gray-600">Уведомления в браузере</p>
-                    </div>
-                </div>
-                <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" checked class="sr-only peer">
-                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pink-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600"></div>
-                </label>
-            </div>
-        </div>
-
-        <button class="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg transition-all">
-            <i class="fas fa-save mr-2"></i>Сохранить настройки уведомлений
-        </button>
-    </div>
-
-    <!-- Security Tab -->
-    <div id="tab-security" class="tab-content hidden p-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Безопасность и доступ</h2>
-        
-        <div class="p-6 bg-yellow-50 border border-yellow-200 rounded-lg mb-6">
-            <div class="flex items-start gap-3">
-                <i class="fas fa-shield-alt text-yellow-600 text-xl mt-1"></i>
-                <div>
-                    <h3 class="text-sm font-medium text-gray-900 mb-2">Рекомендации по безопасности</h3>
-                    <ul class="text-sm text-gray-700 space-y-2">
-                        <li>• Используйте сложные пароли (минимум 8 символов)</li>
-                        <li>• Регулярно меняйте пароли сотрудников</li>
-                        <li>• Не передавайте учетные данные третьим лицам</li>
-                        <li>• Проверяйте активные сессии пользователей</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="space-y-6">
-            <div>
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Управление сессиями</h3>
-                <p class="text-sm text-gray-600 mb-4">
-                    Просмотрите активные сессии пользователей и завершите подозрительные соединения
-                </p>
-                <button class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                    Просмотреть активные сессии
-                </button>
-            </div>
-
-            <div>
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Резервное копирование</h3>
-                <p class="text-sm text-gray-600 mb-4">
-                    Скачайте резервную копию всех данных системы
-                </p>
-                <button class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                    <i class="fas fa-download mr-2"></i>Скачать данные
-                </button>
-            </div>
+    <!-- TAB: Security -->
+    <div id="tab-security" class="card-body" style="display: none;">
+        <h2 style="font-size: 1.25rem; font-weight: 700; color: #111827; margin-bottom: 1.5rem;">
+            Безопасность
+        </h2>
+        <div style="background: linear-gradient(135deg, #fef3c7, #fde68a); padding: 1rem; border-radius: 0.75rem; margin-bottom: 1.5rem;">
+            <p style="color: #92400e; font-size: 0.875rem; margin-bottom: 0.75rem; font-weight: 600;">
+                <i class="fas fa-shield-alt" style="margin-right: 0.5rem;"></i>
+                Рекомендации по безопасности:
+            </p>
+            <ul style="color: #92400e; font-size: 0.875rem; margin-left: 1.5rem;">
+                <li>Используйте сложные пароли</li>
+                <li>Регулярно меняйте пароли</li>
+                <li>Проверяйте активные сессии</li>
+            </ul>
         </div>
     </div>
 </div>
 
-<style>
-.tab-button {
-    display: inline-flex;
-    align-items: center;
-    font-weight: 500;
-    color: #6b7280;
-    white-space: nowrap;
-}
-
-.tab-button:hover {
-    color: #ec4899;
-}
-
-.tab-button.active {
-    color: #ec4899;
-    border-bottom-color: #ec4899 !important;
-}
-
-.tab-content {
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
-}
-</style>
-
 <script>
-function switchTab(tabName) {
+function showTab(tabName) {
     // Hide all tabs
-    document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove('active');
+    document.querySelectorAll('[id^="tab-"]').forEach(el => el.style.display = 'none');
+    
+    // Reset all buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.style.color = '#6b7280';
+        btn.style.borderBottom = 'none';
     });
     
-    // Remove active from all buttons
-    document.querySelectorAll('.tab-button').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    
-    // Show selected tab
-    document.getElementById('tab-' + tabName).classList.add('active');
-    document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+    // Show selected tab and highlight button
+    document.getElementById('tab-' + tabName).style.display = 'block';
+    event.target.closest('.tab-btn').style.color = '#ec4899';
+    event.target.closest('.tab-btn').style.borderBottom = '2px solid #ec4899';
 }
-
-// Set first tab as active on load
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('tab-general').classList.add('active');
-});
 </script>
 {% endblock %}
