@@ -7,10 +7,173 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Градиенты для карточек */
+    .dashboard-card {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .dashboard-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .dashboard-card:hover::before {
+        opacity: 1;
+    }
+
+    /* Иконки карточек */
+    .card-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .dashboard-card:hover .card-icon {
+        transform: scale(1.1) rotate(-5deg);
+    }
+
+    /* Значения метрик */
+    .metric-value {
+        font-size: 2rem;
+        font-weight: 800;
+        line-height: 1;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* Изменения метрик */
+    .metric-change {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+
+    .metric-change.positive {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .metric-change.negative {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    /* Графики */
+    .chart-card {
+        background: white;
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+    }
+
+    .chart-card:hover {
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .chart-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 2px solid #f3f4f6;
+    }
+
+    .chart-icon-wrapper {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Списки активности */
+    .activity-item {
+        padding: 16px;
+        border-radius: 12px;
+        transition: all 0.2s ease;
+        border-left: 4px solid transparent;
+    }
+
+    .activity-item:hover {
+        background: #f9fafb;
+        border-left-color: #667eea;
+        transform: translateX(4px);
+    }
+
+    .activity-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #ec4899, #8b5cf6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 1.125rem;
+    }
+
+    /* Анимация загрузки */
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    .loading-shimmer {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .loading-shimmer::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        animation: shimmer 2s infinite;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
+<!-- Header -->
 <div class="mb-8">
     <h1 class="text-4xl font-bold text-gray-900 mb-2">
-        <span class="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Панель управления</span>
+        <span class="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            Панель управления
+        </span>
     </h1>
     <p class="text-lg text-gray-600">Добро пожаловать в CRM-систему салона красоты</p>
 </div>
@@ -18,80 +181,80 @@
 <!-- Stats Cards -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <!-- Total Clients -->
-    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+    <div class="dashboard-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-                <i class="fas fa-users text-white text-xl"></i>
+            <div class="card-icon bg-gradient-to-br from-blue-100 to-blue-200">
+                <i class="fas fa-users text-blue-600 text-xl"></i>
             </div>
             <div class="text-right">
-                <div class="text-3xl font-bold text-gray-900">{{ stats.total_clients }}</div>
+                <div class="metric-value text-gray-900">{{ stats.total_clients }}</div>
                 <div class="text-sm text-gray-500 mt-1">Клиентов</div>
             </div>
         </div>
         <div class="flex items-center text-sm">
-            <span class="text-green-600 flex items-center gap-1">
+            <span class="metric-change positive">
                 <i class="fas fa-arrow-up"></i>
-                <span class="font-semibold">+12%</span>
+                <span>+12%</span>
             </span>
             <span class="text-gray-500 ml-2">за месяц</span>
         </div>
     </div>
 
     <!-- Total Bookings -->
-    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+    <div class="dashboard-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center">
-                <i class="fas fa-calendar-check text-white text-xl"></i>
+            <div class="card-icon bg-gradient-to-br from-pink-100 to-pink-200">
+                <i class="fas fa-calendar-check text-pink-600 text-xl"></i>
             </div>
             <div class="text-right">
-                <div class="text-3xl font-bold text-gray-900">{{ stats.total_bookings }}</div>
+                <div class="metric-value text-gray-900">{{ stats.total_bookings }}</div>
                 <div class="text-sm text-gray-500 mt-1">Записей</div>
             </div>
         </div>
         <div class="flex items-center text-sm">
-            <span class="text-green-600 flex items-center gap-1">
+            <span class="metric-change positive">
                 <i class="fas fa-arrow-up"></i>
-                <span class="font-semibold">+8%</span>
+                <span>+8%</span>
             </span>
             <span class="text-gray-500 ml-2">за месяц</span>
         </div>
     </div>
 
     <!-- Completed -->
-    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+    <div class="dashboard-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
-                <i class="fas fa-check-circle text-white text-xl"></i>
+            <div class="card-icon bg-gradient-to-br from-green-100 to-green-200">
+                <i class="fas fa-check-circle text-green-600 text-xl"></i>
             </div>
             <div class="text-right">
-                <div class="text-3xl font-bold text-gray-900">{{ stats.completed_bookings }}</div>
+                <div class="metric-value text-gray-900">{{ stats.completed_bookings }}</div>
                 <div class="text-sm text-gray-500 mt-1">Завершено</div>
             </div>
         </div>
         <div class="flex items-center text-sm">
-            <span class="text-green-600 flex items-center gap-1">
+            <span class="metric-change positive">
                 <i class="fas fa-arrow-up"></i>
-                <span class="font-semibold">+15%</span>
+                <span>+15%</span>
             </span>
             <span class="text-gray-500 ml-2">за месяц</span>
         </div>
     </div>
 
     <!-- Conversion -->
-    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+    <div class="dashboard-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
-                <i class="fas fa-percentage text-white text-xl"></i>
+            <div class="card-icon bg-gradient-to-br from-purple-100 to-purple-200">
+                <i class="fas fa-percentage text-purple-600 text-xl"></i>
             </div>
             <div class="text-right">
-                <div class="text-3xl font-bold text-gray-900">{{ stats.conversion_rate }}%</div>
+                <div class="metric-value text-gray-900">{{ stats.conversion_rate }}%</div>
                 <div class="text-sm text-gray-500 mt-1">Конверсия</div>
             </div>
         </div>
         <div class="flex items-center text-sm">
-            <span class="text-green-600 flex items-center gap-1">
+            <span class="metric-change positive">
                 <i class="fas fa-arrow-up"></i>
-                <span class="font-semibold">+3%</span>
+                <span>+3%</span>
             </span>
             <span class="text-gray-500 ml-2">за месяц</span>
         </div>
@@ -101,12 +264,12 @@
 <!-- Charts Row -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
     <!-- Bookings Chart -->
-    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
-                <i class="fas fa-chart-line text-pink-500"></i>
-                Записи за 30 дней
-            </h2>
+    <div class="chart-card">
+        <div class="chart-header">
+            <div class="chart-icon-wrapper">
+                <i class="fas fa-chart-line text-white"></i>
+            </div>
+            <h2 class="text-xl font-bold text-gray-900">Записи за 30 дней</h2>
         </div>
         <div style="height: 300px; position: relative;">
             <canvas id="bookingsChart"></canvas>
@@ -114,12 +277,12 @@
     </div>
 
     <!-- Services Chart -->
-    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
-                <i class="fas fa-chart-pie text-purple-500"></i>
-                Популярные услуги
-            </h2>
+    <div class="chart-card">
+        <div class="chart-header">
+            <div class="chart-icon-wrapper">
+                <i class="fas fa-chart-pie text-white"></i>
+            </div>
+            <h2 class="text-xl font-bold text-gray-900">Популярные услуги</h2>
         </div>
         <div style="height: 300px; position: relative;">
             <canvas id="servicesChart"></canvas>
@@ -139,9 +302,9 @@
         </div>
         <div class="divide-y divide-gray-100">
             {% for client in recent_clients %}
-            <div class="p-4 hover:bg-gray-50 transition-colors">
+            <div class="activity-item">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
+                    <div class="activity-avatar">
                         {{ client[3][0] if client[3] else '?' }}
                     </div>
                     <div class="flex-1 min-w-0">
@@ -173,7 +336,7 @@
         </div>
         <div class="divide-y divide-gray-100">
             {% for booking in recent_bookings %}
-            <div class="p-4 hover:bg-gray-50 transition-colors">
+            <div class="activity-item">
                 <div class="flex items-center justify-between">
                     <div>
                         <div class="font-semibold text-gray-900">{{ booking[2] }}</div>
@@ -203,7 +366,13 @@ if (bookingsCtx) {
                 label: 'Записи',
                 data: {{ analytics.bookings_by_day | map(attribute=1) | list | tojson }},
                 borderColor: '#ec4899',
-                backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                backgroundColor: (context) => {
+                    const ctx = context.chart.ctx;
+                    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+                    gradient.addColorStop(0, 'rgba(236, 72, 153, 0.3)');
+                    gradient.addColorStop(1, 'rgba(236, 72, 153, 0.01)');
+                    return gradient;
+                },
                 tension: 0.4,
                 fill: true,
                 borderWidth: 3,

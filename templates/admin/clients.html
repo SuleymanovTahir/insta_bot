@@ -4,6 +4,151 @@
 
 {% block nav_clients %}active{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Улучшенные карточки клиентов */
+    .client-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid #e5e7eb;
+    }
+
+    .client-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        border-color: #ec4899;
+    }
+
+    /* Аватар клиента с градиентом */
+    .client-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #ec4899, #8b5cf6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 1.25rem;
+        transition: all 0.3s ease;
+    }
+
+    .client-card:hover .client-avatar {
+        transform: scale(1.1) rotate(-5deg);
+    }
+
+    /* Статусы клиентов */
+    .client-status {
+        padding: 0.375rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+    }
+
+    .status-new {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-lead {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .status-customer {
+        background: #f3e8ff;
+        color: #6b21a8;
+    }
+
+    .status-vip {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-inactive {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    /* Иконка закрепления */
+    .pin-icon {
+        color: #f59e0b;
+        font-size: 0.875rem;
+        margin-left: 0.375rem;
+    }
+
+    /* Кнопки действий */
+    .client-action-btn {
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .client-action-btn:hover {
+        transform: scale(1.1);
+    }
+
+    .btn-view {
+        color: #2563eb;
+        background: #eff6ff;
+    }
+
+    .btn-view:hover {
+        background: #dbeafe;
+    }
+
+    .btn-chat {
+        color: #059669;
+        background: #d1fae5;
+    }
+
+    .btn-chat:hover {
+        background: #a7f3d0;
+    }
+
+    /* Таблица клиентов */
+    .clients-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .clients-table thead th {
+        background: #f9fafb;
+        padding: 1rem 1.5rem;
+        text-align: left;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #6b7280;
+        border-bottom: 2px solid #e5e7eb;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .clients-table tbody tr {
+        transition: all 0.2s ease;
+    }
+
+    .clients-table tbody tr:hover {
+        background: #f9fafb;
+    }
+
+    .clients-table tbody td {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #f3f4f6;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="mb-8">
     <h1 class="text-3xl font-bold text-gray-900 mb-2">👥 Управление клиентами</h1>
@@ -92,67 +237,62 @@
 <!-- Clients Table -->
 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
     <div class="overflow-x-auto">
-        <table class="w-full" id="clientsTable">
-            <thead class="bg-gray-50 border-b border-gray-200">
+        <table class="clients-table" id="clientsTable">
+            <thead>
                 <tr>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Клиент</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Телефон</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Instagram</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Статус</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Сообщений</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">LTV</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Последний контакт</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Действия</th>
+                    <th>Клиент</th>
+                    <th>Телефон</th>
+                    <th>Instagram</th>
+                    <th>Статус</th>
+                    <th>Сообщений</th>
+                    <th>LTV</th>
+                    <th>Последний контакт</th>
+                    <th>Действия</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200">
+            <tbody>
                 {% if clients %}
                 {% for client in clients %}
-                <tr class="hover:bg-gray-50 transition-colors" data-status="{{ client[8] }}">
-                    <td class="px-6 py-4">
+                <tr data-status="{{ client[8] }}">
+                    <td>
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                            <div class="client-avatar">
                                 {{ client[3][0] if client[3] else client[1][0] if client[1] else '?' }}
                             </div>
                             <div>
                                 <strong class="text-sm font-medium text-gray-900">{{ get_client_display_name(client) }}</strong>
                                 {% if client|length > 12 and client[12] %}
-                                <i class="fas fa-thumbtack text-amber-500 ml-1" title="Закреплен"></i>
+                                <i class="pin-icon fas fa-thumbtack" title="Закреплен"></i>
                                 {% endif %}
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-sm text-gray-600">{{ client[2] or '-' }}</td>
-                    <td class="px-6 py-4">
+                    <td class="text-sm text-gray-600">{{ client[2] or '-' }}</td>
+                    <td>
                         {% if client[1] %}
-                        <a href="https://instagram.com/{{ client[1] }}" target="_blank" class="text-sm text-blue-600 hover:text-blue-800">
+                        <a href="https://instagram.com/{{ client[1] }}" target="_blank" class="text-sm text-blue-600 hover:text-blue-800 hover:underline">
                             @{{ client[1] }}
                         </a>
                         {% else %}
                         <span class="text-sm text-gray-400">{{ client[0][:15] }}...</span>
                         {% endif %}
                     </td>
-                    <td class="px-6 py-4">
-                        <span class="px-3 py-1 rounded-full text-xs font-medium
-                                     {% if client[8] == 'new' %}bg-green-100 text-green-800
-                                     {% elif client[8] == 'lead' %}bg-blue-100 text-blue-800
-                                     {% elif client[8] == 'customer' %}bg-purple-100 text-purple-800
-                                     {% elif client[8] == 'vip' %}bg-amber-100 text-amber-800
-                                     {% else %}bg-red-100 text-red-800{% endif %}">
+                    <td>
+                        <span class="client-status status-{{ client[8] }}">
                             {{ client_statuses[client[8]].label if client[8] in client_statuses else client[8] }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 text-sm text-gray-900">{{ client[6] }}</td>
-                    <td class="px-6 py-4 text-sm font-medium text-green-600">{{ client[9] }} AED</td>
-                    <td class="px-6 py-4 text-sm text-gray-600">{{ client[5][:16] if client[5] else '-' }}</td>
-                    <td class="px-6 py-4">
+                    <td class="text-sm text-gray-900 font-medium">{{ client[6] }}</td>
+                    <td class="text-sm font-medium text-green-600">{{ client[9] }} AED</td>
+                    <td class="text-sm text-gray-600">{{ client[5][:16] if client[5] else '-' }}</td>
+                    <td>
                         <div class="flex items-center gap-2">
-                            <button class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" 
+                            <button class="client-action-btn btn-view" 
                                     onclick="viewClient('{{ client[0] }}')" 
                                     title="Просмотр">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            <button class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors" 
+                            <button class="client-action-btn btn-chat" 
                                     onclick="openChat('{{ client[0] }}')" 
                                     title="Чат">
                                 <i class="fas fa-comment"></i>
@@ -201,22 +341,6 @@
             }
 
             tr[i].style.display = found ? '' : 'none';
-        }
-    }
-
-    function filterByStatus() {
-        const select = document.getElementById('statusFilter');
-        const status = select.value;
-        const table = document.getElementById('clientsTable');
-        const tr = table.getElementsByTagName('tr');
-
-        for (let i = 1; i < tr.length; i++) {
-            if (status === 'all') {
-                tr[i].style.display = '';
-            } else {
-                const rowStatus = tr[i].getAttribute('data-status');
-                tr[i].style.display = rowStatus === status ? '' : 'none';
-            }
         }
     }
 

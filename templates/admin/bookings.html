@@ -4,6 +4,199 @@
 
 {% block nav_bookings %}active{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Улучшенные карточки статистики */
+    .stat-card-modern {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .stat-card-modern::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .stat-card-modern:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .stat-card-modern:hover::before {
+        opacity: 1;
+    }
+
+    /* Модальное окно */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        max-width: 42rem;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        transform: scale(0.9);
+        transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.active .modal-content {
+        transform: scale(1);
+    }
+
+    /* Таблица */
+    .bookings-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .bookings-table thead th {
+        background: #f9fafb;
+        padding: 1rem 1.5rem;
+        text-align: left;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #6b7280;
+        border-bottom: 2px solid #e5e7eb;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .bookings-table tbody tr {
+        transition: all 0.2s ease;
+    }
+
+    .bookings-table tbody tr:hover {
+        background: #f9fafb;
+    }
+
+    .bookings-table tbody td {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    /* Аватар клиента */
+    .client-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #ec4899, #8b5cf6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 1.125rem;
+    }
+
+    /* Статус селект */
+    .status-select {
+        padding: 0.5rem 0.75rem;
+        border-radius: 9999px;
+        border: none;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .status-select:focus {
+        outline: none;
+        ring: 2px;
+        ring-offset: 2px;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-confirmed {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .status-completed {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .status-cancelled {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    /* Кнопки действий */
+    .action-btn {
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .action-btn:hover {
+        transform: scale(1.1);
+    }
+
+    .action-btn-view {
+        color: #2563eb;
+        background: #eff6ff;
+    }
+
+    .action-btn-view:hover {
+        background: #dbeafe;
+    }
+
+    .action-btn-contact {
+        color: #059669;
+        background: #d1fae5;
+    }
+
+    .action-btn-contact:hover {
+        background: #a7f3d0;
+    }
+
+    .action-btn-delete {
+        color: #dc2626;
+        background: #fee2e2;
+    }
+
+    .action-btn-delete:hover {
+        background: #fecaca;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Header -->
 <div class="mb-8">
@@ -13,7 +206,7 @@
 
 <!-- Stats Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+    <div class="stat-card-modern bg-white p-6 rounded-xl shadow-sm border border-gray-200">
         <div class="flex items-center justify-between mb-4">
             <div>
                 <p class="text-sm text-gray-500 mb-1">Ожидают подтверждения</p>
@@ -25,7 +218,7 @@
         </div>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+    <div class="stat-card-modern bg-white p-6 rounded-xl shadow-sm border border-gray-200">
         <div class="flex items-center justify-between mb-4">
             <div>
                 <p class="text-sm text-gray-500 mb-1">Завершенных</p>
@@ -37,7 +230,7 @@
         </div>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+    <div class="stat-card-modern bg-white p-6 rounded-xl shadow-sm border border-gray-200">
         <div class="flex items-center justify-between mb-4">
             <div>
                 <p class="text-sm text-gray-500 mb-1">Всего записей</p>
@@ -49,7 +242,7 @@
         </div>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+    <div class="stat-card-modern bg-white p-6 rounded-xl shadow-sm border border-gray-200">
         <div class="flex items-center justify-between mb-4">
             <div>
                 <p class="text-sm text-gray-500 mb-1">Общий доход</p>
@@ -95,27 +288,27 @@
 <!-- Bookings Table -->
 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
     <div class="overflow-x-auto">
-        <table class="w-full" id="bookingsTable">
-            <thead class="bg-gray-50 border-b border-gray-200">
+        <table class="bookings-table" id="bookingsTable">
+            <thead>
                 <tr>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">ID</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Клиент</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Услуга</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Дата и время</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Телефон</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Статус</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Создано</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-gray-600">Действия</th>
+                    <th>ID</th>
+                    <th>Клиент</th>
+                    <th>Услуга</th>
+                    <th>Дата и время</th>
+                    <th>Телефон</th>
+                    <th>Статус</th>
+                    <th>Создано</th>
+                    <th>Действия</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200">
+            <tbody>
                 {% if bookings %}
                 {% for booking in bookings %}
-                <tr class="hover:bg-gray-50 transition-colors" data-status="{{ booking[6] }}">
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900">#{{ booking[0] }}</td>
-                    <td class="px-6 py-4">
+                <tr data-status="{{ booking[6] }}">
+                    <td class="text-sm font-medium text-gray-900">#{{ booking[0] }}</td>
+                    <td>
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                            <div class="client-avatar">
                                 {{ booking[5][0] if booking[5] else '?' }}
                             </div>
                             <div>
@@ -124,15 +317,11 @@
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ booking[2] }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-600">{{ booking[3] }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-600">{{ booking[4] }}</td>
-                    <td class="px-6 py-4">
-                        <select class="px-3 py-1 rounded-full text-xs font-medium border-none cursor-pointer
-                                       {% if booking[6] == 'pending' %}bg-yellow-100 text-yellow-800
-                                       {% elif booking[6] == 'confirmed' %}bg-green-100 text-green-800
-                                       {% elif booking[6] == 'completed' %}bg-blue-100 text-blue-800
-                                       {% else %}bg-red-100 text-red-800{% endif %}" 
+                    <td class="text-sm font-medium text-gray-900">{{ booking[2] }}</td>
+                    <td class="text-sm text-gray-600">{{ booking[3] }}</td>
+                    <td class="text-sm text-gray-600">{{ booking[4] }}</td>
+                    <td>
+                        <select class="status-select status-{{ booking[6] }}" 
                                 onchange="changeStatus({{ booking[0] }}, this.value)">
                             <option value="pending" {% if booking[6]=='pending' %}selected{% endif %}>Ожидает</option>
                             <option value="confirmed" {% if booking[6]=='confirmed' %}selected{% endif %}>Подтвержден</option>
@@ -140,20 +329,20 @@
                             <option value="cancelled" {% if booking[6]=='cancelled' %}selected{% endif %}>Отменен</option>
                         </select>
                     </td>
-                    <td class="px-6 py-4 text-sm text-gray-600">{{ booking[7][:16] if booking[7] else '-' }}</td>
-                    <td class="px-6 py-4">
+                    <td class="text-sm text-gray-600">{{ booking[7][:16] if booking[7] else '-' }}</td>
+                    <td>
                         <div class="flex items-center gap-2">
-                            <button class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" 
+                            <button class="action-btn action-btn-view" 
                                     onclick="viewBooking({{ booking[0] }})" 
                                     title="Просмотр">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            <button class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors" 
+                            <button class="action-btn action-btn-contact" 
                                     onclick="contactClient('{{ booking[1] }}')" 
                                     title="Связаться">
                                 <i class="fas fa-comment"></i>
                             </button>
-                            <button class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" 
+                            <button class="action-btn action-btn-delete" 
                                     onclick="deleteBooking({{ booking[0] }})" 
                                     title="Удалить">
                                 <i class="fas fa-trash"></i>
@@ -179,11 +368,11 @@
 </div>
 
 <!-- Modal для добавления записи -->
-<div class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50" id="addBookingModal">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full m-4 max-h-[90vh] overflow-y-auto">
+<div class="modal-overlay" id="addBookingModal">
+    <div class="modal-content">
         <div class="p-6 border-b border-gray-200 flex items-center justify-between">
             <h2 class="text-2xl font-bold text-gray-900">Добавить запись</h2>
-            <button onclick="closeBookingModal()" class="text-gray-400 hover:text-gray-600">
+            <button onclick="closeBookingModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
                 <i class="fas fa-times text-xl"></i>
             </button>
         </div>
@@ -348,15 +537,15 @@
     }
     
     function addBooking() {
-        document.getElementById('addBookingModal').classList.remove('hidden');
-        document.getElementById('addBookingModal').classList.add('flex');
+        const modal = document.getElementById('addBookingModal');
+        modal.classList.add('active');
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('bookingDate').value = today;
     }
 
     function closeBookingModal() {
-        document.getElementById('addBookingModal').classList.add('hidden');
-        document.getElementById('addBookingModal').classList.remove('flex');
+        const modal = document.getElementById('addBookingModal');
+        modal.classList.remove('active');
         document.getElementById('addBookingForm').reset();
     }
 
@@ -402,6 +591,7 @@
         }
     }
 
+    // Закрытие модального окна при клике вне его
     window.onclick = function (event) {
         const modal = document.getElementById('addBookingModal');
         if (event.target === modal) {
