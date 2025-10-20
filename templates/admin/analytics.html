@@ -8,458 +8,237 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock %}
 
-{% block extra_css %}
-<style>
-    /* Градиенты для карточек статистики */
-    .stat-card-gradient-1 {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-    
-    .stat-card-gradient-2 {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    }
-    
-    .stat-card-gradient-3 {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    }
-    
-    .stat-card-gradient-4 {
-        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    }
-
-    /* Улучшенная карточка статистики */
-    .stat-card-modern {
-        position: relative;
-        overflow: hidden;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .stat-card-modern::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-        opacity: 0;
-        transition: opacity 0.4s ease;
-    }
-
-    .stat-card-modern:hover {
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-    }
-
-    .stat-card-modern:hover::before {
-        opacity: 1;
-    }
-
-    /* Иконка статистики */
-    .stat-icon {
-        width: 60px;
-        height: 60px;
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(10px);
-        transition: all 0.3s ease;
-    }
-
-    .stat-card-modern:hover .stat-icon {
-        transform: scale(1.1) rotate(5deg);
-    }
-
-    /* Числа с анимацией */
-    .stat-value {
-        font-size: 2.5rem;
-        font-weight: 800;
-        line-height: 1;
-        color: white;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    /* Процент изменения */
-    .stat-change {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        padding: 4px 12px;
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(10px);
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: white;
-    }
-
-    /* Графики с тенью */
-    .chart-container {
-        position: relative;
-        background: white;
-        border-radius: 20px;
-        padding: 24px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
-    }
-
-    .chart-container:hover {
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-        transform: translateY(-4px);
-    }
-
-    .chart-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 24px;
-        padding-bottom: 16px;
-        border-bottom: 2px solid #f3f4f6;
-    }
-
-    .chart-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 12px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-    }
-
-    /* Фильтры */
-    .filter-bar {
-        background: white;
-        border-radius: 20px;
-        padding: 20px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        margin-bottom: 24px;
-    }
-
-    .filter-select {
-        padding: 12px 16px;
-        border: 2px solid #e5e7eb;
-        border-radius: 12px;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        background: white;
-    }
-
-    .filter-select:hover {
-        border-color: #667eea;
-    }
-
-    .filter-select:focus {
-        outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-    }
-
-    /* Кнопка экспорта */
-    .export-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        padding: 12px 24px;
-        border-radius: 12px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        border: none;
-        cursor: pointer;
-    }
-
-    .export-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    /* Таблица детализации */
-    .detail-table {
-        background: white;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    }
-
-    .detail-table table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .detail-table th {
-        background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
-        padding: 16px;
-        text-align: left;
-        font-weight: 600;
-        color: #374151;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 0.05em;
-    }
-
-    .detail-table td {
-        padding: 16px;
-        border-top: 1px solid #f3f4f6;
-        transition: all 0.2s ease;
-    }
-
-    .detail-table tr:hover td {
-        background: #f9fafb;
-    }
-
-    /* Прогресс бар */
-    .progress-bar {
-        height: 8px;
-        background: #e5e7eb;
-        border-radius: 10px;
-        overflow: hidden;
-        position: relative;
-    }
-
-    .progress-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #667eea, #764ba2);
-        border-radius: 10px;
-        transition: width 1s ease;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .progress-fill::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-        animation: shimmer 2s infinite;
-    }
-
-    @keyframes shimmer {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100%); }
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<!-- Header -->
-<div class="mb-8">
-    <h1 class="text-4xl font-bold text-gray-900 mb-2 flex items-center gap-3">
-        <span class="text-5xl">📊</span>
-        Аналитика и отчеты
-    </h1>
-    <p class="text-gray-600 text-lg">Детальный анализ работы салона</p>
-</div>
-
-<!-- Filters -->
-<div class="filter-bar">
-    <div class="flex flex-col md:flex-row gap-4 items-center">
-        <select class="filter-select flex-1" id="periodSelect" onchange="changePeriod()">
-            <option value="7">📅 Неделя</option>
-            <option value="14">📅 2 недели</option>
-            <option value="30" selected>📅 Месяц</option>
-            <option value="90">📅 3 месяца</option>
-            <option value="custom">🗓️ Свой период</option>
-        </select>
-
-        <input type="date" class="filter-select" id="dateFrom" style="display:none;" onchange="updateCustomPeriod()">
-        <input type="date" class="filter-select" id="dateTo" style="display:none;" onchange="updateCustomPeriod()">
-
-        <button class="export-btn" onclick="refreshData()">
-            <i class="fas fa-sync mr-2"></i> Обновить
-        </button>
-
-        <select class="filter-select" id="exportFormat">
-            <option value="">Экспорт...</option>
-            <option value="csv">📄 CSV</option>
-            <option value="excel">📊 Excel (XLSX)</option>
-            <option value="pdf">📕 PDF</option>
-        </select>
-
-        <button class="export-btn" onclick="exportReport()">
-            <i class="fas fa-download mr-2"></i> Скачать
-        </button>
+<div class="p-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-4xl font-semibold text-gray-900 mb-2 flex items-center gap-3">
+            <span class="text-5xl">📊</span>
+            Аналитика и отчеты
+        </h1>
+        <p class="text-gray-600 text-lg">Детальный анализ работы салона</p>
     </div>
-</div>
 
-<!-- Stats Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <!-- Конверсия -->
-    <div class="stat-card-modern stat-card-gradient-1 rounded-2xl p-6 shadow-xl">
-        <div class="flex items-start justify-between mb-4">
-            <div class="stat-icon">
-                <i class="fas fa-chart-line text-white text-2xl"></i>
-            </div>
-        </div>
-        <div class="stat-value mb-2">{{ stats.conversion_rate }}%</div>
-        <p class="text-white/90 text-sm font-medium mb-3">Конверсия</p>
-        <div class="stat-change">
-            <i class="fas fa-arrow-up"></i>
-            <span>+2.3%</span>
+    <!-- Filters -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
+        <div class="flex flex-col md:flex-row gap-4 items-center">
+            <select class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all" id="periodSelect" onchange="changePeriod()">
+                <option value="7">📅 Неделя</option>
+                <option value="14">📅 2 недели</option>
+                <option value="30" selected>📅 Месяц</option>
+                <option value="90">📅 3 месяца</option>
+                <option value="custom">🗓️ Свой период</option>
+            </select>
+
+            <input type="date" class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all" id="dateFrom" style="display:none;" onchange="updateCustomPeriod()">
+            <input type="date" class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all" id="dateTo" style="display:none;" onchange="updateCustomPeriod()">
+
+            <button class="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all whitespace-nowrap" onclick="refreshData()">
+                <i class="fas fa-sync mr-2"></i> Обновить
+            </button>
+
+            <select class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all" id="exportFormat">
+                <option value="">Экспорт...</option>
+                <option value="csv">📄 CSV</option>
+                <option value="excel">📊 Excel (XLSX)</option>
+                <option value="pdf">📕 PDF</option>
+            </select>
+
+            <button class="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all whitespace-nowrap" onclick="exportReport()">
+                <i class="fas fa-download mr-2"></i> Скачать
+            </button>
         </div>
     </div>
 
-    <!-- Время ответа -->
-    <div class="stat-card-modern stat-card-gradient-2 rounded-2xl p-6 shadow-xl">
-        <div class="flex items-start justify-between mb-4">
-            <div class="stat-icon">
-                <i class="fas fa-clock text-white text-2xl"></i>
-            </div>
-        </div>
-        <div class="stat-value mb-2">{{ analytics.avg_response_time }}</div>
-        <p class="text-white/90 text-sm font-medium mb-3">Ср. время ответа (мин)</p>
-        <div class="stat-change">
-            <i class="fas fa-arrow-down"></i>
-            <span>-0.5 мин</span>
-        </div>
-    </div>
-
-    <!-- Доход -->
-    <div class="stat-card-modern stat-card-gradient-3 rounded-2xl p-6 shadow-xl">
-        <div class="flex items-start justify-between mb-4">
-            <div class="stat-icon">
-                <i class="fas fa-dollar-sign text-white text-2xl"></i>
-            </div>
-        </div>
-        <div class="stat-value mb-2">{{ stats.total_revenue }}</div>
-        <p class="text-white/90 text-sm font-medium mb-3">Доход (AED)</p>
-        <div class="stat-change">
-            <i class="fas fa-arrow-up"></i>
-            <span>+15%</span>
-        </div>
-    </div>
-
-    <!-- Средний чек -->
-    <div class="stat-card-modern stat-card-gradient-4 rounded-2xl p-6 shadow-xl">
-        <div class="flex items-start justify-between mb-4">
-            <div class="stat-icon">
-                <i class="fas fa-receipt text-white text-2xl"></i>
-            </div>
-        </div>
-        <div class="stat-value mb-2">
-            {{ (stats.total_revenue / stats.completed_bookings) | round(0) if stats.completed_bookings > 0 else 0 }}
-        </div>
-        <p class="text-white/90 text-sm font-medium mb-3">Средний чек (AED)</p>
-        <div class="stat-change">
-            <i class="fas fa-arrow-up"></i>
-            <span>+8%</span>
-        </div>
-    </div>
-</div>
-
-<!-- Charts Grid -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-    <!-- Динамика записей -->
-    <div class="chart-container">
-        <div class="chart-header">
-            <div class="chart-icon">
-                <i class="fas fa-chart-area"></i>
-            </div>
-            <h2 class="text-xl font-bold text-gray-900">Динамика записей</h2>
-        </div>
-        <div style="height: 300px;">
-            <canvas id="bookingsTrendChart"></canvas>
-        </div>
-    </div>
-
-    <!-- Распределение услуг -->
-    <div class="chart-container">
-        <div class="chart-header">
-            <div class="chart-icon">
-                <i class="fas fa-chart-pie"></i>
-            </div>
-            <h2 class="text-xl font-bold text-gray-900">Распределение услуг</h2>
-        </div>
-        <div style="height: 300px;">
-            <canvas id="servicesChart"></canvas>
-        </div>
-    </div>
-
-    <!-- Статусы записей -->
-    <div class="chart-container">
-        <div class="chart-header">
-            <div class="chart-icon">
-                <i class="fas fa-chart-bar"></i>
-            </div>
-            <h2 class="text-xl font-bold text-gray-900">Статусы записей</h2>
-        </div>
-        <div style="height: 300px;">
-            <canvas id="statusChart"></canvas>
-        </div>
-    </div>
-
-    <!-- Динамика дохода -->
-    <div class="chart-container">
-        <div class="chart-header">
-            <div class="chart-icon">
-                <i class="fas fa-dollar-sign"></i>
-            </div>
-            <h2 class="text-xl font-bold text-gray-900">Динамика дохода</h2>
-        </div>
-        <div style="height: 300px;">
-            <canvas id="revenueChart"></canvas>
-        </div>
-    </div>
-</div>
-
-<!-- Services Table -->
-<div class="detail-table">
-    <div class="p-6 border-b border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <i class="fas fa-list text-purple-600"></i>
-            Детализация по услугам
-        </h2>
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Услуга</th>
-                <th>Количество</th>
-                <th>Доход</th>
-                <th>Средний чек</th>
-                <th>Доля рынка</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if analytics.services_stats %}
-            {% set total_count = analytics.services_stats | sum(attribute=1) %}
-            {% for service in analytics.services_stats %}
-            <tr>
-                <td class="font-semibold text-gray-900">{{ service[0] }}</td>
-                <td class="text-gray-900">{{ service[1] }}</td>
-                <td class="font-bold text-green-600">{{ service[2] or 0 }} AED</td>
-                <td class="text-gray-900">
-                    {{ ((service[2] or 0) / service[1]) | round(0) if service[1] > 0 else 0 }} AED
-                </td>
-                <td>
-                    <div class="flex items-center gap-3">
-                        <div class="progress-bar flex-1">
-                            <div class="progress-fill" style="width: {{ (service[1] / total_count * 100) if total_count > 0 else 0 }}%"></div>
-                        </div>
-                        <span class="text-sm font-bold text-gray-900" style="min-width: 50px;">
-                            {{ ((service[1] / total_count * 100) if total_count > 0 else 0) | round(1) }}%
-                        </span>
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Конверсия -->
+        <div class="relative bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 shadow-xl overflow-hidden group hover:shadow-2xl transition-all hover:scale-105">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
+            <div class="relative">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                        <i class="fas fa-chart-line text-white text-xl"></i>
                     </div>
-                </td>
-            </tr>
-            {% endfor %}
-            {% else %}
-            <tr>
-                <td colspan="5" class="text-center py-12">
-                    <div class="flex flex-col items-center">
-                        <i class="fas fa-chart-bar text-gray-300 text-6xl mb-4"></i>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Нет данных</h3>
-                        <p class="text-gray-500">Данные появятся после первых записей</p>
+                </div>
+                <div class="text-4xl font-bold text-white mb-2">{{ stats.conversion_rate }}%</div>
+                <p class="text-white/90 text-sm font-medium mb-3">Конверсия</p>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-sm font-semibold text-white">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+2.3%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Время ответа -->
+        <div class="relative bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl p-6 shadow-xl overflow-hidden group hover:shadow-2xl transition-all hover:scale-105">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
+            <div class="relative">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                        <i class="fas fa-clock text-white text-xl"></i>
                     </div>
-                </td>
-            </tr>
-            {% endif %}
-        </tbody>
-    </table>
+                </div>
+                <div class="text-4xl font-bold text-white mb-2">{{ analytics.avg_response_time }}</div>
+                <p class="text-white/90 text-sm font-medium mb-3">Ср. время ответа (мин)</p>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-sm font-semibold text-white">
+                    <i class="fas fa-arrow-down"></i>
+                    <span>-0.5 мин</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Доход -->
+        <div class="relative bg-gradient-to-br from-cyan-500 to-blue-500 rounded-2xl p-6 shadow-xl overflow-hidden group hover:shadow-2xl transition-all hover:scale-105">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
+            <div class="relative">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                        <i class="fas fa-dollar-sign text-white text-xl"></i>
+                    </div>
+                </div>
+                <div class="text-4xl font-bold text-white mb-2">{{ stats.total_revenue }}</div>
+                <p class="text-white/90 text-sm font-medium mb-3">Доход (AED)</p>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-sm font-semibold text-white">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+15%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Средний чек -->
+        <div class="relative bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 shadow-xl overflow-hidden group hover:shadow-2xl transition-all hover:scale-105">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16"></div>
+            <div class="relative">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                        <i class="fas fa-receipt text-white text-xl"></i>
+                    </div>
+                </div>
+                <div class="text-4xl font-bold text-white mb-2">
+                    {{ (stats.total_revenue / stats.completed_bookings) | round(0) if stats.completed_bookings > 0 else 0 }}
+                </div>
+                <p class="text-white/90 text-sm font-medium mb-3">Средний чек (AED)</p>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-sm font-semibold text-white">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+8%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <!-- Динамика записей -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-chart-area text-white"></i>
+                </div>
+                <h2 class="text-xl font-semibold text-gray-900">Динамика записей</h2>
+            </div>
+            <div style="height: 300px;">
+                <canvas id="bookingsTrendChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Распределение услуг -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-chart-pie text-white"></i>
+                </div>
+                <h2 class="text-xl font-semibold text-gray-900">Распределение услуг</h2>
+            </div>
+            <div style="height: 300px;">
+                <canvas id="servicesChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Статусы записей -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-chart-bar text-white"></i>
+                </div>
+                <h2 class="text-xl font-semibold text-gray-900">Статусы записей</h2>
+            </div>
+            <div style="height: 300px;">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Динамика дохода -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-dollar-sign text-white"></i>
+                </div>
+                <h2 class="text-xl font-semibold text-gray-900">Динамика дохода</h2>
+            </div>
+            <div style="height: 300px;">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-6 border-b border-gray-200">
+            <h2 class="text-2xl font-semibold text-gray-900 flex items-center gap-2">
+                <i class="fas fa-list text-purple-600"></i>
+                Детализация по услугам
+            </h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Услуга</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Количество</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Доход</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Средний чек</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Доля рынка</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% if analytics.services_stats %}
+                    {% set total_count = analytics.services_stats | sum(attribute=1) %}
+                    {% for service in analytics.services_stats %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4 font-semibold text-gray-900">{{ service[0] }}</td>
+                        <td class="px-6 py-4 text-gray-900">{{ service[1] }}</td>
+                        <td class="px-6 py-4 font-semibold text-green-600">{{ service[2] or 0 }} AED</td>
+                        <td class="px-6 py-4 text-gray-900">
+                            {{ ((service[2] or 0) / service[1]) | round(0) if service[1] > 0 else 0 }} AED
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-purple-500 to-purple-600 rounded-full transition-all duration-1000" style="width: {{ (service[1] / total_count * 100) if total_count > 0 else 0 }}%"></div>
+                                </div>
+                                <span class="text-sm font-semibold text-gray-900 min-w-[50px]">
+                                    {{ ((service[1] / total_count * 100) if total_count > 0 else 0) | round(1) }}%
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="px-6 py-20 text-center">
+                            <div class="flex flex-col items-center">
+                                <i class="fas fa-chart-bar text-gray-300 text-6xl mb-4"></i>
+                                <h3 class="text-xl font-semibold text-gray-900 mb-2">Нет данных</h3>
+                                <p class="text-gray-500">Данные появятся после первых записей</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
@@ -536,7 +315,7 @@
         console.log('Updating charts with:', data);
     }
 
-    // Initialize Charts with gradient colors
+    // Initialize Charts
     const bookingsTrendCtx = document.getElementById('bookingsTrendChart').getContext('2d');
     new Chart(bookingsTrendCtx, {
         type: 'line',
@@ -545,18 +324,18 @@
             datasets: [{
                 label: 'Записи',
                 data: {{ analytics.bookings_by_day | map(attribute=1) | list | tojson }},
-                borderColor: '#667eea',
+                borderColor: '#a855f7',
                 backgroundColor: (context) => {
                     const ctx = context.chart.ctx;
                     const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-                    gradient.addColorStop(0, 'rgba(102, 126, 234, 0.3)');
-                    gradient.addColorStop(1, 'rgba(102, 126, 234, 0.01)');
+                    gradient.addColorStop(0, 'rgba(168, 85, 247, 0.3)');
+                    gradient.addColorStop(1, 'rgba(168, 85, 247, 0.01)');
                     return gradient;
                 },
                 tension: 0.4,
                 fill: true,
                 borderWidth: 3,
-                pointBackgroundColor: '#667eea',
+                pointBackgroundColor: '#a855f7',
                 pointBorderColor: '#fff',
                 pointBorderWidth: 2,
                 pointRadius: 5,
@@ -572,15 +351,9 @@
             scales: {
                 y: { 
                     beginAtZero: true,
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.05)'
-                    }
+                    grid: { color: 'rgba(0, 0, 0, 0.05)' }
                 },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
+                x: { grid: { display: false } }
             }
         }
     });
@@ -592,14 +365,7 @@
             labels: {{ analytics.services_stats | map(attribute=0) | list | tojson }},
             datasets: [{
                 data: {{ analytics.services_stats | map(attribute=1) | list | tojson }},
-                backgroundColor: [
-                    '#667eea',
-                    '#764ba2',
-                    '#f093fb',
-                    '#4facfe',
-                    '#43e97b',
-                    '#fa709a'
-                ],
+                backgroundColor: ['#a855f7', '#ec4899', '#3b82f6', '#10b981', '#f59e0b', '#ef4444'],
                 borderWidth: 0
             }]
         },
@@ -609,13 +375,7 @@
             plugins: {
                 legend: {
                     position: 'bottom',
-                    labels: {
-                        padding: 20,
-                        font: {
-                            size: 12,
-                            weight: '600'
-                        }
-                    }
+                    labels: { padding: 20, font: { size: 12, weight: '600' } }
                 }
             }
         }
@@ -632,8 +392,8 @@
                 backgroundColor: (context) => {
                     const ctx = context.chart.ctx;
                     const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-                    gradient.addColorStop(0, '#667eea');
-                    gradient.addColorStop(1, '#764ba2');
+                    gradient.addColorStop(0, '#a855f7');
+                    gradient.addColorStop(1, '#9333ea');
                     return gradient;
                 },
                 borderRadius: 8,
@@ -643,21 +403,10 @@
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false }
-            },
+            plugins: { legend: { display: false } },
             scales: {
-                y: { 
-                    beginAtZero: true,
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.05)'
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
+                y: { beginAtZero: true, grid: { color: 'rgba(0, 0, 0, 0.05)' } },
+                x: { grid: { display: false } }
             }
         }
     });
@@ -673,8 +422,8 @@
                 backgroundColor: (context) => {
                     const ctx = context.chart.ctx;
                     const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-                    gradient.addColorStop(0, '#43e97b');
-                    gradient.addColorStop(1, '#38f9d7');
+                    gradient.addColorStop(0, '#10b981');
+                    gradient.addColorStop(1, '#059669');
                     return gradient;
                 },
                 borderRadius: 8,
@@ -684,21 +433,10 @@
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false }
-            },
+            plugins: { legend: { display: false } },
             scales: {
-                y: { 
-                    beginAtZero: true,
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.05)'
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
+                y: { beginAtZero: true, grid: { color: 'rgba(0, 0, 0, 0.05)' } },
+                x: { grid: { display: false } }
             }
         }
     });

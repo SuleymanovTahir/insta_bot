@@ -10192,3 +10192,11 @@ jinja2.exceptions.TemplateSyntaxError: Unexpected end of template. Jinja was loo
 2025-10-20 13:19:12 - crm - INFO - [middleware] 📤 GET /admin/clients → 200 (0.00s)
 2025-10-20 13:19:13 - crm - INFO - [middleware] 🔥 GET /admin/clients
 2025-10-20 13:19:13 - crm - INFO - [middleware] 📤 GET /admin/clients → 200 (0.00s)
+2025-10-20 13:25:19 - crm - INFO - [middleware] 🔥 GET /admin/clients
+2025-10-20 13:25:19 - crm - INFO - [middleware] 📤 GET /admin/clients → 200 (0.01s)
+2025-10-20 13:25:21 - crm - INFO - [middleware] 🔥 GET /admin/analytics
+2025-10-20 13:25:21 - crm - INFO - [middleware] 📤 GET /admin/analytics → 200 (0.02s)
+2025-10-20 13:25:26 - crm - INFO - [middleware] 🔥 GET /admin/funnel
+2025-10-20 13:25:26 - crm - INFO - [middleware] 📤 GET /admin/funnel → 200 (0.01s)
+2025-10-20 13:25:27 - crm - INFO - [middleware] 🔥 GET /admin/analytics
+2025-10-20 13:25:27 - crm - INFO - [middleware] 📤 GET /admin/analytics → 200 (0.00s)
