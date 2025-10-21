@@ -109,7 +109,13 @@ app.add_middleware(
 # Trusted hosts
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=["mlediamant.com", "*.mlediamant.com"]
+    allowed_hosts=[
+        "mlediamant.com", 
+        "*.mlediamant.com",
+        "localhost",           # Add this
+        "127.0.0.1",          # Add this
+        "127.0.0.1:8000"      # Add this (with port)
+    ]
 )
 
 # Security headers
