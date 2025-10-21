@@ -1,0 +1,97 @@
+/* === DATA TABLE CONTAINER === */
+.data-table-container {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: var(--space-xl);
+}
+
+/* === DATA TABLE === */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* === TABLE HEADER === */
+.data-table thead {
+    background: var(--gradient-primary);
+}
+
+.data-table th {
+    padding: 20px 15px;
+    text-align: left;
+    color: var(--white);
+    font-weight: 600;
+    font-size: 0.95em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+/* === TABLE BODY === */
+.data-table td {
+    padding: 18px 15px;
+    border-bottom: 1px solid var(--gray-light);
+    font-size: 0.95em;
+    vertical-align: middle;
+}
+
+.data-table tbody tr {
+    transition: background var(--transition-fast);
+}
+
+.data-table tbody tr:hover {
+    background: var(--light);
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* === TABLE ACTIONS === */
+.table-actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+/* === EMPTY STATE === */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--gray);
+}
+
+.empty-state i {
+    font-size: 5em;
+    margin-bottom: 20px;
+    opacity: 0.3;
+}
+
+.empty-state h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: var(--dark);
+}
+
+.empty-state p {
+    font-size: 1.1em;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .data-table {
+        font-size: 0.85em;
+    }
+    
+    .data-table th,
+    .data-table td {
+        padding: 12px 10px;
+    }
+    
+    /* Скрываем некоторые колонки на мобильных */
+    .data-table th:nth-child(n+4),
+    .data-table td:nth-child(n+4) {
+        display: none;
+    }
+}

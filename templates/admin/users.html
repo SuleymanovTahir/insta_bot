@@ -1,25 +1,26 @@
 {% extends "admin/base.html" %}
 
-{% block title %}Пользователи - {{ salon_info.name }}{% endblock %}
-{% block nav_users %}active{% endblock %}
+{% block title %}Управление пользователями - {{ salon_info.name }}{% endblock %}
 
 {% block content %}
-<!-- Заголовок -->
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-    <div>
-        <h1 style="font-size: 2rem; font-weight: 700; color: #111827; margin-bottom: 0.5rem;">
-            👥 Пользователи
-        </h1>
-        <p style="color: #6b7280;">Управление доступом</p>
-    </div>
+<div class="page-header">
+    <h1>👥 Управление пользователями</h1>
+    <p>Список сотрудников с доступом к CRM</p>
 </div>
 
-<!-- Таблица пользователей -->
-<div class="table-container">
-    <table class="table">
+<div class="search-filter-bar">
+    <button class="btn btn-primary" onclick="window.location.href='/register'">
+        <i class="fas fa-user-plus"></i> Добавить сотрудника
+    </button>
+</div>
+
+<div class="data-table-container">
+    <table class="data-table">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Логин</th>
+                <th>Полное имя</th>
                 <th>Email</th>
                 <th>Роль</th>
                 <th>Последний вход</th>
@@ -28,50 +29,34 @@
             </tr>
         </thead>
         <tbody>
-            {% if users %}
-                {% for user in users %}
-                <tr>
-                    <td>
-                        <div style="font-weight: 600; color: #111827;">{{ user[1] }}</div>
-                    </td>
-                    <td>{{ user[4] or '-' }}</td>
-                    <td>
-                        {% if user[5] == 'admin' %}
-                            <span class="badge" style="background: #dbeafe; color: #1e40af;">Администратор</span>
-                        {% elif user[5] == 'manager' %}
-                            <span class="badge" style="background: #ddd6fe; color: #6d28d9;">Менеджер</span>
-                        {% else %}
-                            <span class="badge badge-success">Сотрудник</span>
-                        {% endif %}
-                    </td>
-                    <td style="font-size: 0.875rem; color: #6b7280;">
-                        {{ user[7][:16] if user[7] else 'Никогда' }}
-                    </td>
-                    <td>
-                        {% if user[8] == 1 %}
-                            <span class="badge badge-success">Активен</span>
-                        {% else %}
-                            <span class="badge badge-danger">Заблокирован</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if user[1] != 'admin' %}
-                        <button onclick="deleteUser('{{ user[1] }}')" class="btn" style="padding: 0.5rem 0.75rem; font-size: 0.875rem; background: white; border: 1px solid #fee2e2; color: #ef4444;">
-                            <i class="fas fa-trash"></i> Удалить
-                        </button>
-                        {% else %}
-                        <span style="color: #9ca3af; font-size: 0.875rem;">-</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            {% endif %}
+            {% for user in users %}
+            <tr>
+                <td><strong>#{{ user[0] }}</strong></td>
+                <td>{{ user[1] }}</td>
+                <td>{{ user[3] or '-' }}</td>
+                <td>{{ user[4] or '-' }}</td>
+                <td><span class="badge badge-info">{{ user[5] }}</span></td>
+                <td>{{ user[7][:16] if user[7] else 'Никогда' }}</td>
+                <td>
+                    {% if user[8] == 1 %}
+                    <span class="badge badge-success">Активен</span>
+                    {% else %}
+                    <span class="badge badge-danger">Заблокирован</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-danger" onclick="deleteUser({{ user[0] }}, '{{ user[1] }}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
 
 <script>
-function deleteUser(username) {
+async function deleteUser(userId, username) {
     if (username === 'admin') {
         showNotification('Нельзя удалить главного администратора', 'error');
         return;
@@ -79,15 +64,22 @@ function deleteUser(username) {
     
     if (!confirm(`Удалить пользователя ${username}?`)) return;
     
-    fetch(`/admin/api/users/${username}/delete`, { method: 'POST' })
-        .then(r => r.json())
-        .then(data => {
-            if (data.success) {
-                showNotification('Пользователь удален', 'success');
-                setTimeout(() => location.reload(), 1000);
-            }
-        })
-        .catch(() => showNotification('Ошибка удаления', 'error'));
+    try {
+        const response = await fetch(`/admin/api/users/${userId}/delete`, {
+            method: 'POST'
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification('Пользователь удален', 'success');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showNotification(result.message, 'error');
+        }
+    } catch (error) {
+        showNotification('Ошибка удаления', 'error');
+    }
 }
 </script>
 {% endblock %}

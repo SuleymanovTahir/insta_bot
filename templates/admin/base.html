@@ -1,273 +1,104 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ salon_info.name }}{% endblock %}</title>
-    
-    <!-- Unified CSS -->
-    <link rel="stylesheet" href="/static/css/unified-layout.css">
-    
-    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/static/css/main.css">
+    {% block extra_css %}{% endblock %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
     {% block head_scripts %}{% endblock %}
 </head>
+
 <body>
-    <div class="admin-layout">
+    <div class="crm-wrapper">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <div class="sidebar-logo">
-                    <i class="fas fa-gem"></i>
-                </div>
-                <div class="sidebar-title">{{ salon_info.name }}</div>
-                <div class="sidebar-subtitle">CRM System</div>
+                <h1>💎 {{ salon_info.name }}</h1>
+                <p>CRM System</p>
             </div>
-
             <nav class="sidebar-nav">
-                <a href="/admin" class="sidebar-nav-item {% block nav_dashboard %}{% endblock %}">
-                    <i class="fas fa-home"></i>
-                    <span>Главная</span>
+                <a href="/admin" class="nav-item {% block nav_dashboard %}{% endblock %}">
+                    <i class="fas fa-chart-line"></i> Дашборд
                 </a>
-                
-                <a href="/admin/clients" class="sidebar-nav-item {% block nav_clients %}{% endblock %}">
-                    <i class="fas fa-users"></i>
-                    <span>Клиенты</span>
+                <a href="/admin/clients" class="nav-item {% block nav_clients %}{% endblock %}">
+                    <i class="fas fa-users"></i> Клиенты
                 </a>
-                
-                <a href="/admin/bookings" class="sidebar-nav-item {% block nav_bookings %}{% endblock %}">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Записи</span>
+                <a href="/admin/bookings" class="nav-item {% block nav_bookings %}{% endblock %}">
+                    <i class="fas fa-calendar-check"></i> Записи
                 </a>
-                
-                <a href="/admin/chat" class="sidebar-nav-item {% block nav_chat %}{% endblock %}">
-                    <i class="fas fa-comments"></i>
-                    <span>Чат</span>
+                <a href="/admin/services" class="nav-item {% block nav_services %}{% endblock %}">
+                    <i class="fas fa-spa"></i> Услуги
+                </a>
+                <a href="/admin/chat" class="nav-item {% block nav_chat %}{% endblock %}">
+                    <i class="fas fa-comment-dots"></i> Чат
                     {% if unread_count > 0 %}
-                    <span class="sidebar-badge">{{ unread_count }}</span>
+                    <span class="badge-notification">{{ unread_count }}</span>
                     {% endif %}
                 </a>
-                
-                <a href="/admin/messages" class="sidebar-nav-item {% block nav_messages %}{% endblock %}">
-                    <i class="fas fa-envelope"></i>
-                    <span>Сообщения</span>
+                <a href="/admin/messages" class="nav-item {% block nav_messages %}{% endblock %}">
+                    <i class="fas fa-comments"></i> История
                 </a>
-                
-                <a href="/admin/analytics" class="sidebar-nav-item {% block nav_analytics %}{% endblock %}">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Аналитика</span>
+                <a href="/admin/analytics" class="nav-item {% block nav_analytics %}{% endblock %}">
+                    <i class="fas fa-chart-bar"></i> Аналитика
                 </a>
-                
-                <a href="/admin/funnel" class="sidebar-nav-item {% block nav_funnel %}{% endblock %}">
-                    <i class="fas fa-filter"></i>
-                    <span>Воронка</span>
+                <a href="/admin/funnel" class="nav-item {% block nav_funnel %}{% endblock %}">
+                    <i class="fas fa-filter"></i> Воронка продаж
                 </a>
-                
-                <a href="/admin/services" class="sidebar-nav-item {% block nav_services %}{% endblock %}">
-                    <i class="fas fa-concierge-bell"></i>
-                    <span>Услуги</span>
-                </a>
-                
+
                 {% if current_user and current_user.role == 'admin' %}
-                <a href="/admin/users" class="sidebar-nav-item {% block nav_users %}{% endblock %}">
-                    <i class="fas fa-user-shield"></i>
-                    <span>Пользователи</span>
+                <a href="/admin/users" class="nav-item {% block nav_users %}{% endblock %}">
+                    <i class="fas fa-user-cog"></i> Пользователи
                 </a>
                 {% endif %}
-                
-                <a href="/admin/calendar" class="sidebar-nav-item {% block nav_calendar %}{% endblock %}">
-                    <i class="fas fa-calendar"></i>
-                    <span>Календарь</span>
-                </a>
-                
-                {% if current_user and current_user.role == 'admin' %}
-                <a href="/admin/settings" class="sidebar-nav-item {% block nav_settings %}{% endblock %}">
-                    <i class="fas fa-cog"></i>
-                    <span>Настройки</span>
-                </a>
-                {% endif %}
-                
-                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);"></div>
-                
-                <a href="/logout" class="sidebar-nav-item" style="color: #ef4444;">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Выход</span>
-                </a>
             </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        {{ current_user.full_name[0] if current_user and current_user.full_name else 'A' }}
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">{{ current_user.full_name if current_user else 'Администратор' }}
+                        </div>
+                        <div class="user-role">{{ current_user.role if current_user else 'admin' }}</div>
+                    </div>
+                </div>
+                <a href="/logout" class="btn btn-secondary" style="width: 100%; margin-top: 10px; text-align: center;">
+                    <i class="fas fa-sign-out-alt"></i> Выход
+                </a>
+            </div>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Header -->
-            <header class="admin-header">
-                <div class="admin-header-left">
-                    <button class="admin-header-icon mobile-menu-toggle" onclick="toggleSidebar()" style="display: none;">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    
-                    <div class="admin-header-search">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Поиск..." id="globalSearch">
-                    </div>
-                </div>
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
 
-                <div class="admin-header-right">
-                    <div class="admin-header-icon" onclick="toggleNotifications()">
-                        <i class="fas fa-bell"></i>
-                        {% if unread_count > 0 %}
-                        <span class="badge-dot"></span>
-                        {% endif %}
-                    </div>
-
-                    <div class="admin-header-user" onclick="toggleUserMenu()" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 1rem; border-radius: 12px; cursor: pointer; transition: all 0.2s;">
-                        <div style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.875rem;">
-                            {{ current_user.username[0].upper() if current_user else 'A' }}
-                        </div>
-                        <div class="admin-header-user-info">
-                            <div style="font-weight: 600; font-size: 0.875rem; color: #111827;">{{ current_user.username if current_user else 'Admin' }}</div>
-                            <div style="font-size: 0.75rem; color: #6b7280;">{{ current_user.role if current_user else 'Администратор' }}</div>
-                        </div>
-                        <i class="fas fa-chevron-down" style="color: #9ca3af; font-size: 0.75rem;"></i>
-                    </div>
-                </div>
-            </header>
-
-            <!-- Page Content -->
-            <div class="page-container animate-fade-in">
-                {% block content %}{% endblock %}
-            </div>
+            {% block content %}
+            <!-- Здесь будет контент страницы -->
+            {% endblock %}
         </main>
     </div>
 
-    <!-- Notification Container -->
-    <div id="notificationContainer" style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;"></div>
-
-    <!-- Base Scripts -->
     <script>
-        // Sidebar Management
         function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('active');
+            document.getElementById('sidebar').classList.toggle('active');
         }
 
-        function closeSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            
-            sidebar.classList.remove('open');
-            overlay.classList.remove('active');
+        function showNotification(message, type) {
+            const notif = document.createElement('div');
+            notif.className = `notification notification-${type}`;
+            notif.textContent = message;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 3000);
         }
-
-        // Close sidebar on window resize to desktop
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => {
-                if (window.innerWidth > 768) {
-                    closeSidebar();
-                }
-            }, 250);
-        });
-
-        // Notifications
-        function toggleNotifications() {
-            // TODO: Implement notifications panel
-            alert('Уведомления пока не реализованы');
-        }
-
-        // User Menu
-        function toggleUserMenu() {
-            if (confirm('Выйти из системы?')) {
-                window.location.href = '/logout';
-            }
-        }
-
-        // Notification System
-        function showNotification(message, type = 'success') {
-            const container = document.getElementById('notificationContainer');
-            
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                background: white;
-                padding: 1rem 1.5rem;
-                border-radius: 12px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                display: flex;
-                align-items: center;
-                gap: 1rem;
-                margin-bottom: 1rem;
-                animation: slideInRight 0.3s ease-out;
-                min-width: 300px;
-            `;
-            
-            const icons = {
-                success: { icon: 'fa-check-circle', color: '#10b981' },
-                error: { icon: 'fa-times-circle', color: '#ef4444' },
-                warning: { icon: 'fa-exclamation-circle', color: '#f59e0b' },
-                info: { icon: 'fa-info-circle', color: '#3b82f6' }
-            };
-            
-            const config = icons[type] || icons.info;
-            
-            notification.innerHTML = `
-                <i class="fas ${config.icon}" style="color: ${config.color}; font-size: 1.25rem;"></i>
-                <span style="font-weight: 500; color: #111827; flex: 1;">${message}</span>
-                <button onclick="this.parentElement.remove()" 
-                        style="padding: 0.25rem; color: #6b7280; cursor: pointer; background: none; border: none;">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
-            
-            container.appendChild(notification);
-            
-            // Auto remove after 5 seconds
-            setTimeout(() => {
-                notification.style.animation = 'slideOutRight 0.3s ease-out';
-                setTimeout(() => notification.remove(), 300);
-            }, 5000);
-        }
-
-        // Slide animations
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideInRight {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            @keyframes slideOutRight {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Global Search (можно расширить)
-        const searchInput = document.getElementById('globalSearch');
-        if (searchInput) {
-            searchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    const query = e.target.value;
-                    if (query.trim()) {
-                        // TODO: Implement global search
-                        console.log('Search:', query);
-                    }
-                }
-            });
-        }
-
-        // Make showNotification globally available
-        window.showNotification = showNotification;
     </script>
 
     {% block extra_scripts %}{% endblock %}
 </body>
+
 </html>

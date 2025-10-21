@@ -5,175 +5,135 @@
 {% block nav_clients %}active{% endblock %}
 
 {% block content %}
-<!-- Back Button & Header -->
-<div style="margin-bottom: 2rem;">
-    <a href="/admin/clients" style="display: inline-flex; align-items: center; gap: 0.5rem; color: #ec4899; text-decoration: none; font-weight: 500; margin-bottom: 1rem; transition: all 0.2s;">
-        <i class="fas fa-arrow-left"></i>
-        <span>Назад к списку</span>
-    </a>
-    
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
-        <div style="display: flex; align-items: center; gap: 1rem;">
-            <div style="width: 64px; height: 64px; border-radius: 16px; background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 2rem; box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);">
-                {{ client[3][0] if client[3] else '?' }}
-            </div>
-            <div>
-                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.25rem;">
-                    <h1 style="font-size: 2rem; font-weight: 700; color: #111827; margin: 0;">
-                        {{ client[3] or 'Клиент' }}
-                    </h1>
-                    {% if client[8] == 'vip' %}
-                    <span class="badge" style="background: #f3e8ff; color: #7c3aed; font-size: 0.875rem;">
-                        <i class="fas fa-crown"></i> VIP
-                    </span>
-                    {% elif client[8] == 'regular' %}
-                    <span class="badge" style="background: #dbeafe; color: #1e40af; font-size: 0.875rem;">
-                        <i class="fas fa-user-check"></i> Постоянный
-                    </span>
-                    {% elif client[8] == 'new' %}
-                    <span class="badge" style="background: #d1fae5; color: #166534; font-size: 0.875rem;">
-                        <i class="fas fa-user-plus"></i> Новый
-                    </span>
-                    {% endif %}
-                </div>
-                <p style="color: #6b7280; font-size: 1rem; margin: 0;">
-                    <i class="fab fa-instagram"></i> @{{ client[1] or client[0][:15] }}
-                </p>
-            </div>
-        </div>
-        
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <a href="/admin/clients" style="color: #667eea; text-decoration: none; margin-bottom: 10px; display: inline-block;">
+            <i class="fas fa-arrow-left"></i> Назад к списку
+        </a>
+        <h1>
+            <i class="fas fa-user-circle"></i> {{ client[3] or 'Клиент' }}
+            <span class="badge badge-{{ client[8] }}" style="font-size: 0.6em; margin-left: 15px;">
+                {{ client_statuses[client[8]].label if client[8] in client_statuses else client[8] }}
+            </span>
+        </h1>
+        <p style="color: #6b7280;">
+            <i class="fab fa-instagram"></i> @{{ client[1] or client[0][:15] }}
+        </p>
+    </div>
+    <div>
         <button class="btn btn-primary" onclick="window.location.href='/admin/chat?client={{ client[0] }}'">
-            <i class="fas fa-comment"></i>
-            <span>Открыть чат</span>
+            <i class="fas fa-comment"></i> Открыть чат
         </button>
     </div>
 </div>
 
-<!-- Stats Grid -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-    <!-- Всего сообщений -->
+<!-- Информационные карточки -->
+<div class="stats-grid" style="margin-bottom: 30px;">
     <div class="stat-card">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-            <div>
-                <h3 style="font-size: 2rem; font-weight: 700; color: #111827; margin: 0 0 0.25rem 0;">{{ client[6] }}</h3>
-                <p style="font-size: 0.875rem; color: #6b7280; margin: 0;">Всего сообщений</p>
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ client[6] }}</h3>
+                <p>Всего сообщений</p>
             </div>
-            <div style="width: 40px; height: 40px; background: #eff6ff; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                <i class="fas fa-comments" style="color: #3b82f6;"></i>
+            <div class="stat-card-icon">
+                <i class="fas fa-comments"></i>
             </div>
         </div>
     </div>
     
-    <!-- Записей -->
     <div class="stat-card">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-            <div>
-                <h3 style="font-size: 2rem; font-weight: 700; color: #111827; margin: 0 0 0.25rem 0;">{{ bookings|length }}</h3>
-                <p style="font-size: 0.875rem; color: #6b7280; margin: 0;">Записей</p>
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ bookings|length }}</h3>
+                <p>Записей</p>
             </div>
-            <div style="width: 40px; height: 40px; background: #f3e8ff; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                <i class="fas fa-calendar-check" style="color: #a855f7;"></i>
+            <div class="stat-card-icon">
+                <i class="fas fa-calendar-check"></i>
             </div>
         </div>
     </div>
     
-    <!-- LTV -->
     <div class="stat-card">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-            <div>
-                <h3 style="font-size: 2rem; font-weight: 700; color: #10b981; margin: 0 0 0.25rem 0;">{{ client[9] }}</h3>
-                <p style="font-size: 0.875rem; color: #6b7280; margin: 0;">LTV (AED)</p>
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ client[9] }} AED</h3>
+                <p>LTV (пожизненная ценность)</p>
             </div>
-            <div style="width: 40px; height: 40px; background: #d1fae5; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                <i class="fas fa-dollar-sign" style="color: #10b981;"></i>
+            <div class="stat-card-icon">
+                <i class="fas fa-dollar-sign"></i>
             </div>
         </div>
     </div>
     
-    <!-- Последний контакт -->
     <div class="stat-card">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-            <div>
-                <h3 style="font-size: 1.25rem; font-weight: 700; color: #111827; margin: 0 0 0.25rem 0;">
-                    {{ client[5][:10] if client[5] else '-' }}
-                </h3>
-                <p style="font-size: 0.875rem; color: #6b7280; margin: 0;">Последний контакт</p>
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ ((client[5]|string)[:10]) if client[5] else '-' }}</h3>
+                <p>Последний контакт</p>
             </div>
-            <div style="width: 40px; height: 40px; background: #fef3c7; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                <i class="fas fa-clock" style="color: #f59e0b;"></i>
+            <div class="stat-card-icon">
+                <i class="fas fa-clock"></i>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Main Content Grid -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+<!-- Основная информация -->
+<div class="analytics-grid">
     <!-- Контактная информация -->
-    <div class="card">
-        <div class="card-header">
-            <h2 style="font-size: 1.25rem; font-weight: 600; color: #111827; display: flex; align-items: center; gap: 0.5rem; margin: 0;">
-                <i class="fas fa-address-card" style="color: #ec4899;"></i>
-                Контактная информация
-            </h2>
-        </div>
-        <div class="card-body">
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <div style="padding: 1rem; border-bottom: 1px solid #f3f4f6;">
-                    <label style="font-size: 0.875rem; font-weight: 600; color: #6b7280; display: block; margin-bottom: 0.5rem;">Имя</label>
-                    <input type="text" id="clientName" class="form-input" value="{{ client[3] or '' }}" placeholder="Не указано">
-                </div>
-                
-                <div style="padding: 1rem; border-bottom: 1px solid #f3f4f6;">
-                    <label style="font-size: 0.875rem; font-weight: 600; color: #6b7280; display: block; margin-bottom: 0.5rem;">Телефон</label>
-                    <input type="text" id="clientPhone" class="form-input" value="{{ client[2] or '' }}" placeholder="Не указано">
-                </div>
-                
-                <div style="padding: 1rem; border-bottom: 1px solid #f3f4f6;">
-                    <label style="font-size: 0.875rem; font-weight: 600; color: #6b7280; display: block; margin-bottom: 0.5rem;">Instagram</label>
-                    {% if client[1] %}
-                    <a href="https://instagram.com/{{ client[1] }}" target="_blank" style="color: #ec4899; font-weight: 500; text-decoration: none;">
-                        @{{ client[1] }}
-                    </a>
-                    {% else %}
-                    <span style="color: #9ca3af;">{{ client[0][:30] }}...</span>
-                    {% endif %}
-                </div>
-                
-                <div style="padding: 1rem; border-bottom: 1px solid #f3f4f6;">
-                    <label style="font-size: 0.875rem; font-weight: 600; color: #6b7280; display: block; margin-bottom: 0.5rem;">Статус</label>
-                    <select id="clientStatus" class="form-input" onchange="updateStatus()">
-                        <option value="new" {% if client[8] == 'new' %}selected{% endif %}>Новый</option>
-                        <option value="regular" {% if client[8] == 'regular' %}selected{% endif %}>Постоянный</option>
-                        <option value="vip" {% if client[8] == 'vip' %}selected{% endif %}>VIP</option>
-                    </select>
-                </div>
-                
-                <div style="padding: 1rem;">
-                    <label style="font-size: 0.875rem; font-weight: 600; color: #6b7280; display: block; margin-bottom: 0.5rem;">Первый контакт</label>
-                    <span style="color: #111827;">{{ client[4][:16] if client[4] else '-' }}</span>
-                </div>
-                
-                <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="saveClientInfo()">
-                    <i class="fas fa-save"></i>
-                    <span>Сохранить изменения</span>
-                </button>
+    <div class="chart-container">
+        <h2><i class="fas fa-address-card"></i> Контактная информация</h2>
+        <div style="padding: 20px;">
+            <div class="info-item" style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                <span class="info-label" style="font-weight: 600; color: #6b7280;">Имя</span>
+                <input type="text" id="clientName" class="info-value-edit" value="{{ client[3] or '' }}" placeholder="Не указано">
             </div>
+            
+            <div class="info-item" style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                <span class="info-label" style="font-weight: 600; color: #6b7280;">Телефон</span>
+                <input type="text" id="clientPhone" class="info-value-edit" value="{{ client[2] or '' }}" placeholder="Не указано">
+            </div>
+            
+            <div class="info-item" style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                <span class="info-label" style="font-weight: 600; color: #6b7280;">Instagram</span>
+                {% if client[1] %}
+                <a href="https://instagram.com/{{ client[1] }}" target="_blank" style="color: #667eea;">
+                    @{{ client[1] }}
+                </a>
+                {% else %}
+                <span style="color: #9ca3af;">{{ client[0][:30] }}...</span>
+                {% endif %}
+            </div>
+            
+            <div class="info-item" style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                <span class="info-label" style="font-weight: 600; color: #6b7280;">Статус</span>
+                <select id="clientStatus" class="form-select" onchange="updateStatus()">
+                    {% for key, status in client_statuses.items() %}
+                    <option value="{{ key }}" {% if client[8] == key %}selected{% endif %}>
+                        {{ status.label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="info-item" style="padding: 15px;">
+                <span class="info-label" style="font-weight: 600; color: #6b7280;">Первый контакт</span>
+                <span class="info-value">{{ client[4][:16] if client[4] else '-' }}</span>
+            </div>
+            
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="saveClientInfo()">
+                <i class="fas fa-save"></i> Сохранить изменения
+            </button>
         </div>
     </div>
     
     <!-- Заметки -->
-    <div class="card">
-        <div class="card-header">
-            <h2 style="font-size: 1.25rem; font-weight: 600; color: #111827; display: flex; align-items: center; gap: 0.5rem; margin: 0;">
-                <i class="fas fa-sticky-note" style="color: #f59e0b;"></i>
-                Заметки
-            </h2>
-        </div>
-        <div class="card-body">
-            <textarea id="clientNotes" class="form-input" rows="10" placeholder="Добавьте заметки о клиенте..." style="resize: vertical;">{{ client[11] if client|length > 11 else '' }}</textarea>
-            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="saveNotes()">
-                <i class="fas fa-save"></i>
-                <span>Сохранить заметки</span>
+    <div class="chart-container">
+        <h2><i class="fas fa-sticky-note"></i> Заметки</h2>
+        <div style="padding: 20px;">
+            <textarea id="clientNotes" class="form-textarea" rows="10" placeholder="Добавьте заметки о клиенте...">{{ client[11] if client|length > 11 else '' }}</textarea>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="saveNotes()">
+                <i class="fas fa-save"></i> Сохранить заметки
             </button>
         </div>
     </div>
@@ -181,92 +141,102 @@
 
 <!-- История записей -->
 {% if bookings %}
-<div class="table-container" style="margin-bottom: 2rem;">
-    <div class="card-header">
-        <h2 style="font-size: 1.5rem; font-weight: 600; color: #111827; display: flex; align-items: center; gap: 0.5rem; margin: 0;">
-            <i class="fas fa-calendar-alt" style="color: #a855f7;"></i>
-            История записей
+<div class="data-table-container" style="margin-top: 30px;">
+    <div style="padding: 20px; border-bottom: 1px solid #e5e7eb;">
+        <h2 style="font-size: 1.3em; color: #1f2937;">
+            <i class="fas fa-calendar-alt"></i> История записей
         </h2>
     </div>
-    <div style="overflow-x: auto;">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Услуга</th>
-                    <th>Дата/Время</th>
-                    <th>Статус</th>
-                    <th>Доход</th>
-                    <th>Создано</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for booking in bookings %}
-                <tr>
-                    <td style="font-weight: 600; color: #111827;">{{ booking[2] }}</td>
-                    <td style="color: #6b7280;">{{ booking[3] }}</td>
-                    <td>
-                        {% if booking[6] == 'pending' %}
-                        <span class="badge badge-warning">Ожидает</span>
-                        {% elif booking[6] == 'confirmed' %}
-                        <span class="badge badge-success">Подтверждена</span>
-                        {% elif booking[6] == 'completed' %}
-                        <span class="badge badge-info">Завершена</span>
-                        {% elif booking[6] == 'cancelled' %}
-                        <span class="badge badge-danger">Отменена</span>
-                        {% endif %}
-                    </td>
-                    <td style="font-weight: 600; color: #10b981;">{{ booking[8] if booking|length > 8 else 0 }} AED</td>
-                    <td style="color: #6b7280;">{{ booking[7][:16] }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Услуга</th>
+                <th>Дата/Время</th>
+                <th>Статус</th>
+                <th>Доход</th>
+                <th>Создано</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td><strong>{{ booking[2] }}</strong></td>
+                <td>{{ booking[3] }}</td>
+                <td><span class="badge badge-{{ booking[6] }}">{{ booking[6] }}</span></td>
+                <td>{{ booking[8] if booking|length > 8 else 0 }} AED</td>
+                <td>{{ booking[7][:16] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endif %}
 
 <!-- История сообщений -->
-<div class="card">
-    <div class="card-header">
-        <h2 style="font-size: 1.5rem; font-weight: 600; color: #111827; display: flex; align-items: center; gap: 0.5rem; margin: 0;">
-            <i class="fas fa-comments" style="color: #3b82f6;"></i>
-            История сообщений (последние 50)
+<div class="data-table-container" style="margin-top: 30px;">
+    <div style="padding: 20px; border-bottom: 1px solid #e5e7eb;">
+        <h2 style="font-size: 1.3em; color: #1f2937;">
+            <i class="fas fa-comments"></i> История сообщений (последние 50)
         </h2>
     </div>
-    <div class="card-body" style="max-height: 600px; overflow-y: auto;">
-        {% if history %}
-        <div style="display: flex; flex-direction: column; gap: 1rem;">
-            {% for msg in history %}
-            <div style="{% if msg[1] == 'client' %}background: linear-gradient(135deg, #eff6ff 0%, #f3f4f6 100%); border-left: 4px solid #3b82f6;{% else %}background: linear-gradient(135deg, #d1fae5 0%, #f3f4f6 100%); border-left: 4px solid #10b981;{% endif %} padding: 1rem; border-radius: 12px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-                    <span style="font-weight: 600; color: #111827; display: flex; align-items: center; gap: 0.5rem;">
-                        {% if msg[1] == 'client' %}
-                        <i class="fas fa-user" style="color: #3b82f6;"></i> Клиент
-                        {% else %}
-                        <i class="fas fa-robot" style="color: #10b981;"></i> Бот
-                        {% endif %}
-                    </span>
-                    <span style="color: #9ca3af; font-size: 0.875rem;">{{ msg[2][11:16] }}</span>
-                </div>
-                <div style="color: #374151; line-height: 1.5;">{{ msg[0] }}</div>
+    <div style="padding: 20px; max-height: 600px; overflow-y: auto;">
+        {% for msg in history %}
+        <div class="message-box {% if msg[1] == 'client' %}message-client{% else %}message-bot{% endif %}" style="margin-bottom: 15px;">
+            <div class="message-header">
+                <span>
+                    {% if msg[1] == 'client' %}
+                    <i class="fas fa-user"></i> Клиент
+                    {% else %}
+                    <i class="fas fa-robot"></i> Бот
+                    {% endif %}
+                </span>
+                <span style="color: #9ca3af; font-size: 0.9em;">{{ msg[2][11:16] }}</span>
             </div>
-            {% endfor %}
+            <div class="message-text">{{ msg[0] }}</div>
         </div>
-        {% else %}
-        <div style="padding: 3rem; text-align: center;">
-            <i class="fas fa-comments" style="font-size: 3rem; color: #e5e7eb; margin-bottom: 1rem;"></i>
-            <p style="color: #6b7280;">Нет сообщений</p>
-        </div>
-        {% endif %}
+        {% endfor %}
     </div>
 </div>
-{% endblock %}
 
-{% block extra_scripts %}
+<style>
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-label {
+    min-width: 120px;
+}
+
+.info-value-edit {
+    flex: 1;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.95em;
+    transition: border-color 0.3s;
+}
+
+.info-value-edit:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.message-client {
+    background: linear-gradient(135deg, #e0e7ff, #f3f4f6);
+    border-left: 4px solid #667eea;
+}
+
+.message-bot {
+    background: linear-gradient(135deg, #d1fae5, #f3f4f6);
+    border-left: 4px solid #10b981;
+}
+</style>
+
 <script>
 const clientId = '{{ client[0] }}';
 
-// Save client info
 async function saveClientInfo() {
     const name = document.getElementById('clientName').value;
     const phone = document.getElementById('clientPhone').value;
@@ -289,7 +259,6 @@ async function saveClientInfo() {
     }
 }
 
-// Update status
 async function updateStatus() {
     const status = document.getElementById('clientStatus').value;
     
@@ -303,14 +272,12 @@ async function updateStatus() {
         const data = await response.json();
         if (data.success) {
             showNotification('Статус обновлен', 'success');
-            setTimeout(() => location.reload(), 1000);
         }
     } catch (error) {
         showNotification('Ошибка обновления', 'error');
     }
 }
 
-// Save notes
 async function saveNotes() {
     const notes = document.getElementById('clientNotes').value;
     

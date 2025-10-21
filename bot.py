@@ -5,76 +5,47 @@ from config import GEMINI_API_KEY, SALON_INFO, SERVICES
 
 genai.configure(api_key=GEMINI_API_KEY)
 
-def get_service_info_v2(query: str) -> Optional[Dict]:
-    """Найти услугу по запросу клиента (из БД)"""
-    from database import get_all_services
-    
+def get_service_info(query: str) -> Optional[Dict]:
+    """Найти услугу по запросу клиента"""
     query_lower = query.lower()
     
-    # Получаем услуги из БД
-    services = get_all_services(active_only=True)
-    
-    # Ключевые слова для поиска
-    keywords_mapping = {
-        "губ": ["lips", "permanent lips", "перманент губ"],
-        "бров": ["brows", "permanent brows", "брови"],
-        "стрелк": ["eyeliner", "подводк"],
-        "маникюр": ["manicure", "гель лак", "gelish"],
-        "педикюр": ["pedicure"],
-        "массаж": ["massage"],
-        "наращивание": ["extension", "lashes"],
-        "окраш": ["color", "краск", "balayage", "ombre"],
-        "стрижк": ["haircut", "cut"],
+    # Словарь ключевых слов для поиска услуг
+    service_keywords = {
+        "permanent_lips": ["губ", "lips", "permanent lips", "перманент губ"],
+        "permanent_brows": ["бров", "brows", "permanent brows", "перманент бровей", "брови"],
+        "eyeliner": ["стрелк", "eyeliner", "подводк"],
+        "lashliner": ["межресничн", "lashliner", "между ресниц"],
+        "deep_facial": ["чистк лица", "facial cleaning", "глубок чистк"],
+        "manicure_gelish": ["маникюр", "manicure", "гель лак", "gelish"],
+        "pedicure_gelish": ["педикюр", "pedicure"],
+        "balayage": ["балаяж", "balayage"],
+        "ombre": ["омбре", "ombre", "шатуш", "shatush", "air touch", "аир тач"],
+        "bleach_hair": ["осветлен", "bleach", "блонд", "blonde"],
+        "hair_cut": ["стрижк", "haircut", "cut"],
+        "full_color": ["окраш", "color", "краск"],
+        "classic_lashes": ["классическ ресниц", "classic lash", "наращивание ресниц"],
+        "2d_lashes": ["2d", "2д объем"],
+        "3d_lashes": ["3d", "3д объем"],
+        "mega_lashes": ["4d", "5d", "мега объем", "mega volume"],
+        "brow_lamination": ["ламин бров", "brow lamination", "ламинирование бровей"],
+        "lash_lamination": ["ламин ресниц", "lash lamination", "ламинирование ресниц"],
+        "body_massage": ["массаж тела", "body massage"],
+        "back_massage": ["массаж спин", "back massage"],
+        "anticellulite_massage": ["антицеллюлит", "anticellulite"],
+        "full_bikini": ["бикини", "bikini"],
+        "full_legs": ["эпиляция ног", "leg wax", "ноги"],
     }
     
-    # Ищем совпадения
-    for service in services:
-        service_name_ru = (service[3] or service[2]).lower()
-        service_desc_ru = (service[9] or "").lower()
-        
-        # Прямое совпадение
-        if query_lower in service_name_ru or query_lower in service_desc_ru:
-            return {
-                "name": service[2],
-                "name_ru": service[3] or service[2],
-                "price": service[5],
-                "currency": service[6],
-                "description_ru": service[9],
-                "benefits": service[11].split('|') if service[11] else []
-            }
-        
-        # Поиск по ключевым словам
-        for keyword, synonyms in keywords_mapping.items():
+    for service_key, keywords in service_keywords.items():
+        for keyword in keywords:
             if keyword in query_lower:
-                for synonym in synonyms:
-                    if synonym.lower() in service_name_ru:
-                        return {
-                            "name": service[2],
-                            "name_ru": service[3] or service[2],
-                            "price": service[5],
-                            "currency": service[6],
-                            "description_ru": service[9],
-                            "benefits": service[11].split('|') if service[11] else []
-                        }
+                return SERVICES.get(service_key)
     
     return None
 
-
-async def ask_gemini_v2(prompt: str, context: str = "") -> str:
-    """
-    Запрос к Gemini AI с использованием настроек из БД
-    """
-    from database import get_bot_settings
-    
+async def ask_gemini(prompt: str, context: str = "") -> str:
+    """Запрос к Gemini AI"""
     model = genai.GenerativeModel('gemini-2.0-flash-exp')
-    
-    # Получаем настройки
-    settings = get_bot_settings()
-    
-    if settings:
-        # Модифицируем context на основе настроек
-        context = build_prompt_from_settings(settings, prompt)
-    
     full_prompt = f"{context}\n\n{prompt}"
     
     try:

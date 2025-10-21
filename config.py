@@ -4,35 +4,17 @@ import sys
 import io
 from datetime import datetime
 
-import os
-from dotenv import load_dotenv
-
-load_dotenv() 
-
 os.environ['GRPC_VERBOSITY'] = 'ERROR'
 os.environ['GLOG_minloglevel'] = '2'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 # ===== ВЕРСИЯ ДЛЯ КЭШИРОВАНИЯ =====
-import time
-
-# Версия CSS для кэш-буста
-CSS_VERSION = str(int(time.time()))
+CSS_VERSION = datetime.now().strftime('%Y%m%d%H%M%S')
 
 # ===== ТОКЕНЫ И КЛЮЧИ =====
-VERIFY_TOKEN = os.getenv("VERIFY_TOKEN", "taha")
-PAGE_ACCESS_TOKEN = os.getenv("PAGE_ACCESS_TOKEN", "ваш_токен")
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "ваш_ключ")
-
-# База данных
-DATABASE_NAME = os.getenv("DATABASE_NAME", "salon_bot.db")
-
-# SMTP
-SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
-SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
-SMTP_USERNAME = os.getenv("SMTP_USERNAME", "")
-SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
-FROM_EMAIL = os.getenv("FROM_EMAIL", "")
+VERIFY_TOKEN = "taha"
+PAGE_ACCESS_TOKEN = "EAAvRUEhJuBoBPk3mfuTp1UxZCYj0plL6ZCZAxxrLI9VX1ezuUYzVhH2ZBrFYURp76hpdjmZC5bMpIBkmEBD2Wbdf4ANUT77r9N2cUMzmK7yKdFbSjewBtZAhTrGPpNYZAorJJsVmkQzzMddBq7ZBWbMbUXuFmvfxloTluQPuAixqP9cQwBlzwtTmBaEzr5uxV0JrZALfe2ZA1MmdOSIvKZCGkMirOpqYgZDZD"
+GEMINI_API_KEY = "AIzaSyDlgsahT92pPt-CsSd7XSlQm09uxyMCEHA"
 
 # ===== ИНФОРМАЦИЯ О САЛОНЕ =====
 SALON_INFO = {
@@ -540,32 +522,3 @@ SMTP_PASSWORD = "hkfw qruh hxur ghta"
 FROM_EMAIL = "ii3391609@gmail.com"
 
 DATABASE_NAME = 'salon_bot.db'
-
-# ===== СТАТУСЫ КЛИЕНТОВ С ЦВЕТАМИ =====
-CLIENT_STATUSES = {
-    "new": {
-        "label": "Новый",
-        "color": "green",
-        "icon": "fa-user-plus"
-    },
-    "lead": {
-        "label": "Лид",
-        "color": "blue",
-        "icon": "fa-user-clock"
-    },
-    "customer": {
-        "label": "Клиент",
-        "color": "purple",
-        "icon": "fa-user-check"
-    },
-    "vip": {
-        "label": "VIP",
-        "color": "pink",
-        "icon": "fa-crown"
-    },
-    "lost": {
-        "label": "Потерян",
-        "color": "red",
-        "icon": "fa-user-times"
-    }
-}

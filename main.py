@@ -25,7 +25,7 @@ from database import (
 )
 
 # ===== ИМПОРТЫ BOT =====
-from bot import ask_gemini_v2, build_genius_prompt, extract_booking_info, is_booking_complete
+from bot import ask_gemini, build_genius_prompt, extract_booking_info, is_booking_complete
 
 # ===== ИМПОРТЫ INSTAGRAM =====
 from instagram import send_message, send_typing_indicator
@@ -97,16 +97,10 @@ async def log_requests(request: Request, call_next):
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
-import os
-
 # CORS
-allowed_origins = ["https://mlediamant.com"]
-if os.getenv("ENVIRONMENT") != "production":
-    allowed_origins.extend(["http://localhost:8000", "http://127.0.0.1:8000"])
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
+    allow_origins=["https://mlediamant.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -115,14 +109,7 @@ app.add_middleware(
 # Trusted hosts
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=[
-        "mlediamant.com", 
-        "*.mlediamant.com",
-        "localhost",
-        "127.0.0.1",
-        "localhost:8000",
-        "127.0.0.1:8000"
-    ]
+    allowed_hosts=["mlediamant.com", "*.mlediamant.com"]
 )
 
 # Security headers
@@ -726,45 +713,30 @@ async def terms_of_service(request: Request):
         log_error(f"Ошибка в terms_of_service: {e}", "api", exc_info=True)
         raise
 
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-scheduler = AsyncIOScheduler()
-
-def cleanup_expired_sessions():
-    """Очистить истёкшие сессии"""
-    from database import DATABASE_NAME
-    from datetime import datetime
-    
-    conn = sqlite3.connect(DATABASE_NAME)
-    c = conn.cursor()
-    
-    now = datetime.now().isoformat()
-    
-    try:
-        c.execute("DELETE FROM sessions WHERE expires_at < ?", (now,))
-        deleted = c.rowcount
-        conn.commit()
-        conn.close()
-        
-        if deleted > 0:
-            print(f"🧹 Очищено {deleted} истёкших сессий")
-    except Exception as e:
-        conn.close()
-        print(f"Ошибка очистки сессий: {e}")
-
-
-# Запускать каждый час
-scheduler.add_job(cleanup_expired_sessions, 'interval', hours=1)
-
+# ===== ЗАПУСК =====
 @app.on_event("startup")
-async def startup_scheduler():
-    scheduler.start()
-    print("✅ Планировщик задач запущен")
+async def startup_event():
+    """При запуске приложения"""
+    try:
+        log_info("=" * 70, "startup")
+        log_info("🚀 Запуск CRM системы...", "startup")
+        log_info(f"💎 Салон: {SALON_INFO['name']}", "startup")
+        log_info(f"🤖 Бот-гений продаж: {SALON_INFO['bot_name']}", "startup")
+        log_info(f"📍 Адрес: {SALON_INFO['address']}", "startup")
+        log_info("=" * 70, "startup")
 
-@app.on_event("shutdown")
-async def shutdown_scheduler():
-    scheduler.shutdown()
+        init_database()
 
+        log_info("✅ CRM готова к работе!", "startup")
+        log_info("🔐 Логин: http://localhost:8000/login", "startup")
+        log_info("📊 Админ-панель: http://localhost:8000/admin", "startup")
+        log_info("📈 Воронка продаж: http://localhost:8000/admin/funnel", "startup")
+        log_info("📉 Аналитика: http://localhost:8000/admin/analytics", "startup")
+        log_info("=" * 70, "startup")
+    except Exception as e:
+        log_critical(f"❌ КРИТИЧЕСКАЯ ОШИБКА ПРИ ЗАПУСКЕ: {e}", "startup")
+        raise
 
 
 if __name__ == "__main__":

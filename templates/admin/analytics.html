@@ -9,249 +9,283 @@
 {% endblock %}
 
 {% block content %}
-<!-- Page Header -->
-<div class="page-header" style="margin-bottom: 2rem;">
-    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-        <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-            <i class="fas fa-chart-line" style="color: white; font-size: 1.5rem;"></i>
-        </div>
-        <div>
-            <h1 style="font-size: 2rem; font-weight: 700; color: #111827; margin: 0;">Аналитика и отчеты</h1>
-            <p style="color: #6b7280; font-size: 1rem; margin: 0;">Детальный анализ работы салона</p>
-        </div>
-    </div>
+<div class="page-header">
+    <h1>📊 Аналитика и отчеты</h1>
+    <p>Детальный анализ работы салона</p>
 </div>
 
-<!-- Filters -->
-<div class="card" style="margin-bottom: 1.5rem;">
-    <div class="card-body" style="padding: 1.5rem;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; align-items: center;">
-            <select class="form-input" id="periodSelect" onchange="changePeriod()" style="padding: 0.75rem 1rem;">
-                <option value="7">📅 Неделя</option>
-                <option value="14">📅 2 недели</option>
-                <option value="30" selected>📅 Месяц</option>
-                <option value="90">📅 3 месяца</option>
-                <option value="custom">🗓️ Свой период</option>
-            </select>
+<!-- Period Selector -->
+<div class="search-filter-bar">
+    <select class="filter-select" id="periodSelect" onchange="changePeriod()">
+        <option value="7">Неделя</option>
+        <option value="14">2 недели</option>
+        <option value="30" selected>Месяц</option>
+        <option value="90">3 месяца</option>
+        <option value="custom">Свой период</option>
+    </select>
 
-            <input type="date" class="form-input" id="dateFrom" style="display:none;">
-            <input type="date" class="form-input" id="dateTo" style="display:none;">
+    <input type="date" class="form-input" id="dateFrom" style="display:none; width: auto;"
+        onchange="updateCustomPeriod()">
+    <input type="date" class="form-input" id="dateTo" style="display:none; width: auto;"
+        onchange="updateCustomPeriod()">
 
-            <button class="btn btn-primary" onclick="refreshData()">
-                <i class="fas fa-sync"></i>
-                <span>Обновить</span>
-            </button>
+    <button class="btn btn-primary" onclick="refreshData()">
+        <i class="fas fa-sync"></i> Обновить
+    </button>
 
-            <select class="form-input" id="exportFormat" style="padding: 0.75rem 1rem;">
-                <option value="">Экспорт...</option>
-                <option value="csv">📄 CSV</option>
-                <option value="excel">📊 Excel (XLSX)</option>
-                <option value="pdf">📕 PDF</option>
-            </select>
+<select class="filter-select" id="exportFormat" style="width: auto;">
+        <option value="">Экспорт...</option>
+        <option value="csv">CSV</option>
+        <option value="excel">Excel (XLSX)</option>
+        <option value="pdf">PDF</option>
+    </select>
 
-            <button class="btn btn-secondary" onclick="exportReport()">
-                <i class="fas fa-download"></i>
-                <span>Скачать</span>
-            </button>
-        </div>
-    </div>
+    <button class="btn btn-secondary" onclick="exportReport()">
+        <i class="fas fa-download"></i> Скачать
+    </button>
 </div>
 
-<!-- Stats Grid -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-    <!-- Конверсия -->
-    <div class="stat-card-gradient" style="background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%); color: white; position: relative; overflow: hidden;">
-        <div style="position: absolute; top: -50%; right: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);"></div>
-        <div style="position: relative; z-index: 1;">
-            <div style="width: 48px; height: 48px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
-                <i class="fas fa-chart-line" style="font-size: 1.25rem;"></i>
+<!-- Key Metrics -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.conversion_rate }}%</h3>
+                <p>Конверсия</p>
+                <span class="stat-trend trend-up">
+                    <i class="fas fa-arrow-up"></i> +2.3%
+                </span>
             </div>
-            <div style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;">{{ stats.conversion_rate }}%</div>
-            <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 1rem;">Конверсия</div>
-            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.375rem 0.75rem; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 9999px; font-size: 0.875rem; font-weight: 600;">
-                <i class="fas fa-arrow-up"></i>
-                <span>+2.3%</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Время ответа -->
-    <div class="stat-card-gradient" style="background: linear-gradient(135deg, #ec4899 0%, #db2777 100%); color: white; position: relative; overflow: hidden;">
-        <div style="position: absolute; top: -50%; right: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);"></div>
-        <div style="position: relative; z-index: 1;">
-            <div style="width: 48px; height: 48px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
-                <i class="fas fa-clock" style="font-size: 1.25rem;"></i>
-            </div>
-            <div style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;">{{ analytics.avg_response_time }}</div>
-            <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 1rem;">Ср. время ответа (мин)</div>
-            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.375rem 0.75rem; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 9999px; font-size: 0.875rem; font-weight: 600;">
-                <i class="fas fa-arrow-down"></i>
-                <span>-0.5 мин</span>
+            <div class="stat-card-icon">
+                <i class="fas fa-chart-line"></i>
             </div>
         </div>
     </div>
 
-    <!-- Доход -->
-    <div class="stat-card-gradient" style="background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%); color: white; position: relative; overflow: hidden;">
-        <div style="position: absolute; top: -50%; right: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);"></div>
-        <div style="position: relative; z-index: 1;">
-            <div style="width: 48px; height: 48px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
-                <i class="fas fa-dollar-sign" style="font-size: 1.25rem;"></i>
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ analytics.avg_response_time }} мин</h3>
+                <p>Среднее время ответа</p>
+                <span class="stat-trend trend-down">
+                    <i class="fas fa-arrow-down"></i> -0.5 мин
+                </span>
             </div>
-            <div style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;">{{ stats.total_revenue }}</div>
-            <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 1rem;">Доход (AED)</div>
-            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.375rem 0.75rem; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 9999px; font-size: 0.875rem; font-weight: 600;">
-                <i class="fas fa-arrow-up"></i>
-                <span>+15%</span>
+            <div class="stat-card-icon">
+                <i class="fas fa-clock"></i>
             </div>
         </div>
     </div>
 
-    <!-- Средний чек -->
-    <div class="stat-card-gradient" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; position: relative; overflow: hidden;">
-        <div style="position: absolute; top: -50%; right: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);"></div>
-        <div style="position: relative; z-index: 1;">
-            <div style="width: 48px; height: 48px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
-                <i class="fas fa-receipt" style="font-size: 1.25rem;"></i>
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.total_revenue }} AED</h3>
+                <p>Доход за период</p>
+                <span class="stat-trend trend-up">
+                    <i class="fas fa-arrow-up"></i> +15%
+                </span>
             </div>
-            <div style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;">
-                {{ (stats.total_revenue / stats.completed_bookings) | round(0) if stats.completed_bookings > 0 else 0 }}
+            <div class="stat-card-icon">
+                <i class="fas fa-dollar-sign"></i>
             </div>
-            <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 1rem;">Средний чек (AED)</div>
-            <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.375rem 0.75rem; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 9999px; font-size: 0.875rem; font-weight: 600;">
-                <i class="fas fa-arrow-up"></i>
-                <span>+8%</span>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ (stats.total_revenue / stats.completed_bookings) | round(0) if stats.completed_bookings > 0 else
+                    0 }} AED</h3>
+                <p>Средний чек</p>
+                <span class="stat-trend trend-up">
+                    <i class="fas fa-arrow-up"></i> +8%
+                </span>
+            </div>
+            <div class="stat-card-icon">
+                <i class="fas fa-receipt"></i>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Charts Grid -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-    <!-- Динамика записей -->
-    <div class="card">
-        <div class="card-header">
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-chart-area" style="color: white;"></i>
-                </div>
-                <h2 style="font-size: 1.25rem; font-weight: 600; color: #111827; margin: 0;">Динамика записей</h2>
-            </div>
-        </div>
-        <div class="card-body">
-            <div style="height: 300px;">
-                <canvas id="bookingsTrendChart"></canvas>
-            </div>
+<div class="analytics-grid">
+    <!-- Bookings Trend -->
+    <div class="chart-container">
+        <h2><i class="fas fa-chart-area"></i> Динамика записей</h2>
+        <div class="chart-wrapper">
+            <canvas id="bookingsTrendChart"></canvas>
         </div>
     </div>
 
-    <!-- Распределение услуг -->
-    <div class="card">
-        <div class="card-header">
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #ec4899 0%, #db2777 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-chart-pie" style="color: white;"></i>
-                </div>
-                <h2 style="font-size: 1.25rem; font-weight: 600; color: #111827; margin: 0;">Распределение услуг</h2>
-            </div>
+    <!-- Services Distribution -->
+    <div class="chart-container">
+        <h2><i class="fas fa-chart-pie"></i> Распределение услуг</h2>
+        <div class="chart-wrapper">
+            <canvas id="servicesChart"></canvas>
         </div>
-        <div class="card-body">
-            <div style="height: 300px;">
-                <canvas id="servicesChart"></canvas>
-            </div>
+    </div>
+</div>
+
+<!-- More Charts -->
+<div class="analytics-grid">
+    <!-- Status Distribution -->
+    <div class="chart-container">
+        <h2><i class="fas fa-chart-bar"></i> Статусы записей</h2>
+        <div class="chart-wrapper">
+            <canvas id="statusChart"></canvas>
         </div>
     </div>
 
-    <!-- Статусы записей -->
-    <div class="card">
-        <div class="card-header">
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-chart-bar" style="color: white;"></i>
-                </div>
-                <h2 style="font-size: 1.25rem; font-weight: 600; color: #111827; margin: 0;">Статусы записей</h2>
-            </div>
-        </div>
-        <div class="card-body">
-            <div style="height: 300px;">
-                <canvas id="statusChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <!-- Динамика дохода -->
-    <div class="card">
-        <div class="card-header">
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-dollar-sign" style="color: white;"></i>
-                </div>
-                <h2 style="font-size: 1.25rem; font-weight: 600; color: #111827; margin: 0;">Динамика дохода</h2>
-            </div>
-        </div>
-        <div class="card-body">
-            <div style="height: 300px;">
-                <canvas id="revenueChart"></canvas>
-            </div>
+    <!-- Revenue Trend -->
+    <div class="chart-container">
+        <h2><i class="fas fa-dollar-sign"></i> Динамика дохода</h2>
+        <div class="chart-wrapper">
+            <canvas id="revenueChart"></canvas>
         </div>
     </div>
 </div>
 
 <!-- Services Table -->
-<div class="table-container">
-    <div class="card-header">
-        <h2 style="font-size: 1.5rem; font-weight: 600; color: #111827; display: flex; align-items: center; gap: 0.5rem; margin: 0;">
-            <i class="fas fa-list" style="color: #a855f7;"></i>
-            Детализация по услугам
+<div class="data-table-container" style="margin-top: 30px;">
+    <div style="padding: 20px; border-bottom: 1px solid #e5e7eb;">
+        <h2 style="font-size: 1.3em; color: #1f2937;">
+            <i class="fas fa-list"></i> Детализация по услугам
         </h2>
     </div>
-    <div style="overflow-x: auto;">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Услуга</th>
-                    <th>Количество</th>
-                    <th>Доход</th>
-                    <th>Средний чек</th>
-                    <th>Доля рынка</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if analytics.services_stats %}
-                {% set total_count = analytics.services_stats | sum(attribute=1) %}
-                {% for service in analytics.services_stats %}
-                <tr>
-                    <td style="font-weight: 600; color: #111827;">{{ service[0] }}</td>
-                    <td style="color: #111827;">{{ service[1] }}</td>
-                    <td style="font-weight: 600; color: #10b981;">{{ service[2] or 0 }} AED</td>
-                    <td style="color: #111827;">
-                        {{ ((service[2] or 0) / service[1]) | round(0) if service[1] > 0 else 0 }} AED
-                    </td>
-                    <td>
-                        <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <div style="flex: 1; height: 8px; background: #e5e7eb; border-radius: 9999px; overflow: hidden;">
-                                <div style="height: 100%; background: linear-gradient(90deg, #a855f7 0%, #9333ea 100%); border-radius: 9999px; transition: width 1s ease; width: {{ (service[1] / total_count * 100) if total_count > 0 else 0 }}%;"></div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Услуга</th>
+                <th>Количество</th>
+                <th>Доход</th>
+                <th>Средний чек</th>
+                <th>Доля рынка</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if analytics.services_stats %}
+            {% set total_count = analytics.services_stats | sum(attribute=1) %}
+            {% for service in analytics.services_stats %}
+            <tr>
+                <td><strong>{{ service[0] }}</strong></td>
+                <td>{{ service[1] }}</td>
+                <td>{{ service[2] or 0 }} AED</td>
+                <td>{{ ((service[2] or 0) / service[1]) | round(0) if service[1] > 0 else 0 }} AED</td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="progress-bar" style="flex: 1;">
+                            <div class="progress-fill"
+                                style="width: {{ (service[1] / total_count * 100) if total_count > 0 else 0 }}%"></div>
+                        </div>
+                        <span>{{ ((service[1] / total_count * 100) if total_count > 0 else 0) | round(1) }}%</span>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="5">
+                    <div class="empty-state">
+                        <i class="fas fa-chart-bar"></i>
+                        <h3>Нет данных</h3>
+                        <p>Данные появятся после первых записей</p>
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Insights -->
+<div class="analytics-grid" style="margin-top: 30px;">
+    <div class="chart-container">
+        <h2><i class="fas fa-lightbulb"></i> Ключевые инсайты</h2>
+        <div style="padding: 20px 0;">
+            <div class="message-box"
+                style="background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-left: 5px solid #10b981; margin-bottom: 15px;">
+                <div class="message-header">
+                    <span><i class="fas fa-trophy"></i> Лучшая услуга</span>
+                    <span class="badge badge-success">Топ</span>
+                </div>
+                <div class="message-text">
+                    {% if analytics.services_stats and analytics.services_stats[0] %}
+                    <strong>{{ analytics.services_stats[0][0] }}</strong> — самая популярная услуга с {{
+                    analytics.services_stats[0][1] }} записями
+                    {% else %}
+                    Пока нет данных по услугам
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="message-box"
+                style="background: linear-gradient(135deg, #dbeafe, #bfdbfe); border-left: 5px solid #3b82f6; margin-bottom: 15px;">
+                <div class="message-header">
+                    <span><i class="fas fa-clock"></i> Время работы</span>
+                    <span class="badge badge-info">Инсайт</span>
+                </div>
+                <div class="message-text">
+                    Средний цикл от первого контакта до записи: <strong>{{ analytics.avg_response_time * 3 | round(0) }}
+                        минут</strong>
+                </div>
+            </div>
+
+            <div class="message-box"
+                style="background: linear-gradient(135deg, #fef3c7, #fde68a); border-left: 5px solid #f59e0b; margin-bottom: 15px;">
+                <div class="message-header">
+                    <span><i class="fas fa-chart-line"></i> Тренд</span>
+                    <span class="badge badge-warning">Важно</span>
+                </div>
+                <div class="message-text">
+                    {% if stats.total_bookings > 0 %}
+                    Конверсия составляет {{ stats.conversion_rate }}%. Это {% if stats.conversion_rate > 30 %}отличный{%
+                    elif stats.conversion_rate > 15 %}хороший{% else %}средний{% endif %} показатель для салонов
+                    красоты.
+                    {% else %}
+                    Начните собирать данные для анализа трендов
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h2><i class="fas fa-users"></i> Сегментация клиентов</h2>
+        <div style="padding: 20px 0;">
+            <div class="client-card">
+                <div class="client-stats" style="border-top: none; padding-top: 0;">
+                    <div class="client-stat">
+                        <div class="client-stat-value">{{ stats.new_clients }}</div>
+                        <div class="client-stat-label">Новые</div>
+                        <div class="progress-bar" style="margin-top: 10px;">
+                            <div class="progress-fill"
+                                style="width: {{ (stats.new_clients / stats.total_clients * 100) if stats.total_clients > 0 else 0 }}%; background: #3b82f6;">
                             </div>
-                            <span style="font-size: 0.875rem; font-weight: 600; color: #111827; min-width: 50px;">
-                                {{ ((service[1] / total_count * 100) if total_count > 0 else 0) | round(1) }}%
-                            </span>
                         </div>
-                    </td>
-                </tr>
-                {% endfor %}
-                {% else %}
-                <tr>
-                    <td colspan="5" style="padding: 5rem 1.5rem; text-align: center;">
-                        <div style="display: flex; flex-direction: column; align-items: center;">
-                            <i class="fas fa-chart-bar" style="font-size: 4rem; color: #e5e7eb; margin-bottom: 1rem;"></i>
-                            <h3 style="font-size: 1.25rem; font-weight: 600; color: #111827; margin-bottom: 0.5rem;">Нет данных</h3>
-                            <p style="color: #6b7280;">Данные появятся после первых записей</p>
+                    </div>
+                    <div class="client-stat">
+                        <div class="client-stat-value">{{ stats.leads }}</div>
+                        <div class="client-stat-label">Лиды</div>
+                        <div class="progress-bar" style="margin-top: 10px;">
+                            <div class="progress-fill"
+                                style="width: {{ (stats.leads / stats.total_clients * 100) if stats.total_clients > 0 else 0 }}%; background: #f59e0b;">
+                            </div>
                         </div>
-                    </td>
-                </tr>
-                {% endif %}
-            </tbody>
-        </table>
+                    </div>
+                    <div class="client-stat">
+                        <div class="client-stat-value">{{ stats.customers }}</div>
+                        <div class="client-stat-label">Клиенты</div>
+                        <div class="progress-bar" style="margin-top: 10px;">
+                            <div class="progress-fill"
+                                style="width: {{ (stats.customers / stats.total_clients * 100) if stats.total_clients > 0 else 0 }}%; background: #10b981;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -269,6 +303,15 @@
         } else {
             dateFrom.style.display = 'none';
             dateTo.style.display = 'none';
+            refreshData();
+        }
+    }
+
+    function updateCustomPeriod() {
+        const dateFrom = document.getElementById('dateFrom').value;
+        const dateTo = document.getElementById('dateTo').value;
+
+        if (dateFrom && dateTo) {
             refreshData();
         }
     }
@@ -295,162 +338,115 @@
     }
 
     function exportReport() {
-        const format = document.getElementById('exportFormat').value;
-        
-        if (!format) {
-            showNotification('Выберите формат экспорта', 'warning');
-            return;
-        }
-        
-        const period = document.getElementById('periodSelect').value;
-        const dateFrom = document.getElementById('dateFrom').value;
-        const dateTo = document.getElementById('dateTo').value;
-        
-        let url = `/admin/api/export/analytics?format=${format}&period=${period}`;
-        
-        if (period === 'custom' && dateFrom && dateTo) {
-            url = `/admin/api/export/analytics?format=${format}&date_from=${dateFrom}&date_to=${dateTo}`;
-        }
-        
-        showNotification('Экспорт начат...', 'info');
-        window.location.href = url;
+    const format = document.getElementById('exportFormat').value;
+    
+    if (!format) {
+        showNotification('Выберите формат экспорта', 'warning');
+        return;
     }
+    
+    const period = document.getElementById('periodSelect').value;
+    const dateFrom = document.getElementById('dateFrom').value;
+    const dateTo = document.getElementById('dateTo').value;
+    
+    let url = `/admin/api/export/analytics?format=${format}&period=${period}`;
+    
+    if (period === 'custom' && dateFrom && dateTo) {
+        url = `/admin/api/export/analytics?format=${format}&date_from=${dateFrom}&date_to=${dateTo}`;
+    }
+    
+    showNotification('Экспорт начат...', 'info');
+    window.location.href = url;
+}
 
     function updateCharts(data) {
         console.log('Updating charts with:', data);
-        // Implementation depends on backend API structure
     }
 
     // Initialize Charts
-    document.addEventListener('DOMContentLoaded', function() {
-        // Bookings Trend Chart
-        const bookingsTrendCtx = document.getElementById('bookingsTrendChart').getContext('2d');
-        new Chart(bookingsTrendCtx, {
-            type: 'line',
-            data: {
-                labels: {{ analytics.bookings_by_day | map(attribute=0) | list | tojson }},
-                datasets: [{
-                    label: 'Записи',
-                    data: {{ analytics.bookings_by_day | map(attribute=1) | list | tojson }},
-                    borderColor: '#a855f7',
-                    backgroundColor: (context) => {
-                        const ctx = context.chart.ctx;
-                        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-                        gradient.addColorStop(0, 'rgba(168, 85, 247, 0.3)');
-                        gradient.addColorStop(1, 'rgba(168, 85, 247, 0.01)');
-                        return gradient;
-                    },
-                    tension: 0.4,
-                    fill: true,
-                    borderWidth: 3,
-                    pointBackgroundColor: '#a855f7',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 5,
-                    pointHoverRadius: 7
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
-                },
-                scales: {
-                    y: { 
-                        beginAtZero: true,
-                        grid: { color: 'rgba(0, 0, 0, 0.05)' }
-                    },
-                    x: { grid: { display: false } }
-                }
-            }
-        });
+    const bookingsTrendCtx = document.getElementById('bookingsTrendChart').getContext('2d');
+    new Chart(bookingsTrendCtx, {
+        type: 'line',
+        data: {
+            labels: {{ analytics.bookings_by_day | map(attribute = 0) | list | tojson }},
+        datasets: [{
+            label: 'Записи',
+            data: {{ analytics.bookings_by_day | map(attribute = 1) | list | tojson }},
+        borderColor: 'rgb(102, 126, 234)',
+        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+        tension: 0.4,
+        fill: true
+        }]
+    },
+        options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } }
+    }
+});
 
-        // Services Chart
-        const servicesCtx = document.getElementById('servicesChart').getContext('2d');
-        new Chart(servicesCtx, {
-            type: 'doughnut',
-            data: {
-                labels: {{ analytics.services_stats | map(attribute=0) | list | tojson }},
-                datasets: [{
-                    data: {{ analytics.services_stats | map(attribute=1) | list | tojson }},
-                    backgroundColor: ['#a855f7', '#ec4899', '#3b82f6', '#10b981', '#f59e0b', '#ef4444'],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { padding: 20, font: { size: 12, weight: '600' } }
-                    }
-                }
-            }
-        });
+    const servicesCtx = document.getElementById('servicesChart').getContext('2d');
+    new Chart(servicesCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ analytics.services_stats | map(attribute = 0) | list | tojson }},
+        datasets: [{
+            data: {{ analytics.services_stats | map(attribute = 1) | list | tojson }},
+        backgroundColor: [
+            'rgb(102, 126, 234)',
+            'rgb(118, 75, 162)',
+            'rgb(240, 147, 251)',
+            'rgb(16, 185, 129)',
+            'rgb(245, 158, 11)',
+            'rgb(59, 130, 246)'
+        ]
+        }]
+    },
+        options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' } }
+    }
+});
 
-        // Status Chart
-        const statusCtx = document.getElementById('statusChart').getContext('2d');
-        new Chart(statusCtx, {
-            type: 'bar',
-            data: {
-                labels: {{ analytics.status_stats | map(attribute=0) | list | tojson }},
-                datasets: [{
-                    label: 'Количество',
-                    data: {{ analytics.status_stats | map(attribute=1) | list | tojson }},
-                    backgroundColor: (context) => {
-                        const ctx = context.chart.ctx;
-                        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-                        gradient.addColorStop(0, '#06b6d4');
-                        gradient.addColorStop(1, '#0284c7');
-                        return gradient;
-                    },
-                    borderRadius: 8,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { beginAtZero: true, grid: { color: 'rgba(0, 0, 0, 0.05)' } },
-                    x: { grid: { display: false } }
-                }
-            }
-        });
+    const statusCtx = document.getElementById('statusChart').getContext('2d');
+    new Chart(statusCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ analytics.status_stats | map(attribute = 0) | list | tojson }},
+        datasets: [{
+            label: 'Количество',
+            data: {{ analytics.status_stats | map(attribute = 1) | list | tojson }},
+        backgroundColor: 'rgba(102, 126, 234, 0.8)',
+        borderColor: 'rgb(102, 126, 234)',
+        borderWidth: 1
+        }]
+    },
+        options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } }
+    }
+});
 
-        // Revenue Chart
-        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-        new Chart(revenueCtx, {
-            type: 'bar',
-            data: {
-                labels: {{ analytics.services_stats | map(attribute=0) | list | tojson }},
-                datasets: [{
-                    label: 'Доход (AED)',
-                    data: {{ analytics.services_stats | map(attribute=2) | list | tojson }},
-                    backgroundColor: (context) => {
-                        const ctx = context.chart.ctx;
-                        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-                        gradient.addColorStop(0, '#10b981');
-                        gradient.addColorStop(1, '#059669');
-                        return gradient;
-                    },
-                    borderRadius: 8,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { beginAtZero: true, grid: { color: 'rgba(0, 0, 0, 0.05)' } },
-                    x: { grid: { display: false } }
-                }
-            }
-        });
-    });
+    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+    new Chart(revenueCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ analytics.services_stats | map(attribute = 0) | list | tojson }},
+        datasets: [{
+            label: 'Доход (AED)',
+            data: {{ analytics.services_stats | map(attribute = 2) | list | tojson }},
+        backgroundColor: 'rgba(16, 185, 129, 0.8)',
+        borderColor: 'rgb(16, 185, 129)',
+        borderWidth: 1
+        }]
+    },
+        options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } }
+    }
+});
 </script>
 {% endblock %}

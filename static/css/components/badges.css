@@ -1,0 +1,70 @@
+/* === BASE BADGE === */
+.badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+/* === BADGE VARIANTS === */
+.badge-primary {
+    background: rgba(102, 126, 234, 0.1);
+    color: var(--primary);
+}
+
+.badge-success {
+    background: var(--success-light);
+    color: var(--success-dark);
+}
+
+.badge-warning {
+    background: var(--warning-light);
+    color: var(--warning-dark);
+}
+
+.badge-danger {
+    background: var(--danger-light);
+    color: var(--danger-dark);
+}
+
+.badge-info {
+    background: var(--info-light);
+    color: var(--info-dark);
+}
+
+.badge-secondary {
+    background: var(--gray-light);
+    color: var(--gray);
+}
+
+/* === STATUS BADGES === */
+.badge-new { background: rgba(59, 130, 246, 0.1); color: var(--info); }
+.badge-lead { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+.badge-customer { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+.badge-pending { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+.badge-confirmed { background: rgba(59, 130, 246, 0.1); color: var(--info); }
+.badge-completed { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+.badge-cancelled { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+.badge-client { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+.badge-bot { background: rgba(236, 72, 153, 0.1); color: #ec4899; }
+
+/* === NOTIFICATION BADGE === */
+.badge-notification {
+    background: var(--danger);
+    color: var(--white);
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 0.7em;
+    font-weight: 700;
+    margin-left: var(--space-sm);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
