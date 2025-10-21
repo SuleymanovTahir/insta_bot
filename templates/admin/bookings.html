@@ -1,77 +1,58 @@
 {% extends "admin/base.html" %}
 
 {% block title %}Записи - {{ salon_info.name }}{% endblock %}
-
 {% block nav_bookings %}active{% endblock %}
 
 {% block content %}
 <div class="page-header">
     <h1>📅 Управление записями</h1>
-    <p>Всего записей: {{ bookings|length }}</p>
+    <p>{{ bookings|length }} записей всего</p>
 </div>
 
-<!-- Stats -->
-<div class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-card-content">
-            <div class="stat-card-info">
-                <h3>{{ stats.pending_bookings }}</h3>
-                <p>Ожидают подтверждения</p>
-            </div>
-            <div class="stat-card-icon">
-                <i class="fas fa-clock"></i>
-            </div>
+<!-- MINI STATS -->
+<div class="stats-grid" style="margin-bottom: 24px;">
+    <div class="stat-card" style="padding: 16px;">
+        <div style="text-align: center;">
+            <div class="stat-value" style="margin-bottom: 4px;">{{ stats.pending_bookings }}</div>
+            <div class="stat-label" style="text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.5px;">Ожидают</div>
         </div>
     </div>
 
-    <div class="stat-card">
-        <div class="stat-card-content">
-            <div class="stat-card-info">
-                <h3>{{ stats.completed_bookings }}</h3>
-                <p>Завершенных</p>
-            </div>
-            <div class="stat-card-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
+    <div class="stat-card" style="padding: 16px;">
+        <div style="text-align: center;">
+            <div class="stat-value" style="margin-bottom: 4px; color: #10b981;">{{ stats.completed_bookings }}</div>
+            <div class="stat-label" style="text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.5px;">Завершено</div>
         </div>
     </div>
 
-    <div class="stat-card">
-        <div class="stat-card-content">
-            <div class="stat-card-info">
-                <h3>{{ stats.total_bookings }}</h3>
-                <p>Всего записей</p>
-            </div>
-            <div class="stat-card-icon">
-                <i class="fas fa-calendar-alt"></i>
-            </div>
+    <div class="stat-card" style="padding: 16px;">
+        <div style="text-align: center;">
+            <div class="stat-value" style="margin-bottom: 4px;">{{ stats.total_bookings }}</div>
+            <div class="stat-label" style="text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.5px;">Всего</div>
         </div>
     </div>
 
-    <div class="stat-card">
-        <div class="stat-card-content">
-            <div class="stat-card-info">
-                <h3>{{ stats.total_revenue }} AED</h3>
-                <p>Общий доход</p>
-            </div>
-            <div class="stat-card-icon">
-                <i class="fas fa-dollar-sign"></i>
-            </div>
+    <div class="stat-card" style="padding: 16px;">
+        <div style="text-align: center;">
+            <div class="stat-value" style="margin-bottom: 4px; color: #10b981;">{{ stats.total_revenue }} AED</div>
+            <div class="stat-label" style="text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.5px;">Доход</div>
         </div>
     </div>
 </div>
 
-<!-- Search and Filter -->
+<!-- FILTERS -->
 <div class="search-filter-bar">
-    <input type="text" class="search-box" id="searchInput" placeholder="🔍 Поиск по имени, телефону, услуге..."
-        onkeyup="searchTable()">
+    <div style="flex: 1; min-width: 250px; position: relative;">
+        <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #9ca3af; pointer-events: none;"></i>
+        <input type="text" class="search-box" id="searchInput" placeholder="Поиск по клиенту или услуге..." onkeyup="searchTable()" style="padding-left: 40px;">
+    </div>
 
     <select class="filter-select" id="statusFilter" onchange="filterByStatus()">
         <option value="all">Все статусы</option>
-        <option value="pending">Ожидают</option>
-        <option value="confirmed">Подтверждены</option>
-        <option value="completed">Завершены</option>
-        <option value="cancelled">Отменены</option>
+        <option value="pending">Ожидает</option>
+        <option value="confirmed">Подтверждена</option>
+        <option value="completed">Завершена</option>
+        <option value="cancelled">Отменена</option>
     </select>
 
     <button class="btn btn-primary" onclick="addBooking()">
@@ -79,7 +60,7 @@
     </button>
 </div>
 
-<!-- Bookings Table -->
+<!-- TABLE -->
 <div class="data-table-container">
     <table class="data-table" id="bookingsTable">
         <thead>
@@ -90,7 +71,7 @@
                 <th>Дата и время</th>
                 <th>Телефон</th>
                 <th>Статус</th>
-                <th>Создано</th>
+                <th>Сумма</th>
                 <th>Действия</th>
             </tr>
         </thead>
@@ -100,36 +81,32 @@
             <tr data-status="{{ booking[6] }}">
                 <td><strong>#{{ booking[0] }}</strong></td>
                 <td>
-                    <div>
-                        <strong>{{ booking[5] }}</strong><br>
-                        <small style="color: #6b7280;">{{ booking[1][:15] }}...</small>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #ec4899, #f43f5e); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; flex-shrink: 0;">
+                            {{ booking[5][0]|upper }}
+                        </div>
+                        <span>{{ booking[5] }}</span>
                     </div>
                 </td>
-                <td><strong>{{ booking[2] }}</strong></td>
-                <td>{{ booking[3] }}</td>
-                <td>{{ booking[4] }}</td>
+                <td>{{ booking[2] }}</td>
+                <td>{{ booking[3] }} {{ booking[4] }}</td>
+                <td>{{ booking[1] }}</td>
                 <td>
-                    <select class="badge badge-{{ booking[6] }}" onchange="changeStatus({{ booking[0] }}, this.value)"
-                        style="border: none; cursor: pointer;">
+                    <select class="badge badge-{{ booking[6] }}" onchange="changeStatus({{ booking[0] }}, this.value)" style="border: none; cursor: pointer; padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">
                         <option value="pending" {% if booking[6]=='pending' %}selected{% endif %}>Ожидает</option>
-                        <option value="confirmed" {% if booking[6]=='confirmed' %}selected{% endif %}>Подтвержден
-                        </option>
-                        <option value="completed" {% if booking[6]=='completed' %}selected{% endif %}>Завершен</option>
-                        <option value="cancelled" {% if booking[6]=='cancelled' %}selected{% endif %}>Отменен</option>
+                        <option value="confirmed" {% if booking[6]=='confirmed' %}selected{% endif %}>Подтверждена</option>
+                        <option value="completed" {% if booking[6]=='completed' %}selected{% endif %}>Завершена</option>
+                        <option value="cancelled" {% if booking[6]=='cancelled' %}selected{% endif %}>Отменена</option>
                     </select>
                 </td>
-                <td>{{ booking[7][:16] if booking[7] else '-' }}</td>
+                <td>{{ booking[8] or 0 }} AED</td>
                 <td>
                     <div style="display: flex; gap: 8px;">
-                        <button class="btn btn-sm btn-info" onclick="viewBooking({{ booking[0] }})" title="Просмотр">
+                        <button class="btn btn-sm" onclick="viewBooking({{ booking[0] }})" title="Просмотр" style="background: white; border: 1px solid #e5e7eb; color: #6b7280; padding: 6px 10px;">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <button class="btn btn-sm btn-success" onclick="contactClient('{{ booking[1] }}')"
-                            title="Связаться">
+                        <button class="btn btn-sm" onclick="contactClient('{{ booking[1] }}')" title="Сообщение" style="background: white; border: 1px solid #e5e7eb; color: #6b7280; padding: 6px 10px;">
                             <i class="fas fa-comment"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteBooking({{ booking[0] }})" title="Удалить">
-                            <i class="fas fa-trash"></i>
                         </button>
                     </div>
                 </td>
@@ -137,57 +114,42 @@
             {% endfor %}
             {% else %}
             <tr>
-                <td colspan="8">
-                    <div class="empty-state">
-                        <i class="fas fa-calendar-times"></i>
-                        <h3>Пока нет записей</h3>
-                        <p>Записи появятся когда клиенты забронируют время</p>
-                    </div>
+                <td colspan="8" style="text-align: center; padding: 60px 20px;">
+                    <i class="fas fa-calendar-times" style="font-size: 3rem; color: #d1d5db; margin-bottom: 16px; display: block;"></i>
+                    <h3 style="color: #1f2937; margin: 8px 0;">Пока нет записей</h3>
+                    <p style="color: #6b7280; margin: 0;">Записи появятся когда клиенты забронируют время</p>
                 </td>
             </tr>
             {% endif %}
         </tbody>
     </table>
 </div>
-<!-- Modal для добавления записи -->
+
+<!-- MODAL -->
 <div class="modal" id="addBookingModal">
     <div class="modal-content">
-        <span class="modal-close" onclick="closeBookingModal()">&times;</span>
         <div class="modal-header">
-            <h2>Добавить запись</h2>
-            <p>Создание новой записи вручную</p>
+            <h2 class="modal-title">Добавить запись</h2>
+            <button class="modal-close" onclick="closeBookingModal()">&times;</button>
         </div>
         
         <form id="addBookingForm" onsubmit="submitBooking(event)">
             <div class="form-group">
                 <label class="form-label">Выбрать клиента</label>
-                <select class="form-input" id="bookingClient" required>
-                    <option value="">Выберите клиента</option>
+                <select class="form-input" id="bookingClient" required onchange="updateClientInfo()">
+                    <option value="">Выберите клиента...</option>
                     {% for client in clients %}
-                    <option value="{{ client[0] }}" 
-                            data-name="{{ client[3] or client[1] }}" 
-                            data-phone="{{ client[2] }}">
-                        {{ get_client_display_name(client) }} 
-                        {% if client[2] %}- {{ client[2] }}{% endif %}
+                    <option value="{{ client[0] }}" data-name="{{ client[3] or client[1] }}" data-phone="{{ client[2] }}">
+                        {{ client[3] or client[1] }}
                     </option>
                     {% endfor %}
                 </select>
             </div>
-            
-            <div class="form-group">
-                <label class="form-label">Имя</label>
-                <input type="text" class="form-input" id="bookingName" required>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Телефон</label>
-                <input type="tel" class="form-input" id="bookingPhone" required>
-            </div>
-            
+
             <div class="form-group">
                 <label class="form-label">Услуга</label>
                 <select class="form-input" id="bookingService" required>
-                    <option value="">Выберите услугу</option>
+                    <option value="">Выберите услугу...</option>
                     <option value="Маникюр">Маникюр</option>
                     <option value="Педикюр">Педикюр</option>
                     <option value="Стрижка">Стрижка</option>
@@ -195,80 +157,266 @@
                     <option value="Массаж">Массаж</option>
                     <option value="Оформление бровей">Оформление бровей</option>
                     <option value="Наращивание ресниц">Наращивание ресниц</option>
-                    <option value="Макияж">Макияж</option>
                 </select>
             </div>
-            
-            <div class="form-group">
-                <label class="form-label">Дата</label>
-                <input type="date" class="form-input" id="bookingDate" required>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Дата</label>
+                    <input type="date" class="form-input" id="bookingDate" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Время</label>
+                    <input type="time" class="form-input" id="bookingTime" required>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label class="form-label">Время</label>
-                <input type="time" class="form-input" id="bookingTime" required>
-            </div>
-            
-            <div style="display: flex; gap: 10px; margin-top: 25px;">
+
+            <div style="display: flex; gap: 12px; margin-top: 20px;">
                 <button type="submit" class="btn btn-primary" style="flex: 1;">
                     <i class="fas fa-save"></i> Создать запись
                 </button>
-                <button type="button" class="btn btn-secondary" onclick="closeBookingModal()">
+                <button type="button" class="btn btn-secondary" onclick="closeBookingModal()" style="flex: 1;">
                     <i class="fas fa-times"></i> Отмена
                 </button>
             </div>
         </form>
     </div>
 </div>
-
-<style>
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 2000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-}
-
-.modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-content {
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    max-width: 600px;
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-.modal-close {
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    color: #9ca3af;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.modal-close:hover {
-    color: #ef4444;
-}
-</style>
-
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
+    function searchTable() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toUpperCase();
+        const table = document.getElementById('bookingsTable');
+        const tr = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < tr.length; i++) {
+            const td = tr[i].getElementsByTagName('td');
+            let found = false;
+
+            for (let j = 0; j < td.length; j++) {
+                if (td[j]) {
+                    const txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            tr[i].style.display = found ? '' : 'none';
+        }
+    }
+
+    function filterByStatus() {
+        const select = document.getElementById('statusFilter');
+        const status = select.value;
+        const table = document.getElementById('bookingsTable');
+        const tr = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < tr.length; i++) {
+            if (status === 'all') {
+                tr[i].style.display = '';
+            } else {
+                const rowStatus = tr[i].getAttribute('data-status');
+                tr[i].style.display = rowStatus === status ? '' : 'none';
+            }
+        }
+    }
+
+    function changeStatus(bookingId, newStatus) {
+        fetch(`/admin/api/bookings/${bookingId}/status`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus })
+        })
+            .then(response => response.json())
+            .then(data => {
+                showNotification('Статус обновлен', 'success');
+                setTimeout(() => location.reload(), 1000);
+            })
+            .catch(error => showNotification('Ошибка при обновлении', 'error'));
+    }
+
+    function viewBooking(id) {
+        window.location.href = `/admin/bookings/${id}`;
+    }
+
+    function contactClient(phone) {
+        alert('Связаться с клиентом: ' + phone);
+    }
+
+    function addBooking() {
+        document.getElementById('addBookingModal').classList.add('active');
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('bookingDate').value = today;
+    }
+
+    function closeBookingModal() {
+        document.getElementById('addBookingModal').classList.remove('active');
+        document.getElementById('addBookingForm').reset();
+    }
+
+    function updateClientInfo() {
+        const select = document.getElementById('bookingClient');
+        const selectedOption = select.options[select.selectedIndex];
+    }
+
+    async function submitBooking(event) {
+        event.preventDefault();
+
+        const formData = {
+            instagram_id: document.getElementById('bookingClient').value,
+            service: document.getElementById('bookingService').value,
+            date: document.getElementById('bookingDate').value,
+            time: document.getElementById('bookingTime').value
+        };
+
+        try {
+            const response = await fetch('/admin/api/bookings/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showNotification('Запись успешно создана', 'success');
+                closeBookingModal();
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                showNotification(data.message || 'Ошибка создания записи', 'error');
+            }
+        } catch (error) {
+            showNotification('Ошибка соединения', 'error');
+        }
+    }
+
+    window.onclick = function (event) {
+        const modal = document.getElementById('addBookingModal');
+        if (event.target === modal) closeBookingModal();
+    }
+
+    function searchTable() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toUpperCase();
+        const table = document.getElementById('bookingsTable');
+        const tr = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < tr.length; i++) {
+            const td = tr[i].getElementsByTagName('td');
+            let found = false;
+
+            for (let j = 0; j < td.length; j++) {
+                if (td[j]) {
+                    const txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            tr[i].style.display = found ? '' : 'none';
+        }
+    }
+
+    function filterByStatus() {
+        const select = document.getElementById('statusFilter');
+        const status = select.value;
+        const table = document.getElementById('bookingsTable');
+        const tr = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < tr.length; i++) {
+            if (status === 'all') {
+                tr[i].style.display = '';
+            } else {
+                const rowStatus = tr[i].getAttribute('data-status');
+                tr[i].style.display = rowStatus === status ? '' : 'none';
+            }
+        }
+    }
+
+    function changeStatus(bookingId, newStatus) {
+        fetch(`/admin/api/bookings/${bookingId}/status`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus })
+        })
+            .then(response => response.json())
+            .then(data => {
+                showNotification('Статус обновлен', 'success');
+                setTimeout(() => location.reload(), 1000);
+            })
+            .catch(error => {
+                showNotification('Ошибка при обновлении', 'error');
+            });
+    }
+
+    function viewBooking(id) {
+        window.location.href = `/admin/bookings/${id}`;
+    }
+
+    function contactClient(phone) {
+        alert('Связаться с клиентом: ' + phone);
+    }
+
+    function addBooking() {
+        document.getElementById('addBookingModal').classList.add('active');
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('bookingDate').value = today;
+    }
+
+    function closeBookingModal() {
+        document.getElementById('addBookingModal').classList.remove('active');
+        document.getElementById('addBookingForm').reset();
+    }
+
+    document.getElementById('bookingClient').addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const name = selectedOption.getAttribute('data-name') || '';
+        const phone = selectedOption.getAttribute('data-phone') || '';
+    });
+
+    async function submitBooking(event) {
+        event.preventDefault();
+
+        const formData = {
+            instagram_id: document.getElementById('bookingClient').value,
+            service: document.getElementById('bookingService').value,
+            date: document.getElementById('bookingDate').value,
+            time: document.getElementById('bookingTime').value
+        };
+
+        try {
+            const response = await fetch('/admin/api/bookings/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showNotification('Запись успешно создана', 'success');
+                closeBookingModal();
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                showNotification(data.message || 'Ошибка создания записи', 'error');
+            }
+        } catch (error) {
+            showNotification('Ошибка соединения', 'error');
+        }
+    }
+
+    window.onclick = function (event) {
+        const modal = document.getElementById('addBookingModal');
+        if (event.target === modal) {
+            closeBookingModal();
+        }
+    }
     function searchTable() {
         const input = document.getElementById('searchInput');
         const filter = input.value.toUpperCase();

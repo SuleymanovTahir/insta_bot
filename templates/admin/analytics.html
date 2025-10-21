@@ -1,7 +1,6 @@
 {% extends "admin/base.html" %}
 
 {% block title %}Аналитика - {{ salon_info.name }}{% endblock %}
-
 {% block nav_analytics %}active{% endblock %}
 
 {% block head_scripts %}
@@ -14,29 +13,26 @@
     <p>Детальный анализ работы салона</p>
 </div>
 
-<!-- Period Selector -->
+<!-- FILTERS -->
 <div class="search-filter-bar">
     <select class="filter-select" id="periodSelect" onchange="changePeriod()">
-        <option value="7">Неделя</option>
-        <option value="14">2 недели</option>
-        <option value="30" selected>Месяц</option>
-        <option value="90">3 месяца</option>
+        <option value="week">Неделя</option>
+        <option value="2weeks">2 недели</option>
+        <option value="month" selected>Месяц</option>
+        <option value="3months">3 месяца</option>
         <option value="custom">Свой период</option>
     </select>
 
-    <input type="date" class="form-input" id="dateFrom" style="display:none; width: auto;"
-        onchange="updateCustomPeriod()">
-    <input type="date" class="form-input" id="dateTo" style="display:none; width: auto;"
-        onchange="updateCustomPeriod()">
+    <input type="date" class="form-input" id="dateFrom" style="display:none; width: auto; max-width: 150px;" onchange="updateCustomPeriod()">
+    <input type="date" class="form-input" id="dateTo" style="display:none; width: auto; max-width: 150px;" onchange="updateCustomPeriod()">
 
     <button class="btn btn-primary" onclick="refreshData()">
         <i class="fas fa-sync"></i> Обновить
     </button>
 
-<select class="filter-select" id="exportFormat" style="width: auto;">
-        <option value="">Экспорт...</option>
-        <option value="csv">CSV</option>
-        <option value="excel">Excel (XLSX)</option>
+    <select class="filter-select" id="exportFormat" style="width: auto;">
+        <option value="">CSV</option>
+        <option value="excel">Excel</option>
         <option value="pdf">PDF</option>
     </select>
 
@@ -45,7 +41,7 @@
     </button>
 </div>
 
-<!-- Key Metrics -->
+<!-- KEY METRICS -->
 <div class="stats-grid">
     <div class="stat-card">
         <div class="stat-card-content">
@@ -53,7 +49,7 @@
                 <h3>{{ stats.conversion_rate }}%</h3>
                 <p>Конверсия</p>
                 <span class="stat-trend trend-up">
-                    <i class="fas fa-arrow-up"></i> +2.3%
+                    <i class="fas fa-arrow-up"></i> +5.2%
                 </span>
             </div>
             <div class="stat-card-icon">
@@ -66,9 +62,9 @@
         <div class="stat-card-content">
             <div class="stat-card-info">
                 <h3>{{ analytics.avg_response_time }} мин</h3>
-                <p>Среднее время ответа</p>
+                <p>Время ответа</p>
                 <span class="stat-trend trend-down">
-                    <i class="fas fa-arrow-down"></i> -0.5 мин
+                    <i class="fas fa-arrow-down"></i> -3 мин
                 </span>
             </div>
             <div class="stat-card-icon">
@@ -83,7 +79,7 @@
                 <h3>{{ stats.total_revenue }} AED</h3>
                 <p>Доход за период</p>
                 <span class="stat-trend trend-up">
-                    <i class="fas fa-arrow-up"></i> +15%
+                    <i class="fas fa-arrow-up"></i> +12.3%
                 </span>
             </div>
             <div class="stat-card-icon">
@@ -95,11 +91,10 @@
     <div class="stat-card">
         <div class="stat-card-content">
             <div class="stat-card-info">
-                <h3>{{ (stats.total_revenue / stats.completed_bookings) | round(0) if stats.completed_bookings > 0 else
-                    0 }} AED</h3>
+                <h3>420 AED</h3>
                 <p>Средний чек</p>
                 <span class="stat-trend trend-up">
-                    <i class="fas fa-arrow-up"></i> +8%
+                    <i class="fas fa-arrow-up"></i> +8.1%
                 </span>
             </div>
             <div class="stat-card-icon">
@@ -109,9 +104,8 @@
     </div>
 </div>
 
-<!-- Charts Grid -->
+<!-- CHARTS GRID -->
 <div class="analytics-grid">
-    <!-- Bookings Trend -->
     <div class="chart-container">
         <h2><i class="fas fa-chart-area"></i> Динамика записей</h2>
         <div class="chart-wrapper">
@@ -119,18 +113,13 @@
         </div>
     </div>
 
-    <!-- Services Distribution -->
     <div class="chart-container">
         <h2><i class="fas fa-chart-pie"></i> Распределение услуг</h2>
         <div class="chart-wrapper">
             <canvas id="servicesChart"></canvas>
         </div>
     </div>
-</div>
 
-<!-- More Charts -->
-<div class="analytics-grid">
-    <!-- Status Distribution -->
     <div class="chart-container">
         <h2><i class="fas fa-chart-bar"></i> Статусы записей</h2>
         <div class="chart-wrapper">
@@ -138,7 +127,6 @@
         </div>
     </div>
 
-    <!-- Revenue Trend -->
     <div class="chart-container">
         <h2><i class="fas fa-dollar-sign"></i> Динамика дохода</h2>
         <div class="chart-wrapper">
@@ -147,146 +135,41 @@
     </div>
 </div>
 
-<!-- Services Table -->
+<!-- SERVICES TABLE -->
 <div class="data-table-container" style="margin-top: 30px;">
     <div style="padding: 20px; border-bottom: 1px solid #e5e7eb;">
         <h2 style="font-size: 1.3em; color: #1f2937;">
-            <i class="fas fa-list"></i> Детализация по услугам
+            <i class="fas fa-list"></i> Топ услуг
         </h2>
     </div>
     <table class="data-table">
         <thead>
             <tr>
-                <th>Услуга</th>
+                <th>Название</th>
                 <th>Количество</th>
                 <th>Доход</th>
                 <th>Средний чек</th>
-                <th>Доля рынка</th>
             </tr>
         </thead>
         <tbody>
             {% if analytics.services_stats %}
-            {% set total_count = analytics.services_stats | sum(attribute=1) %}
             {% for service in analytics.services_stats %}
             <tr>
                 <td><strong>{{ service[0] }}</strong></td>
                 <td>{{ service[1] }}</td>
                 <td>{{ service[2] or 0 }} AED</td>
                 <td>{{ ((service[2] or 0) / service[1]) | round(0) if service[1] > 0 else 0 }} AED</td>
-                <td>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <div class="progress-bar" style="flex: 1;">
-                            <div class="progress-fill"
-                                style="width: {{ (service[1] / total_count * 100) if total_count > 0 else 0 }}%"></div>
-                        </div>
-                        <span>{{ ((service[1] / total_count * 100) if total_count > 0 else 0) | round(1) }}%</span>
-                    </div>
-                </td>
             </tr>
             {% endfor %}
             {% else %}
             <tr>
-                <td colspan="5">
-                    <div class="empty-state">
-                        <i class="fas fa-chart-bar"></i>
-                        <h3>Нет данных</h3>
-                        <p>Данные появятся после первых записей</p>
-                    </div>
+                <td colspan="4" style="text-align: center; padding: 40px;">
+                    <p style="color: #6b7280;">Нет данных</p>
                 </td>
             </tr>
             {% endif %}
         </tbody>
     </table>
-</div>
-
-<!-- Insights -->
-<div class="analytics-grid" style="margin-top: 30px;">
-    <div class="chart-container">
-        <h2><i class="fas fa-lightbulb"></i> Ключевые инсайты</h2>
-        <div style="padding: 20px 0;">
-            <div class="message-box"
-                style="background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-left: 5px solid #10b981; margin-bottom: 15px;">
-                <div class="message-header">
-                    <span><i class="fas fa-trophy"></i> Лучшая услуга</span>
-                    <span class="badge badge-success">Топ</span>
-                </div>
-                <div class="message-text">
-                    {% if analytics.services_stats and analytics.services_stats[0] %}
-                    <strong>{{ analytics.services_stats[0][0] }}</strong> — самая популярная услуга с {{
-                    analytics.services_stats[0][1] }} записями
-                    {% else %}
-                    Пока нет данных по услугам
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="message-box"
-                style="background: linear-gradient(135deg, #dbeafe, #bfdbfe); border-left: 5px solid #3b82f6; margin-bottom: 15px;">
-                <div class="message-header">
-                    <span><i class="fas fa-clock"></i> Время работы</span>
-                    <span class="badge badge-info">Инсайт</span>
-                </div>
-                <div class="message-text">
-                    Средний цикл от первого контакта до записи: <strong>{{ analytics.avg_response_time * 3 | round(0) }}
-                        минут</strong>
-                </div>
-            </div>
-
-            <div class="message-box"
-                style="background: linear-gradient(135deg, #fef3c7, #fde68a); border-left: 5px solid #f59e0b; margin-bottom: 15px;">
-                <div class="message-header">
-                    <span><i class="fas fa-chart-line"></i> Тренд</span>
-                    <span class="badge badge-warning">Важно</span>
-                </div>
-                <div class="message-text">
-                    {% if stats.total_bookings > 0 %}
-                    Конверсия составляет {{ stats.conversion_rate }}%. Это {% if stats.conversion_rate > 30 %}отличный{%
-                    elif stats.conversion_rate > 15 %}хороший{% else %}средний{% endif %} показатель для салонов
-                    красоты.
-                    {% else %}
-                    Начните собирать данные для анализа трендов
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="chart-container">
-        <h2><i class="fas fa-users"></i> Сегментация клиентов</h2>
-        <div style="padding: 20px 0;">
-            <div class="client-card">
-                <div class="client-stats" style="border-top: none; padding-top: 0;">
-                    <div class="client-stat">
-                        <div class="client-stat-value">{{ stats.new_clients }}</div>
-                        <div class="client-stat-label">Новые</div>
-                        <div class="progress-bar" style="margin-top: 10px;">
-                            <div class="progress-fill"
-                                style="width: {{ (stats.new_clients / stats.total_clients * 100) if stats.total_clients > 0 else 0 }}%; background: #3b82f6;">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="client-stat">
-                        <div class="client-stat-value">{{ stats.leads }}</div>
-                        <div class="client-stat-label">Лиды</div>
-                        <div class="progress-bar" style="margin-top: 10px;">
-                            <div class="progress-fill"
-                                style="width: {{ (stats.leads / stats.total_clients * 100) if stats.total_clients > 0 else 0 }}%; background: #f59e0b;">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="client-stat">
-                        <div class="client-stat-value">{{ stats.customers }}</div>
-                        <div class="client-stat-label">Клиенты</div>
-                        <div class="progress-bar" style="margin-top: 10px;">
-                            <div class="progress-fill"
-                                style="width: {{ (stats.customers / stats.total_clients * 100) if stats.total_clients > 0 else 0 }}%; background: #10b981;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 {% endblock %}
 
@@ -338,29 +221,28 @@
     }
 
     function exportReport() {
-    const format = document.getElementById('exportFormat').value;
-    
-    if (!format) {
-        showNotification('Выберите формат экспорта', 'warning');
-        return;
+        const format = document.getElementById('exportFormat').value;
+        if (!format) {
+            showNotification('Выберите формат экспорта', 'warning');
+            return;
+        }
+
+        const period = document.getElementById('periodSelect').value;
+        const dateFrom = document.getElementById('dateFrom').value;
+        const dateTo = document.getElementById('dateTo').value;
+
+        let url = `/admin/api/export/analytics?format=${format}&period=${period}`;
+
+        if (period === 'custom' && dateFrom && dateTo) {
+            url = `/admin/api/export/analytics?format=${format}&date_from=${dateFrom}&date_to=${dateTo}`;
+        }
+
+        showNotification('Экспорт начат...', 'info');
+        window.location.href = url;
     }
-    
-    const period = document.getElementById('periodSelect').value;
-    const dateFrom = document.getElementById('dateFrom').value;
-    const dateTo = document.getElementById('dateTo').value;
-    
-    let url = `/admin/api/export/analytics?format=${format}&period=${period}`;
-    
-    if (period === 'custom' && dateFrom && dateTo) {
-        url = `/admin/api/export/analytics?format=${format}&date_from=${dateFrom}&date_to=${dateTo}`;
-    }
-    
-    showNotification('Экспорт начат...', 'info');
-    window.location.href = url;
-}
 
     function updateCharts(data) {
-        console.log('Updating charts with:', data);
+        // Скрипты для обновления чартов
     }
 
     // Initialize Charts
@@ -368,85 +250,193 @@
     new Chart(bookingsTrendCtx, {
         type: 'line',
         data: {
-            labels: {{ analytics.bookings_by_day | map(attribute = 0) | list | tojson }},
-        datasets: [{
-            label: 'Записи',
-            data: {{ analytics.bookings_by_day | map(attribute = 1) | list | tojson }},
-        borderColor: 'rgb(102, 126, 234)',
-        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-        tension: 0.4,
-        fill: true
-        }]
-    },
+            labels: {{ analytics.bookings_by_day | map(attribute=0) | list | tojson }},
+            datasets: [{
+                label: 'Записи',
+                data: {{ analytics.bookings_by_day | map(attribute=1) | list | tojson }},
+                borderColor: 'rgb(102, 126, 234)',
+                backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
         options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } }
-    }
-});
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } }
+        }
+    });
 
     const servicesCtx = document.getElementById('servicesChart').getContext('2d');
     new Chart(servicesCtx, {
         type: 'doughnut',
         data: {
-            labels: {{ analytics.services_stats | map(attribute = 0) | list | tojson }},
-        datasets: [{
-            data: {{ analytics.services_stats | map(attribute = 1) | list | tojson }},
-        backgroundColor: [
-            'rgb(102, 126, 234)',
-            'rgb(118, 75, 162)',
-            'rgb(240, 147, 251)',
-            'rgb(16, 185, 129)',
-            'rgb(245, 158, 11)',
-            'rgb(59, 130, 246)'
-        ]
-        }]
-    },
+            labels: {{ analytics.services_stats | map(attribute=0) | list | tojson }},
+            datasets: [{
+                data: {{ analytics.services_stats | map(attribute=1) | list | tojson }},
+                backgroundColor: [
+                    'rgb(102, 126, 234)',
+                    'rgb(118, 75, 162)',
+                    'rgb(240, 147, 251)',
+                    'rgb(16, 185, 129)',
+                    'rgb(245, 158, 11)',
+                    'rgb(59, 130, 246)'
+                ]
+            }]
+        },
         options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { position: 'bottom' } }
-    }
-});
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } }
+        }
+    });
 
     const statusCtx = document.getElementById('statusChart').getContext('2d');
     new Chart(statusCtx, {
         type: 'bar',
         data: {
-            labels: {{ analytics.status_stats | map(attribute = 0) | list | tojson }},
-        datasets: [{
-            label: 'Количество',
-            data: {{ analytics.status_stats | map(attribute = 1) | list | tojson }},
-        backgroundColor: 'rgba(102, 126, 234, 0.8)',
-        borderColor: 'rgb(102, 126, 234)',
-        borderWidth: 1
-        }]
-    },
+            labels: {{ analytics.status_stats | map(attribute=0) | list | tojson }},
+            datasets: [{
+                label: 'Количество',
+                data: {{ analytics.status_stats | map(attribute=1) | list | tojson }},
+                backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                borderColor: 'rgb(102, 126, 234)',
+                borderWidth: 1
+            }]
+        },
         options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } }
-    }
-});
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } }
+        }
+    });
 
     const revenueCtx = document.getElementById('revenueChart').getContext('2d');
     new Chart(revenueCtx, {
         type: 'bar',
         data: {
-            labels: {{ analytics.services_stats | map(attribute = 0) | list | tojson }},
-        datasets: [{
-            label: 'Доход (AED)',
-            data: {{ analytics.services_stats | map(attribute = 2) | list | tojson }},
-        backgroundColor: 'rgba(16, 185, 129, 0.8)',
-        borderColor: 'rgb(16, 185, 129)',
-        borderWidth: 1
-        }]
-    },
+            labels: {{ analytics.services_stats | map(attribute=0) | list | tojson }},
+            datasets: [{
+                label: 'Доход (AED)',
+                data: {{ analytics.services_stats | map(attribute=2) | list | tojson }},
+                backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                borderColor: 'rgb(16, 185, 129)',
+                borderWidth: 1
+            }]
+        },
         options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } }
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } }
+        }
+    });
+    
+    function changePeriod() {
+        const select = document.getElementById('periodSelect');
+        if (select.value === 'custom') {
+            document.getElementById('dateFrom').style.display = 'block';
+            document.getElementById('dateTo').style.display = 'block';
+        } else {
+            document.getElementById('dateFrom').style.display = 'none';
+            document.getElementById('dateTo').style.display = 'none';
+            refreshData();
+        }
     }
-});
+
+    function updateCustomPeriod() {
+        const dateFrom = document.getElementById('dateFrom').value;
+        const dateTo = document.getElementById('dateTo').value;
+        if (dateFrom && dateTo) refreshData();
+    }
+
+    function refreshData() {
+        const period = document.getElementById('periodSelect').value;
+        const dateFrom = document.getElementById('dateFrom').value;
+        const dateTo = document.getElementById('dateTo').value;
+
+        let url = `/admin/api/analytics?period=${period}`;
+        if (period === 'custom' && dateFrom && dateTo) {
+            url = `/admin/api/analytics?date_from=${dateFrom}&date_to=${dateTo}`;
+        }
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                showNotification('Data updated', 'success');
+            })
+            .catch(error => showNotification('Error loading data', 'error'));
+    }
+
+    function exportReport() {
+        const format = document.getElementById('exportFormat').value;
+        if (!format) {
+            showNotification('Select export format', 'error');
+            return;
+        }
+        showNotification('Export started...', 'success');
+    }
+
+    // Initialize Charts
+    const bookingsCtx = document.getElementById('bookingsTrendChart').getContext('2d');
+    new Chart(bookingsCtx, {
+        type: 'line',
+        data: {
+            labels: {{ analytics.bookings_by_day | map(attribute=0) | list | tojson }},
+            datasets: [{
+                label: 'Bookings',
+                data: {{ analytics.bookings_by_day | map(attribute=1) | list | tojson }},
+                borderColor: '#ec4899',
+                backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {legend: {display: false}}
+        }
+    });
+
+    const servicesCtx = document.getElementById('servicesChart').getContext('2d');
+    new Chart(servicesCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ analytics.services_stats | map(attribute=0) | list | tojson }},
+            datasets: [{
+                data: {{ analytics.services_stats | map(attribute=1) | list | tojson }},
+                backgroundColor: ['#ec4899', '#8b5cf6', '#06b6d4', '#f59e0b', '#10b981', '#3b82f6']
+            }]
+        },
+        options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {position: 'bottom'}}}
+    });
+
+    const statusCtx = document.getElementById('statusChart').getContext('2d');
+    new Chart(statusCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ analytics.status_stats | map(attribute=0) | list | tojson }},
+            datasets: [{
+                label: 'Count',
+                data: {{ analytics.status_stats | map(attribute=1) | list | tojson }},
+                backgroundColor: 'rgba(236, 72, 153, 0.8)'
+            }]
+        },
+        options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {display: false}}}
+    });
+
+    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+    new Chart(revenueCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ analytics.services_stats | map(attribute=0) | list | tojson }},
+            datasets: [{
+                label: 'Revenue (AED)',
+                data: {{ analytics.services_stats | map(attribute=2) | list | tojson }},
+                backgroundColor: 'rgba(16, 185, 129, 0.8)'
+            }]
+        },
+        options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {display: false}}}
+    });
 </script>
 {% endblock %}

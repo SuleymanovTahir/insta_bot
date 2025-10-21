@@ -1,7 +1,6 @@
 {% extends "admin/base.html" %}
 
-{% block title %}CRM Dashboard - {{ salon_info.name }}{% endblock %}
-
+{% block title %}Панель управления - {{ salon_info.name }}{% endblock %}
 {% block nav_dashboard %}active{% endblock %}
 
 {% block head_scripts %}
@@ -11,36 +10,21 @@
 {% block content %}
 <div class="page-header">
     <h1>📊 Панель управления</h1>
-    <p>Добро пожаловать в CRM-систему салона красоты</p>
+    <p>Добро пожаловать в систему управления салоном</p>
 </div>
 
-<!-- Stats Grid -->
+<!-- STATS GRID -->
 <div class="stats-grid">
     <div class="stat-card">
         <div class="stat-card-content">
             <div class="stat-card-info">
-                <h3>{{ stats.total_clients }}</h3>
-                <p>Всего клиентов</p>
+                <h3>{{ stats.today_bookings }}</h3>
+                <p>Записи сегодня</p>
                 <span class="stat-trend trend-up">
                     <i class="fas fa-arrow-up"></i> +12%
                 </span>
             </div>
-            <div class="stat-card-icon">
-                <i class="fas fa-users"></i>
-            </div>
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-card-content">
-            <div class="stat-card-info">
-                <h3>{{ stats.total_bookings }}</h3>
-                <p>Всего записей</p>
-                <span class="stat-trend trend-up">
-                    <i class="fas fa-arrow-up"></i> +8%
-                </span>
-            </div>
-            <div class="stat-card-icon">
+            <div class="stat-card-icon pink">
                 <i class="fas fa-calendar-check"></i>
             </div>
         </div>
@@ -49,14 +33,14 @@
     <div class="stat-card">
         <div class="stat-card-content">
             <div class="stat-card-info">
-                <h3>{{ stats.completed_bookings }}</h3>
-                <p>Завершенных</p>
+                <h3>{{ stats.new_clients }}</h3>
+                <p>Новые клиенты</p>
                 <span class="stat-trend trend-up">
-                    <i class="fas fa-arrow-up"></i> +15%
+                    <i class="fas fa-arrow-up"></i> +8%
                 </span>
             </div>
-            <div class="stat-card-icon">
-                <i class="fas fa-check-circle"></i>
+            <div class="stat-card-icon purple">
+                <i class="fas fa-user-plus"></i>
             </div>
         </div>
     </div>
@@ -64,151 +48,101 @@
     <div class="stat-card">
         <div class="stat-card-content">
             <div class="stat-card-info">
-                <h3>{{ stats.conversion_rate }}%</h3>
-                <p>Конверсия</p>
+                <h3>{{ stats.daily_revenue }} AED</h3>
+                <p>Доход за день</p>
                 <span class="stat-trend trend-up">
-                    <i class="fas fa-arrow-up"></i> +3%
+                    <i class="fas fa-arrow-up"></i> +15.3%
                 </span>
             </div>
-            <div class="stat-card-icon">
-                <i class="fas fa-percentage"></i>
+            <div class="stat-card-icon green">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-info">
+                <h3>{{ stats.growth_rate }}%</h3>
+                <p>Рост продаж</p>
+                <span class="stat-trend trend-up">
+                    <i class="fas fa-arrow-up"></i> +15.3%
+                </span>
+            </div>
+            <div class="stat-card-icon blue">
+                <i class="fas fa-chart-line"></i>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Charts Row -->
-<div class="analytics-grid">
-    <!-- Bookings Chart -->
-    <div class="chart-container">
-        <h2><i class="fas fa-chart-line"></i> Записи за 30 дней</h2>
-        <div class="chart-wrapper">
-            <canvas id="bookingsChart"></canvas>
-        </div>
-    </div>
-
-    <!-- Services Chart -->
-    <div class="chart-container">
-        <h2><i class="fas fa-chart-pie"></i> Популярные услуги</h2>
-        <div class="chart-wrapper">
-            <canvas id="servicesChart"></canvas>
-        </div>
-    </div>
-</div>
-
-<!-- Recent Activity -->
-<div class="analytics-grid">
-    <!-- Recent Clients -->
+<!-- TWO COLUMN LAYOUT -->
+<div class="two-column-layout">
+    <!-- RECENT BOOKINGS -->
     <div class="data-table-container">
-        <div style="padding: 20px; border-bottom: 1px solid #e5e7eb;">
-            <h2 style="font-size: 1.3em; color: #1f2937;">
-                <i class="fas fa-user-plus"></i> Последние клиенты
-            </h2>
+        <div style="padding: 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+            <h2 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin: 0;">Последние записи</h2>
+            <a href="/admin/bookings" class="btn btn-secondary" style="font-size: 0.85rem; padding: 8px 16px;">
+                Все записи
+            </a>
         </div>
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>Имя</th>
-                    <th>Телефон</th>
-                    <th>Статус</th>
-                    <th>Сообщений</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for client in recent_clients %}
-                <tr>
-                    <td><strong>{{ client[3] or 'Не указано' }}</strong></td>
-                    <td>{{ client[2] or '-' }}</td>
-                    <td><span class="badge badge-{{ client[8] }}">{{ client[8] }}</span></td>
-                    <td>{{ client[6] }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Recent Bookings -->
-    <div class="data-table-container">
-        <div style="padding: 20px; border-bottom: 1px solid #e5e7eb;">
-            <h2 style="font-size: 1.3em; color: #1f2937;">
-                <i class="fas fa-calendar-alt"></i> Последние записи
-            </h2>
-        </div>
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Услуга</th>
                     <th>Клиент</th>
-                    <th>Дата</th>
+                    <th>Услуга</th>
+                    <th>Время</th>
                     <th>Статус</th>
                 </tr>
             </thead>
             <tbody>
                 {% for booking in recent_bookings %}
                 <tr>
-                    <td><strong>{{ booking[2] }}</strong></td>
-                    <td>{{ booking[5] }}</td>
-                    <td>{{ booking[3][:16] }}</td>
-                    <td><span class="badge badge-{{ booking[6] }}">{{ booking[6] }}</span></td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #ec4899, #f43f5e); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem; flex-shrink: 0;">
+                                {{ booking[5][0]|upper }}
+                            </div>
+                            <span>{{ booking[5] }}</span>
+                        </div>
+                    </td>
+                    <td>{{ booking[2] }}</td>
+                    <td>{{ booking[4] }}</td>
+                    <td><span class="badge badge-{{ booking[6] }}">
+                        {% if booking[6] == 'pending' %}Ожидает
+                        {% elif booking[6] == 'confirmed' %}Подтвержена
+                        {% elif booking[6] == 'completed' %}Завершена
+                        {% elif booking[6] == 'cancelled' %}Отменена
+                        {% endif %}
+                    </span></td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-</div>
 
-<!-- Quick Stats -->
-<div class="stats-grid" style="margin-top: 30px;">
-    <div class="stat-card">
-        <div class="stat-card-content">
-            <div class="stat-card-info">
-                <h3>{{ stats.new_clients }}</h3>
-                <p>Новые клиенты</p>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 75%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-card-content">
-            <div class="stat-card-info">
-                <h3>{{ stats.leads }}</h3>
-                <p>Лиды</p>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 60%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-card-content">
-            <div class="stat-card-info">
-                <h3>{{ stats.customers }}</h3>
-                <p>Постоянные клиенты</p>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 85%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-card-content">
-            <div class="stat-card-info">
-                <h3>{{ stats.pending_bookings }}</h3>
-                <p>Ожидают подтверждения</p>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 45%"></div>
-                </div>
-            </div>
+    <!-- QUICK ACTIONS -->
+    <div class="chart-container">
+        <h2 style="margin-top: 0;">Быстрые действия</h2>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            <a href="/admin/bookings" class="btn btn-primary" style="width: 100%; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i class="fas fa-calendar"></i> Создать запись
+            </a>
+            <a href="/admin/clients" class="btn btn-secondary" style="width: 100%; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i class="fas fa-user-plus"></i> Добавить клиента
+            </a>
+            {% if current_user and current_user.role == 'admin' %}
+            <a href="/admin/users/create" class="btn btn-secondary" style="width: 100%; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i class="fas fa-user-cog"></i> Создать пользователя
+            </a>
+            {% endif %}
+            <a href="/admin/analytics" class="btn btn-secondary" style="width: 100%; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i class="fas fa-chart-bar"></i> Просмотреть аналитику
+            </a>
         </div>
     </div>
 </div>
 {% endblock %}
-
 {% block extra_scripts %}
 <script>
 // Bookings Chart
